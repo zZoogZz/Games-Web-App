@@ -1,5 +1,3 @@
-test
-
 # COMPSCI 235 Starter Repository for the Games WebApp Assignments
 This is a starter repository for the games webapp assignments of CompSci 235 in Semester 2, 2023.
 
