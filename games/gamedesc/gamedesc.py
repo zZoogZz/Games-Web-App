@@ -16,8 +16,6 @@ def create_some_game(game_id):
     some_game.image_url = "https://cdn.akamai.steamstatic.com/steam/apps/7940/header.jpg?t=1646762118"
     return some_game
 
-# TODO: This is a blueprint - this needs to render for each game.
-
 
 @gamedesc_blueprint.route('/game/<int:game_id>')
 def desc(game_id):
