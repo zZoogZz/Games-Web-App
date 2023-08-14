@@ -31,4 +31,6 @@ def create_app():
         # Use Jinja to customize a predefined html page rendering the layout for showing a single game.
         return render_template('gameDescription.html', game=some_game)
 
+
+
     return app
