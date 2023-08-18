@@ -58,7 +58,7 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_game_ids_by_date(self, release_date: str) -> List[int]:
+    def get_game_ids_on_date(self, release_date: str) -> List[int]:
         """ Gets list of game ids released on that date. """
         raise NotImplementedError
 
@@ -98,6 +98,11 @@ class AbstractRepository(abc.ABC):
         If there are no matches, this method returns an empty list.
         """
         raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_game_ids_sorted_by_title(self) -> List[int]:
+        """ Returns a list of all game id's sorted according to game title.
+        """
 
     @abc.abstractmethod
     def get_sorted_release_dates(self):

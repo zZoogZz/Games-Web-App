@@ -26,7 +26,7 @@ class MemoryRepository(AbstractRepository): # implement games ordered by date. i
         self.__users.append(user) # check
 
     def get_user(self, username) -> User:
-        return next((user for user in self.__users if user.username == username), None) #check
+        return next((user for user in self.__users if user.username == username), None) # check
 
     def add_game(self, game: Game):
         if isinstance(game, Game) and game.game_id not in self.__games.keys():
@@ -62,7 +62,7 @@ class MemoryRepository(AbstractRepository): # implement games ordered by date. i
         else:
             self.__games_by_publisher[publisher].append(game_id)
 
-    def get_game_ids_by_date(self, release_date: str) -> List[int]:
+    def get_game_ids_on_date(self, release_date: str) -> List[int]:
         try:
             return self.__games_by_release_date[release_date]
         except ValueError:
@@ -100,6 +100,16 @@ class MemoryRepository(AbstractRepository): # implement games ordered by date. i
             pass
         return []
 
+    def get_game_ids_sorted_by_title(self) -> List[int]:
+        title_id_tuple_list = []
+        for game in self.__games.values():
+            title_id_tuple_list.append((game.title, game.game_id))
+        title_id_tuple_list.sort()
+        id_list = []
+        for item in title_id_tuple_list:
+            id_list.append(item[1])
+        return id_list
+
     def get_sorted_release_dates(self):
         date_list = []
         for release_date in self.__games_by_release_date.keys():
@@ -129,6 +139,14 @@ class MemoryRepository(AbstractRepository): # implement games ordered by date. i
                 # No earlier games, so return None.
                 pass
         return None
+
+    def get_game_ids_by_publisher(self, publisher: Publisher) -> List[int]:
+        try:
+            return self.__games_by_publisher[publisher]
+        except ValueError:
+            # No games for specified publisher. Simply return an empty list.
+            pass
+        return []
 
     def add_genre(self, genre: Genre):
         if genre not in self.__genres:
@@ -193,7 +211,7 @@ def load_games_from_database(data_path: Path, repo: MemoryRepository):
         game.description = data_row[description_column].strip()
         game.image_url = data_row[image_url_column].strip()
         game.website_url = data_row[website_url_column].strip()
-        game.publisher = data_row[publisher_column].strip()
+        game.publisher = Publisher(data_row[publisher_column])
         repo.add_game_id_to_publisher(game_id, game.publisher)
         game_genres = data_row[genres_column].strip().split(",") # str to split
         for genre in game_genres:
@@ -246,13 +264,27 @@ def populate(data_path: Path, repo: MemoryRepository):
     # load_reviews(data_path, repo, users)
 
 
-# Janky tests:
-
+# Demo:
 
 data_path = Path("data")
 repo = MemoryRepository()
 populate(data_path, repo)
-print(repo.get_game(951050))
-print(repo.get_game_ids_by_genre(Genre("Action")))
 
+print("Games ID's sorted by title:")
+for game_id in repo.get_game_ids_sorted_by_title():
+    print(f"{game_id} ({repo.get_game(game_id).title})", end=", ")
+print("\n")
 
+print("Games with Genre \"Violent\":")
+for game_id in repo.get_game_ids_by_genre(Genre("Violent")):
+    print(repo.get_game(game_id).title, end=", ")
+print("\n")
+
+print("Games released on Sep 3, 2015:")
+for game_id in repo.get_game_ids_on_date("Sep 3, 2015"):
+    print(repo.get_game(game_id).title, end=", ")
+print("\n")
+
+print("Games released by Publisher \"Aerosoft GmbH\":")
+for game_id in repo.get_game_ids_by_publisher(Publisher("Aerosoft GmbH")):
+    print(repo.get_game(game_id).title, end=", ")
