@@ -249,8 +249,11 @@ def populate(data_path: Path, repo: MemoryRepository):
     # Load reviews into the repository.
     # load_reviews(data_path, repo, users)
 
-data_path = Path("data")
-repo = MemoryRepository()
-populate(data_path, repo)
-print(repo.get_game_by_id(951050))
-print(repo.get_game_ids_for_genre(Genre("Action")))
+#janky tests:
+# data_path = Path("data")
+# repo = MemoryRepository()
+# populate(data_path, repo)
+# print(repo.get_game_by_id(951050))
+# print(repo.get_game_ids_for_genre(Genre("Action")))
+
+
