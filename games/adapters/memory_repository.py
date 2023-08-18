@@ -284,4 +284,5 @@ print("Games released by Publisher \"Aerosoft GmbH\":", end=5*" ")
 for game_id in repo.get_game_ids_by_publisher(Publisher("Aerosoft GmbH")):
     print(repo.get_game(game_id).title, end=", ")
 print("\nEND - this test repeats twice because __init__.py loads this module on run I think\n")
+
 """
