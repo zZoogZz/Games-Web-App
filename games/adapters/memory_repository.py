@@ -15,11 +15,13 @@ class MemoryRepository(AbstractRepository):
     # games ordered by date, not id. id is assumed unique.
 
     def __init__(self):
-        self.__games = list()
-        self.__games_index = dict()
+        self.__games = dict() #key is game id
         self.__genres = list()
+        self.__games_by_genre = dict() #game id's stored against relevant genre
         self.__users = list()
         self.__reviews = list()
+
+
 
     def add_user(self, user: User):
         self.__users.append(user)
@@ -28,18 +30,26 @@ class MemoryRepository(AbstractRepository):
         return next((user for user in self.__users if user.username == username), None)
 
     def add_game(self, game: Game):
-        insort_left(self.__games, game) #dunno what insort_left() does
-        self.__games_index[game.game_id] = game
+        insort_left()
+        #insort_left(self.__games, game) #dunno what insort_left() does
+        if isinstance(game, Game) and game.game_id not in self.__games.keys():
+            self.__games[game.game_id] = game
 
-    def get_game(self, id: int) -> Game:
+    def get_game_by_id(self, game_id: int) -> Game:
         game = None
 
         try:
-            game = self.__games_index[id]
+            game = self.__games[game_id]
         except KeyError:
             pass  # Ignore exception and return None.
 
         return game
+
+    def add_game_id_to_genre(self, game_id: int, genre: Genre):
+        if genre not in self.__games_by_genre.keys():
+            self.__games_by_genre[genre] = [game_id]
+        else:
+            self.__games_by_genre[genre].append(game_id)
 """
     def get_games_by_date(self, target_date: date) -> List[Game]:
         target_game = Game(
@@ -63,7 +73,7 @@ class MemoryRepository(AbstractRepository):
             pass
 
         return matching_games
-        """
+"""
 
     def get_number_of_games(self):
         return len(self.__games)
@@ -89,6 +99,8 @@ class MemoryRepository(AbstractRepository):
         # Fetch the games.
         games = [self.__games_index[id] for id in existing_ids]
         return games
+
+
 
 # * Need to implement function below properly - thinking it needs to search all games and create a new list genre_games
 # for those that include that genre.
@@ -140,7 +152,8 @@ class MemoryRepository(AbstractRepository):
 """
 
     def add_genre(self, genre: Genre):
-        self.__genres.append(genre)
+        if genre not in self.__genres:
+            self.__genres.append(genre)
 
     def get_genres(self) -> List[Genre]:
         return self.__genres
@@ -165,8 +178,8 @@ def read_csv_file(filename: str):
     with open(filename, encoding='utf-8-sig') as infile:
         reader = csv.reader(infile)
 
-        # Read first line of the the CSV file.
-        headers = next(reader)
+        # Read (effectively skip) first line of the the CSV file.
+        #headers = next(reader)
 
         # Read remaining rows from the CSV file.
         for row in reader:
@@ -175,43 +188,42 @@ def read_csv_file(filename: str):
             yield row
 
 
-def load_games_and_genres(data_path: Path, repo: MemoryRepository):
-    genres = dict()
+def load_games_from_database(data_path: Path, repo: MemoryRepository):
+    games = dict()
+    games_filename = str(data_path / "games.csv")
 
-    games_filename = str(data_path / "news_games.csv")
+    game_id_column = 0
+    game_title_column = 1
+    genres_column = 18
+    release_date_column = 2
+    price_column = 3
+    description_column = 4
+    image_url_column = 7
+    website_url_column = 8
+    # reviews_column = 6
+    publisher_column = 16
+
     for data_row in read_csv_file(games_filename):
-
-        game_key = int(data_row[0]) # * check columns!!
-        number_of_genres = len(data_row) - 6
-        game_genres = data_row[-number_of_genres:]
-
-        # Add any new genres; associate the current game with genres.
+        #instantiate:
+        game_id = int(data_row[game_id_column])
+        game = Game(game_id, game_title=data_row[game_title_column])
+        #set:
+        #reviews and users not implemented yet/here
+        game.release_date = data_row[release_date_column].strip()
+        game.price = data_row[price_column].strip()
+        game.description = data_row[description_column].strip()
+        game.image_url = data_row[image_url_column].strip()
+        game.website_url = data_row[website_url_column].strip()
+        game.publisher = data_row[publisher_column].strip()
+        game_genres = data_row[genres_column].strip().split(",") #str to split
         for genre in game_genres:
-            if genre not in genres.keys():
-                genres[genre] = list()
-            genres[genre].append(game_key)
-        del data_row[-number_of_genres:]
+            game_genre = Genre(genre)
+            game.add_genre(game_genre)
+            repo.add_genre(game_genre)
+            repo.add_game_id_to_genre(game_id, game_genre)
 
-        # Create game object.
-        game = Game(
-            # use setter: release_date=date.fromisoformat(data_row[1]),
-            game_id=game_key,  # game_key?
-            game_title=data_row[2]
-            #first_paragraph=data_row[3],
-            #hyperlink=data_row[4],
-            #image_hyperlink=data_row[5],
-        )
-
-        # Add the game to the repository.
         repo.add_game(game)
 
-    # Create Genre objects, associate them with games and add them to the repository.
-    for genre_name in genres.keys():
-        genre = Genre(genre_name)
-        for game_id in genres[genre_name]:
-            game = repo.get_game(game_id)
-            make_genre_association(game, genre)
-        repo.add_genre(genre)
 
 
 def load_users(data_path: Path, repo: MemoryRepository):
