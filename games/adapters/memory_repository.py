@@ -3,7 +3,7 @@ from pathlib import Path
 from datetime import date, datetime
 from typing import List
 
-from bisect import bisect, bisect_left, insort_left
+#from bisect import bisect, bisect_left, insort_left
 
 from werkzeug.security import generate_password_hash
 
@@ -206,22 +206,17 @@ def load_games_from_database(data_path: Path, repo: MemoryRepository):
         game = Game(game_id, game_title=data_row[game_title_column])
         # set:
         game.release_date = data_row[release_date_column].strip()
-        repo.add_game_id_to_release_date(game_id, game.release_date)
         game.price = float(data_row[price_column].strip())
         game.description = data_row[description_column].strip()
         game.image_url = data_row[image_url_column].strip()
         game.website_url = data_row[website_url_column].strip()
         game.publisher = Publisher(data_row[publisher_column])
-        repo.add_game_id_to_publisher(game_id, game.publisher)
         game_genres = data_row[genres_column].strip().split(",") # str to split
         for genre in game_genres:
             game_genre = Genre(genre)
             game.add_genre(game_genre)
-            repo.add_genre(game_genre)
-            repo.add_game_id_to_genre(game_id, game_genre)
 
         repo.add_game(game)
-
 
 
 """
@@ -263,28 +258,30 @@ def populate(data_path: Path, repo: MemoryRepository):
     # Load reviews into the repository.
     # load_reviews(data_path, repo, users)
 
-
+"""
 # Demo:
 
 data_path = Path("data")
 repo = MemoryRepository()
 populate(data_path, repo)
 
-print("Games ID's sorted by title:")
+print("Games ID's sorted by their title:", end=5*" ")
 for game_id in repo.get_game_ids_sorted_by_title():
     print(f"{game_id} ({repo.get_game(game_id).title})", end=", ")
-print("\n")
+print()
 
-print("Games with Genre \"Violent\":")
-for game_id in repo.get_game_ids_by_genre(Genre("Violent")):
+print("Games with Genre \"Simulation\":", end=5*" ")
+for game_id in repo.get_game_ids_by_genre(Genre("Simulation")):
     print(repo.get_game(game_id).title, end=", ")
-print("\n")
+print()
 
-print("Games released on Sep 3, 2015:")
+print("Games released on \"Sep 3, 2015\":", end=5*" ")
 for game_id in repo.get_game_ids_on_date("Sep 3, 2015"):
     print(repo.get_game(game_id).title, end=", ")
-print("\n")
+print()
 
-print("Games released by Publisher \"Aerosoft GmbH\":")
+print("Games released by Publisher \"Aerosoft GmbH\":", end=5*" ")
 for game_id in repo.get_game_ids_by_publisher(Publisher("Aerosoft GmbH")):
     print(repo.get_game(game_id).title, end=", ")
+print("\nEND - this test repeats twice because __init__.py loads this module on run I think\n")
+"""
