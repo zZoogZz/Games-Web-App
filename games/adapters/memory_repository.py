@@ -11,37 +11,37 @@ from games.adapters.repository import AbstractRepository, RepositoryException
 from games.domainmodel.model import Game, Genre, Publisher, User, Review, Wishlist
 
 
-class MemoryRepository: # add (AbstractRepository) and implement remaining functions
-    # games ordered by date, not id. id is assumed unique.
+class MemoryRepository(AbstractRepository): # implement games ordered by date. id is assumed unique.
 
     def __init__(self):
-        self.__games = dict() #key is game id
+        self.__games = dict()
         self.__genres = list()
-        self.__games_by_genre = dict() #game id's stored against relevant genre
-        #self.__games_by_date = dict() #will add later
+        self.__games_by_genre = dict()
+        self.__games_by_publisher = dict()
+        self.__games_by_release_date = dict()
         self.__users = list()
         self.__reviews = list()
 
     def add_user(self, user: User):
-        self.__users.append(user)
+        self.__users.append(user) # check
 
     def get_user(self, username) -> User:
-        return next((user for user in self.__users if user.username == username), None)
+        return next((user for user in self.__users if user.username == username), None) #check
 
     def add_game(self, game: Game):
-
-        #insort_left(self.__games, game) #dunno what insort_left() does
         if isinstance(game, Game) and game.game_id not in self.__games.keys():
             self.__games[game.game_id] = game
+            self.add_game_id_to_release_date(game.game_id, game.release_date)
+            for genre in game.genres:
+                self.add_game_id_to_genre(game.game_id, genre)
+            self.add_game_id_to_publisher(game.game_id, game.publisher)
 
-    def get_game_by_id(self, game_id: int) -> Game:
+    def get_game(self, game_id: int) -> Game:
         game = None
-
         try:
             game = self.__games[game_id]
         except KeyError:
             pass  # Ignore exception and return None.
-
         return game
 
     def add_game_id_to_genre(self, game_id: int, genre: Genre):
@@ -50,93 +50,85 @@ class MemoryRepository: # add (AbstractRepository) and implement remaining funct
         else:
             self.__games_by_genre[genre].append(game_id)
 
-    """
-    def get_games_by_date(self, target_date: date) -> List[Game]:
-        target_game = Game(
-            date=target_date,
-            title=None,
-            first_paragraph=None,
-            hyperlink=None,
-            image_hyperlink=None
-        )
-        matching_games = list()
+    def add_game_id_to_release_date(self, game_id: int, release_date: str):
+        if release_date not in self.__games_by_release_date.keys():
+            self.__games_by_release_date[release_date] = [game_id]
+        else:
+            self.__games_by_release_date[release_date].append(game_id)
 
+    def add_game_id_to_publisher(self, game_id: int, publisher: Publisher):
+        if publisher not in self.__games_by_publisher.keys():
+            self.__games_by_publisher[publisher] = [game_id]
+        else:
+            self.__games_by_publisher[publisher].append(game_id)
+
+    def get_game_ids_by_date(self, release_date: str) -> List[int]:
         try:
-            index = self.game_index(target_game)
-            for game in self.__games[index:None]:
-                if game.release_date == target_date:
-                    matching_games.append(game)
-                else:
-                    break
+            return self.__games_by_release_date[release_date]
         except ValueError:
             # No games for specified date. Simply return an empty list.
             pass
-
-        return matching_games
-    """
+        return []
 
     def get_number_of_games(self):
         return len(self.__games)
 
     def get_first_game(self):
-        game = None
-
-        if len(self.__games) > 0:
+        if self.get_number_of_games() > 0:
+            #not implemented yet
             game = self.__games[0]
-        return game
+        return None
 
     def get_last_game(self):
-        game = None
+        if self.get_number_of_games() > 0:
+            #not implemented yet
+            game = self.__games[0]
+        return None
 
-        if len(self.__games) > 0:
-            game = self.__games[-1]
-        return game
-
-    def get_games_by_id(self, id_list):
+    def get_games_by_ids(self, game_id_list):
         # Strip out any ids in id_list that don't represent game ids in the repository.
-        existing_ids = [id for id in id_list if id in self.__games_index]
-
+        game_ids = [game_id for game_id in game_id_list if game_id in self.__games.keys()]
         # Fetch the games.
-        games = [self.__games_index[id] for id in existing_ids]
+        games = [self.__games[game_id] for game_id in game_ids]
         return games
 
-    def get_game_ids_for_genre(self, genre_name: str):
-        return self.__games_by_genre[genre_name]
+    def get_game_ids_by_genre(self, genre: Genre):
+        try:
+            return self.__games_by_genre[genre]
+        except ValueError:
+            # Not found so return None
+            pass
+        return []
 
-    """
+    def get_sorted_release_dates(self):
+        date_list = []
+        for release_date in self.__games_by_release_date.keys():
+            release_datetime = datetime.strptime(release_date, "%b %d, %Y")
+            date_list.append(release_datetime)
+        return sorted(date_list)
+
     # Not sure if get date of game required for us
     def get_date_of_previous_game(self, game: Game):
-        previous_date = None
-
-        try:
-            index = self.game_index(game)
-            for stored_game in reversed(self.__games[0:index]):
-                if stored_game.release_date < game.release_date:
-                    previous_date = stored_game.release_date
-                    break
-        except ValueError:
-            # No earlier games, so return None.
-            pass
-
-        return previous_date
-
-    # Not sure if get date of game required for us
+        date_sequence = self.get_sorted_release_dates()
+        if game.release_date in date_sequence:
+            try:
+                index = date_sequence.index(game.release_date) - 1
+                return date_sequence[index].strftime("%b %d, %Y")
+            except ValueError:
+                # No earlier games, so return None.
+                pass
+        return None
 
     def get_date_of_next_game(self, game: Game):
-        next_date = None
-
-        try:
-            index = self.game_index(game)
-            for stored_game in self.__games[index + 1:len(self.__games)]:
-                if stored_game.release_date > game.release_date:
-                    next_date = stored_game.release_date
-                    break
-        except ValueError:
-            # No subsequent games, so return None.
-            pass
-
-        return next_date
-    """
+        date_sequence = self.get_sorted_release_dates()
+        if game.release_date in date_sequence:
+            try:
+                index = date_sequence.index(game.release_date) + 1
+                return date_sequence[index].strftime("%b %d, %Y")
+            except ValueError:
+                # No earlier games, so return None.
+                pass
+        return None
 
     def add_genre(self, genre: Genre):
         if genre not in self.__genres:
@@ -154,11 +146,11 @@ class MemoryRepository: # add (AbstractRepository) and implement remaining funct
         return self.__reviews
 
     # Helper method to return game index.
-    def game_index(self, game: Game):
-        index = bisect_left(self.__games, game)
-        if index != len(self.__games) and self.__games[index].release_date == game.release_date:
-            return index
-        raise ValueError
+    # def game_index(self, game: Game):
+    #     index = bisect_left(self.__games, game)
+    #     if index != len(self.__games) and self.__games[index].release_date == game.release_date:
+    #         return index
+    #     raise ValueError
 
 
 def read_csv_file(filename: str):
@@ -191,17 +183,19 @@ def load_games_from_database(data_path: Path, repo: MemoryRepository):
     publisher_column = 16
 
     for data_row in read_csv_file(games_filename):
-        #instantiate:
+        # instantiate:
         game_id = int(data_row[game_id_column])
         game = Game(game_id, game_title=data_row[game_title_column])
-        #set:
+        # set:
         game.release_date = data_row[release_date_column].strip()
+        repo.add_game_id_to_release_date(game_id, game.release_date)
         game.price = float(data_row[price_column].strip())
         game.description = data_row[description_column].strip()
         game.image_url = data_row[image_url_column].strip()
         game.website_url = data_row[website_url_column].strip()
         game.publisher = data_row[publisher_column].strip()
-        game_genres = data_row[genres_column].strip().split(",") #str to split
+        repo.add_game_id_to_publisher(game_id, game.publisher)
+        game_genres = data_row[genres_column].strip().split(",") # str to split
         for genre in game_genres:
             game_genre = Genre(genre)
             game.add_genre(game_genre)
@@ -209,6 +203,7 @@ def load_games_from_database(data_path: Path, repo: MemoryRepository):
             repo.add_game_id_to_genre(game_id, game_genre)
 
         repo.add_game(game)
+
 
 
 """
@@ -225,6 +220,7 @@ def load_users(data_path: Path, repo: MemoryRepository):
         users[data_row[0]] = user
     return users
 """
+
 """
 def load_reviews(data_path: Path, repo: MemoryRepository, users):
     reviews_filename = str(Path(data_path) / "reviews.csv")
@@ -249,11 +245,14 @@ def populate(data_path: Path, repo: MemoryRepository):
     # Load reviews into the repository.
     # load_reviews(data_path, repo, users)
 
-#janky tests:
-# data_path = Path("data")
-# repo = MemoryRepository()
-# populate(data_path, repo)
-# print(repo.get_game_by_id(951050))
-# print(repo.get_game_ids_for_genre(Genre("Action")))
+
+# Janky tests:
+
+
+data_path = Path("data")
+repo = MemoryRepository()
+populate(data_path, repo)
+print(repo.get_game(951050))
+print(repo.get_game_ids_by_genre(Genre("Action")))
 
 

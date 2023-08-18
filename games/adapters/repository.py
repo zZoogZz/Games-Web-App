@@ -35,7 +35,7 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_game(self, id: int) -> Game:
+    def get_game(self, game_id: int) -> Game:
         """ Returns Game with id from the repository.
 
         If there is no Game with the given id, this method returns None.
@@ -43,11 +43,23 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_games_by_date(self, target_date: date) -> List[Game]:
-        """ Returns a list of Games that were published on target_date.
+    def add_game_id_to_genre(self, game_id: int, genre: Genre):
+        """ Adds adds game id against genre key in games by genre dictionary. """
+        raise NotImplementedError
 
-        If there are no Games on the given date, this method returns an empty list.
-        """
+    @abc.abstractmethod
+    def add_game_id_to_release_date(self, game_id: int, release_date: str):
+        """ Adds game id against date key in games by date dictionary. """
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def add_game_id_to_publisher(self, game_id: int, publisher: Publisher):
+        """ Adds game id against publisher key in games by publisher dictionary. """
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_game_ids_by_date(self, release_date: str) -> List[int]:
+        """ Gets list of game ids released on that date. """
         raise NotImplementedError
 
     @abc.abstractmethod
@@ -72,7 +84,7 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_games_by_id(self, id_list):
+    def get_games_by_ids(self, id_list):
         """ Returns a list of Games, whose ids match those in id_list, from the repository.
 
         If there are no matches, this method returns an empty list.
@@ -80,16 +92,24 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_game_ids_for_genre(self, genre_name: str):
-        """ Returns a list of ids representing Games that are genreged by genre_name.
+    def get_game_ids_by_genre(self, genre: Genre):
+        """ Returns a list of game ids which are associated with a Genre.
 
-        If there are Games that are genreged by genre_name, this method returns an empty list.
+        If there are no matches, this method returns an empty list.
         """
         raise NotImplementedError
 
     @abc.abstractmethod
+    def get_sorted_release_dates(self):
+        """ Returns a list of all dates (as strings) on which a game in the games dictionary has a release date,
+        sorted as datetime objects.
+
+        If there are no matches, this method returns an empty list.
+        """
+
+    @abc.abstractmethod
     def get_date_of_previous_game(self, game: Game):
-        """ Returns the date of an Game that immediately precedes game.
+        """ Returns the date of a Game that immediately precedes game.
 
         If game is the first Game in the repository, this method returns None because there are no Games
         on a previous date.
