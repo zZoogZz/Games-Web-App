@@ -5,6 +5,6 @@ home_blueprint = Blueprint(
     'home_bp', __name__)
 
 
-@home_blueprint.route('/home/')
+@home_blueprint.route('/')
 def home():
     return render_template('home/home.html')
