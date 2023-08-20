@@ -6,7 +6,7 @@ from games.domainmodel.model import Game, Genre, Publisher, User, Review, Wishli
 
 
 repo_instance = None
-print('abstract repo')
+
 
 class RepositoryException(Exception):
 
