@@ -9,4 +9,4 @@ home_blueprint = Blueprint(
 @home_blueprint.route('/', methods=['GET'])
 def home():
     return render_template('home/home.html',
-                           top_genres=utilities.get_top_genres()                           )
+                           top_genres=utilities.get_top_genres())

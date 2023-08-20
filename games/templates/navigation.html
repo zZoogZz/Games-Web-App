@@ -1,20 +1,19 @@
 <div class="w3-row w3-centre">
     <nav id="nav">
         <a href="{{ url_for('home_bp.home') }}" class="w3-button">Home</a><br>
+        <a href="{{ url_for('home_bp.home') }}" class="w3-button">Home</a><br>
 
-        <a href="{{ url_for('game_bp.desc',game_id=1) }}" class="w3-button">game 1</a><br>
-        <a href="{{ url_for('game_bp.desc',game_id=2) }}" class="w3-button">game 2</a><br>
-        <a href="{{ url_for('game_bp.desc',game_id=3) }}" class="w3-button">game 3</a><br>
+
         <br>
-        <p>Genres:</p>
+        <p>Top Genres:</p>
         <p>
+
+            {% for genre in top_genres %}
             <ul>
-                {% for genre in top_genres %}
-                <li>
-                    <a href="gameDescription.html"> {{ genre }} </a>
-                </li>
-                {% endfor %}
+                <li><a href="gameDescription.html"> {{ genre[0].genre_name }} </a> <br> <div id="nav-game-count"> ({{ genre[1] }}) </div></li>
             </ul>
+            {% endfor %}
+
         </p>
     </nav>
 </div>

@@ -18,12 +18,37 @@ nav {
   text-align: left;
   background-color: #111; /* Change to your desired navbar color */
   height: calc(100vh - 150px); /* Calculate navbar height as viewport height minus header height */
-  width: 200px; /* Set the width of the navbar */
+  width: 250px; /* Set the width of the navbar */
   float: left; /* Float the navbar to the left */
-  font-size: 30px;
+  font-size: 24px;
   font-weight: 700;
   color: green;
   padding: 5px;
+}
+
+nav ul {
+    display: inline;
+    list-style: none;
+    position: relative;
+    text-align: center;
+}
+
+nav ul li {
+    display: inline;
+    list-style: none;
+    position: relative;
+    text-align: center;
+}
+#nav-game-count {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 100;
+  color: white;
+  padding: 1px;
+}
+
+nav ul {
+  list-style-type: none;
 }
 
 /* Style the main content area */
