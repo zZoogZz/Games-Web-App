@@ -34,6 +34,7 @@ class MemoryRepository(AbstractRepository): # implement games ordered by date. i
             self.add_game_id_to_release_date(game.game_id, game.release_date)
             for genre in game.genres:
                 self.add_game_id_to_genre(game.game_id, genre)
+                self.add_genre(genre)
             self.add_game_id_to_publisher(game.game_id, game.publisher)
 
     def get_game(self, game_id: int) -> Game:
@@ -43,6 +44,12 @@ class MemoryRepository(AbstractRepository): # implement games ordered by date. i
         except KeyError:
             pass  # Ignore exception and return None.
         return game
+
+    def get_games(self):
+        return self.__games
+
+    def get_game_ids(self):
+        return self.__games.keys()
 
     def add_game_id_to_genre(self, game_id: int, genre: Genre):
         if genre not in self.__games_by_genre.keys():
@@ -258,12 +265,16 @@ def populate(data_path: Path, repo: MemoryRepository):
     # Load reviews into the repository.
     # load_reviews(data_path, repo, users)
 
-"""
-# Demo:
 
+# Demo:
+"""
 data_path = Path("data")
 repo = MemoryRepository()
 populate(data_path, repo)
+
+
+print(repo.get_genres())
+print(repo.get_games())
 
 print("Games ID's sorted by their title:", end=5*" ")
 for game_id in repo.get_game_ids_sorted_by_title():
