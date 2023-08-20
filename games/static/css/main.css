@@ -1,12 +1,8 @@
-@import url('https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap');
-
-* {
-  font-family: 'Josefin Sans', sans-serif;
-}
-
+/*this is a temporary chatgpt css file*/
 /* Reset some default margin and padding values */
 body, h1, h2, h3, p {
   margin: 0;
+  padding: 0;
 }
 
 /* Set the height of the header */
@@ -15,14 +11,13 @@ header {
   background-color: black; /* Change to your desired header color */
   color: white;
   text-align: center;
-  padding: 0 10px 0 10px;
 }
 
 
 nav {
-  text-align: center;
+  text-align: left;
   background-color: #111;
-  height: calc(100vh);
+  height: calc(100vh - 150px);
   width: 200px;
   float: left;
   font-size: 24px;
@@ -43,7 +38,6 @@ nav ul li a {
     text-align: center;
     padding: 0px;
     text-decoration: none;
-    font-weight: 700;
 }
 
 nav ul li a:hover {
