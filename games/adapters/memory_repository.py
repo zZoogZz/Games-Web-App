@@ -1,19 +1,17 @@
 import csv
-import os.path
 from pathlib import Path
 from datetime import date, datetime
 from typing import List
 
-# from bisect import bisect, bisect_left, insort_left # using dict so no sorting by id required
+#from bisect import bisect, bisect_left, insort_left
 
-# from werkzeug.security import generate_password_hash # no users or passwords yet
+from werkzeug.security import generate_password_hash
 
 from games.adapters.repository import AbstractRepository, RepositoryException
 from games.domainmodel.model import Game, Genre, Publisher, User, Review, Wishlist
-from games.adapters.datareader.csvdatareader import GameFileCSVReader
-print('memory_repo')
 
-class MemoryRepository(AbstractRepository):  # implement games ordered by date. id is assumed unique.
+
+class MemoryRepository(AbstractRepository): # implement games ordered by date. id is assumed unique.
 
     def __init__(self):
         self.__games = dict()
@@ -28,7 +26,7 @@ class MemoryRepository(AbstractRepository):  # implement games ordered by date. 
         self.__users.append(user) # check
 
     def get_user(self, username) -> User:
-        return next((user for user in self.__users if user.username == username), None)  # check
+        return next((user for user in self.__users if user.username == username), None) # check
 
     def add_game(self, game: Game):
         if isinstance(game, Game) and game.game_id not in self.__games.keys():
@@ -36,6 +34,7 @@ class MemoryRepository(AbstractRepository):  # implement games ordered by date. 
             self.add_game_id_to_release_date(game.game_id, game.release_date)
             for genre in game.genres:
                 self.add_game_id_to_genre(game.game_id, genre)
+                self.add_genre(genre)
             self.add_game_id_to_publisher(game.game_id, game.publisher)
 
     def get_game(self, game_id: int) -> Game:
@@ -45,6 +44,12 @@ class MemoryRepository(AbstractRepository):  # implement games ordered by date. 
         except KeyError:
             pass  # Ignore exception and return None.
         return game
+
+    def get_games(self):
+        return self.__games
+
+    def get_game_ids(self):
+        return self.__games.keys()
 
     def add_game_id_to_genre(self, game_id: int, genre: Genre):
         if genre not in self.__games_by_genre.keys():
@@ -187,29 +192,89 @@ def read_csv_file(filename: str):
             yield row
 
 
-def populate(repo: MemoryRepository):
-    # Per lecture 12:
-    dir_name = os.path.dirname(os.path.abspath(__file__))
-    games_file_name = os.path.join(dir_name, "data/games.csv")
-    reader = GameFileCSVReader(games_file_name)
-    reader.read_csv_file()
-    games = reader.dataset_of_games
-    for game in games:
+def load_games_from_database(data_path: Path, repo: MemoryRepository):
+    games = dict()
+    games_filename = str(data_path / "games.csv")
+
+    game_id_column = 0
+    game_title_column = 1
+    genres_column = 18
+    release_date_column = 2
+    price_column = 3
+    description_column = 4
+    image_url_column = 7
+    website_url_column = 8
+    # reviews_column = 6         #reviews and users not implemented yet/here
+    publisher_column = 16
+
+    for data_row in read_csv_file(games_filename):
+        # instantiate:
+        game_id = int(data_row[game_id_column])
+        game = Game(game_id, game_title=data_row[game_title_column])
+        # set:
+        game.release_date = data_row[release_date_column].strip()
+        game.price = float(data_row[price_column].strip())
+        game.description = data_row[description_column].strip()
+        game.image_url = data_row[image_url_column].strip()
+        game.website_url = data_row[website_url_column].strip()
+        game.publisher = Publisher(data_row[publisher_column])
+        game_genres = data_row[genres_column].strip().split(",") # str to split
+        for genre in game_genres:
+            game_genre = Genre(genre)
+            game.add_genre(game_genre)
+
         repo.add_game(game)
-    print('test')
-    print(repo.get_genres())
 
-
-repo = MemoryRepository()
-populate(repo)
-print(repo.get_number_of_games())
 
 """
+def load_users(data_path: Path, repo: MemoryRepository):
+    users = dict()
+
+    users_filename = str(Path(data_path) / "users.csv")
+    for data_row in read_csv_file(users_filename):
+        user = User(
+            username=data_row[1],
+            password=generate_password_hash(data_row[2])
+        )
+        repo.add_user(user)
+        users[data_row[0]] = user
+    return users
+"""
+
+"""
+def load_reviews(data_path: Path, repo: MemoryRepository, users):
+    reviews_filename = str(Path(data_path) / "reviews.csv")
+    for data_row in read_csv_file(reviews_filename):
+        review = make_review(
+            review_text=data_row[3],
+            user=users[data_row[1]],
+            game=repo.get_game(int(data_row[2])),
+            timestamp=datetime.fromisoformat(data_row[4])
+        )
+        repo.add_review(review)
+"""
+
+
+def populate(data_path: Path, repo: MemoryRepository):
+    # Load games and genres into the repository.
+    load_games_from_database(data_path, repo)
+
+    # Load users into the repository.
+    #users = load_users(data_path, repo)
+
+    # Load reviews into the repository.
+    # load_reviews(data_path, repo, users)
+
+
 # Demo:
-
-
+"""
+data_path = Path("data")
 repo = MemoryRepository()
-populate(repo)
+populate(data_path, repo)
+
+
+print(repo.get_genres())
+print(repo.get_games())
 
 print("Games ID's sorted by their title:", end=5*" ")
 for game_id in repo.get_game_ids_sorted_by_title():

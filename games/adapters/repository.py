@@ -42,6 +42,15 @@ class AbstractRepository(abc.ABC):
         """
         raise NotImplementedError
 
+    def get_games(self):
+        """ Gets the dictionary of all games in repo """
+        raise NotImplementedError
+
+    def get_game_ids(self):
+        """ Gets the game ids of all games in repo """
+        raise NotImplementedError
+
+
     @abc.abstractmethod
     def add_game_id_to_genre(self, game_id: int, genre: Genre):
         """ Adds adds game id against genre key in games by genre dictionary. """
