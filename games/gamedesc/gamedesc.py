@@ -5,8 +5,6 @@ import games.adapters.repository as repo
 gamedesc_blueprint = Blueprint(
     'game_bp', __name__)
 
-# TODO: Access to the games should be implemented via the repository pattern, so this can not stay here!
-
 
 def get_game(game_id):
     game = repo.repo_instance.get_game(game_id)
