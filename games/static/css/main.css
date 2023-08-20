@@ -13,42 +13,42 @@ header {
   text-align: center;
 }
 
-/* Style the navigation bar */
+
 nav {
   text-align: left;
-  background-color: #111; /* Change to your desired navbar color */
-  height: calc(100vh - 150px); /* Calculate navbar height as viewport height minus header height */
-  width: 250px; /* Set the width of the navbar */
-  float: left; /* Float the navbar to the left */
+  background-color: #111;
+  height: calc(100vh - 150px);
+  width: 200px;
+  float: left;
   font-size: 24px;
-  font-weight: 700;
-  color: green;
-  padding: 5px;
+  color: white;
+  padding: 0px;
 }
+
 
 nav ul {
-    display: inline;
-    list-style: none;
-    position: relative;
+    list-style-type: none;
     text-align: center;
+    padding: 0px;
 }
 
-nav ul li {
-    display: inline;
-    list-style: none;
-    position: relative;
+nav ul li a {
+    display: block;
+    color: white;
     text-align: center;
+    padding: 0px;
+    text-decoration: none;
 }
+
+nav ul li a:hover {
+  background-color: #777777;
+}
+
 #nav-game-count {
   text-align: center;
   font-size: 12px;
-  font-weight: 100;
-  color: white;
-  padding: 1px;
-}
-
-nav ul {
-  list-style-type: none;
+  color: #555;
+  padding: 0px;
 }
 
 /* Style the main content area */

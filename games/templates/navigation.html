@@ -1,19 +1,17 @@
 <div class="w3-row w3-centre">
     <nav id="nav">
-        <a href="{{ url_for('home_bp.home') }}" class="w3-button">Home</a><br>
-        <a href="{{ url_for('home_bp.home') }}" class="w3-button">Home</a><br>
-
-
+        <ul>
+            <li><a href="{{ url_for('home_bp.home') }}" class="w3-button">Home</a></li>
+            <li><a href="Jinja url_for All Games route/blueprint" class="w3-button">All Games</a></li>
+        </ul>
         <br>
-        <p>Top Genres:</p>
+        <p>TOP GENRES</p>
         <p>
-
-            {% for genre in top_genres %}
             <ul>
-                <li><a href="gameDescription.html"> {{ genre[0].genre_name }} </a> <br> <div id="nav-game-count"> ({{ genre[1] }}) </div></li>
-            </ul>
+            {% for genre in top_genres %}
+                <li><a href="Probably need to do a GET method or something here"> {{ genre[0].genre_name }} </a></li>  <div id="nav-game-count"> ({{ genre[1] }}) </div>
             {% endfor %}
-
+            </ul>
         </p>
     </nav>
 </div>
