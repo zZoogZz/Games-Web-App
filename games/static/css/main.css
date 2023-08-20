@@ -1,25 +1,45 @@
-#header {
-  padding: 20px;
-  background: 	#E6E6FA;
-  border-bottom: 1px solid #e0e4e8;
-  font-size: 25px;
-  font-weight: bold;
+/*this is a temporary chatgpt css file*/
+/* Reset some default margin and padding values */
+body, h1, h2, h3, p {
+  margin: 0;
+  padding: 0;
+}
+
+/* Set the height of the header */
+header {
+  height: 100px;
+  background-color: black; /* Change to your desired header color */
+  color: white;
   text-align: center;
 }
 
-.copyright {
-  color: black;
-  font-size: 0.9em;
+/* Style the navigation bar */
+nav {
+  text-align: left;
+  background-color: #111; /* Change to your desired navbar color */
+  height: calc(100vh - 150px); /* Calculate navbar height as viewport height minus header height */
+  width: 200px; /* Set the width of the navbar */
+  float: left; /* Float the navbar to the left */
+  font-size: 30px;
+  font-weight: 700;
+  color: green;
+  padding: 5px;
 }
 
-.description p i {
-    font-family: 'Gill Sans';
-    font-weight: bold;
-    font-size: 18px;
-    text-transform: uppercase;
-    color:darkslateblue
-    }
+/* Style the main content area */
+#container {
+  margin-left: 220px; /* Space for the 200px wide navbar and 20px margin */
+  margin-top: 120px; /* Space for the 100px high header and 20px margin */
+  padding: 0px;
+  color: darkblue;
+}
 
-.description img {
-        vertical-align: top;
-    }
+/* Style the footer */
+footer {
+  background-color: #555; /* Change to your desired footer color */
+  color: white;
+  text-align: center;
+  clear: both; /* Clear the float */
+  margin-top: 20px;
+  bottom: 0;
+}
