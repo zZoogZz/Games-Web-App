@@ -11,7 +11,7 @@ from typing import List
 from games.adapters.repository import AbstractRepository, RepositoryException
 from games.domainmodel.model import Game, Genre, Publisher, User, Review, Wishlist
 from games.adapters.datareader.csvdatareader import GameFileCSVReader
-
+print('memory_repo')
 
 class MemoryRepository(AbstractRepository):  # implement games ordered by date. id is assumed unique.
 
@@ -196,11 +196,18 @@ def populate(repo: MemoryRepository):
     games = reader.dataset_of_games
     for game in games:
         repo.add_game(game)
+    print('test')
+    print(repo.get_genres())
+
+
+repo = MemoryRepository()
+populate(repo)
+print(repo.get_number_of_games())
 
 """
 # Demo:
 
-data_path = Path("data")
+
 repo = MemoryRepository()
 populate(repo)
 

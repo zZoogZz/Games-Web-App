@@ -9,11 +9,12 @@
         <p>Genres:</p>
         <p>
             <ul>
-            {% for genre in top_genres %}
-            <li>
-                <a class="nav-link" href="gameDescription.html  "> {{ genre }} </a>
-            </li>
-            {% endfor %}
+                {% for genre in top_genres %}
+                <li>
+                    <a href="gameDescription.html"> {{ genre }} </a>
+                </li>
+                {% endfor %}
+            </ul>
         </p>
     </nav>
 </div>

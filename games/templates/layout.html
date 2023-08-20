@@ -11,6 +11,14 @@
 <body>
 {% include 'header.html' %}
 {% include 'navigation.html' %}
+ <ul>
+     Genre test:  {{ top_genres[0] }}
+    {% for genre in top_genres %}
+    <li>
+        Genre: {{ genre }}
+    </li>
+    {% endfor %}
+</ul>
 {% block content %} {% endblock %}
 {% include 'footer.html' %}
 </body>
