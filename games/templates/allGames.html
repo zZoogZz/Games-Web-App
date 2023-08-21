@@ -9,7 +9,8 @@
                     <p>
                         <ul>
                         {% for game in all_games %}
-                            <li><a href="Probably need to do a GET method or something here"> {{ game.title }} </a><div><img src="{{ game.image_url }}" alt="game image"></div></li>
+                            <li><a href="Probably need to do a GET method or something here"> {{ game.title }} </a>
+                                <div><img src="{{ game.image_url }}" alt="game image"></div></li>
                         {% endfor %}
                         </ul>
                     </p>
