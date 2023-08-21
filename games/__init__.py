@@ -19,7 +19,6 @@ def create_app():
     # fill repository with the content from the provided csv files
     populate(repo.repo_instance)
 
-
     with app.app_context():
         # Add blueprints here to register them.
         from .home import home

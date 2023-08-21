@@ -1,7 +1,5 @@
 from flask import Blueprint, render_template, url_for
-
 import games.adapters.repository as repo
-
 import games.utilities.services as services
 
 utilities_blueprint = Blueprint(
