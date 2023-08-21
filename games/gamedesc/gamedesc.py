@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template
 from games.domainmodel.model import Game
 
+from games.utilities import utilities
+
 import games.adapters.repository as repo
 
 
@@ -16,4 +18,4 @@ def get_game(game_id):
 def desc(game_id):
     some_game = get_game(game_id)
     # Use Jinja to customize a predefined html page rendering the layout for showing a single game.
-    return render_template('gameDescription.html', game=some_game)
+    return render_template('gameDescription.html', game=some_game, top_genres=utilities.get_top_genres())
