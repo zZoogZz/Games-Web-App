@@ -1,8 +1,10 @@
 from flask import Blueprint, render_template
 from games.domainmodel.model import Game
+
 from games.utilities import utilities
 
 import games.adapters.repository as repo
+
 
 gamedesc_blueprint = Blueprint(
     'game_bp', __name__)

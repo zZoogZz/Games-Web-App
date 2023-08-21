@@ -27,6 +27,9 @@ def create_app():
         from .gamedesc import gamedesc
         app.register_blueprint(gamedesc.gamedesc_blueprint)
 
+        from .allGames import allGames
+        app.register_blueprint(allGames.all_games_blueprint)
+
     return app
 
 
