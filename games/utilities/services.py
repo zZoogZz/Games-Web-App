@@ -1,9 +1,7 @@
-# from games.adapters.memory_repository import MemoryRepository
-from games.domainmodel.model import Game
 from games.adapters.repository import AbstractRepository
 from operator import itemgetter
 
-def get_top_genres(repo, number_to_get):
+def get_top_genres(repo: AbstractRepository, number_to_get):
     games = repo.get_games()
     genre_count = dict()
     for game in games.values():
