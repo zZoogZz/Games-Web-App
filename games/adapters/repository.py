@@ -1,6 +1,6 @@
 import abc
 from typing import List
-from datetime import date
+# from datetime import date
 
 from games.domainmodel.model import Game, Genre, Publisher, User, Review, Wishlist
 
@@ -41,6 +41,15 @@ class AbstractRepository(abc.ABC):
         If there is no Game with the given id, this method returns None.
         """
         raise NotImplementedError
+
+    def get_games(self):
+        """ Gets the dictionary of all games in repo """
+        raise NotImplementedError
+
+    def get_game_ids(self):
+        """ Gets the game ids of all games in repo """
+        raise NotImplementedError
+
 
     @abc.abstractmethod
     def add_game_id_to_genre(self, game_id: int, genre: Genre):
