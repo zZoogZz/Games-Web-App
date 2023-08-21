@@ -5,13 +5,23 @@
     <title>Game Site</title>
     <link rel="stylesheet" href="../static/css/main.css"/>
     <!-- W3.CSS -->
-    <!-- <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
 </head>
 <body>
 {% include 'header.html' %}
 {% include 'navigation.html' %}
-{% block content %} {% endblock %}
+<div class="w3-row">
+    <div class="w3-col w3-gray" style="width:10%">
+        {% include 'sidebar.html' %}
+    </div>
+    <div class="w3-rest">
+        {% block content %} {% endblock %}
+    </div>
+</div>
+
+
+
 {% include 'footer.html' %}
 </body>
 </html>
