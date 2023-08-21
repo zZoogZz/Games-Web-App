@@ -25,8 +25,8 @@ class GameFileCSVReader:
                     game.release_date = row["Release date"]
                     game.price = float(row["Price"])
                     game.description = row["About the game"]
-                    game.image_url = row["Website"]
-                    game.website_url = row["Header image"]
+                    game.image_url = row["Header image"]
+                    game.website_url = row["Website"]
                     publisher = Publisher(row["Publishers"])
                     self.__dataset_of_publishers.add(publisher)
                     game.publisher = publisher
