@@ -13,7 +13,7 @@ def all_games_by_name():
     all_games = services.all_games_by_name(repo.repo_instance)
     return all_games
 
-@all_games_blueprint.route('/games', methods=['GET'])
+@all_games_blueprint.route('/all_games', methods=['GET'])
 def all_games():
         all_games = all_games_by_name()
         # Use Jinja to customize a predefined html page rendering the layout for all games in alphabetical order
