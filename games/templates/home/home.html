@@ -12,24 +12,11 @@
             " class="w3-centre">
             </p>
             <div class="w3-display-middle w3-large w3-col" style="width:50%">
-                <form method="POST">
-                <div class="w3-blue w3-container w3-padding w3-round w3-row">
-                    <input name ="query" class="w3-input w3-rest" type="text" placeholder="I'm looking for....">
-                    <select name="query_type" class="w3-input w3-quarter">
-                      <option value="title">Title</option>
-                      <option value="publisher">Publisher</option>
-                    </select>
-                    <input type="submit" class="w3-button w3-green w3-round w3-third" value="Search">
-                </div>
-                </form>
+                {% include 'services/search.html' %}
             </div>
         </div>
     </div>
-    <div>
-
-        <a href="{{ url_for('game_bp.desc',game_id=407420) }}" class="w3-button">Game 1</a><br>
-        <a href="{{ url_for('game_bp.desc',game_id=532080) }}" class="w3-button">Game 2</a><br>
-        <a href="{{ url_for('game_bp.desc',game_id=350970) }}" class="w3-button">Game 3</a><br>
+    <div class="w3-container w3-padding">
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
