@@ -9,7 +9,8 @@
                     <p><i>Release Date:</i> {{ game.release_date }} </p>
                     <p><i>Price:</i> {{ game.price }}</p>
                     <p><i>About:</i> {{ game.description }} </p>
-                    <p><i>Image URL: </i><img src="{{ game.image_url }}" alt="game image"> </p>
+                    <p><i>Image: </i><img src="{{ game.image_url }}" alt="game image"> </p>
+                    <p><i>Website: </i><a href="{{ game.website_url }}">{{ game.website_url }}</a></p>
                 </div>
               </main>
             </div>

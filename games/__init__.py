@@ -16,7 +16,7 @@ def create_app():
 
     # Create the MemoryRepository implementation for a memory-based repository.
     repo.repo_instance = MemoryRepository()
-    # fill the content of the repository from the provided csv files
+    # fill repository with the content from the provided csv files
     populate(repo.repo_instance)
 
     with app.app_context():

@@ -215,6 +215,7 @@ populate(repo)
 print(repo.get_genres())
 print(repo.get_games())
 
+
 print("Games ID's sorted by their title:", end=5*" ")
 for game_id in repo.get_game_ids_sorted_by_title():
     print(f"{game_id} ({repo.get_game(game_id).title})", end=", ")

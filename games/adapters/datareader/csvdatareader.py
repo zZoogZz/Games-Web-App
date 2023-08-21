@@ -27,7 +27,6 @@ class GameFileCSVReader:
                     game.description = row["About the game"]
                     game.image_url = row["Website"]
                     game.website_url = row["Header image"]
-
                     publisher = Publisher(row["Publishers"])
                     self.__dataset_of_publishers.add(publisher)
                     game.publisher = publisher
