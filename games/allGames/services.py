@@ -36,7 +36,7 @@ def query_publisher(query, repo=repository.repo_instance):
     result = []
 
     for game in sorted_game_object_list:
-        if query.lower() in game.publisher.lower():
+        if query.lower() in game.publisher.publisher_name.lower():
             result.append(game)
 
     return result

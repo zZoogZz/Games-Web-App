@@ -14,7 +14,11 @@
             <div class="w3-display-middle w3-large w3-col" style="width:50%">
                 <form method="POST">
                 <div class="w3-blue w3-container w3-padding w3-round w3-row">
-                    <input name = "query" class="w3-input w3-twothird" type="text" placeholder="I'm looking for....">
+                    <input name ="query" class="w3-input w3-rest" type="text" placeholder="I'm looking for....">
+                    <select name="query_type" class="w3-input w3-quarter">
+                      <option value="title">Title</option>
+                      <option value="publisher">Publisher</option>
+                    </select>
                     <input type="submit" class="w3-button w3-green w3-round w3-third" value="Search">
                 </div>
                 </form>

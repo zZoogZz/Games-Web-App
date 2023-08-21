@@ -15,6 +15,6 @@ def home():
 @home_blueprint.route('/', methods=['POST'])
 def home_search_post():
     query = request.form['query']
-    query_type = "title"
+    query_type = request.form['query_type']
 
-    return flask.redirect(url_for("search_bp.search_games", query=query, query_type=query_type))
+    return flask.redirect(url_for("search_bp.search_games", query=query, type=query_type))
