@@ -30,6 +30,8 @@ def create_app():
         from .allGames import allGames
         app.register_blueprint(allGames.all_games_blueprint)
 
+        from .allGames import search
+        app.register_blueprint(search.games_search_blueprint)
     return app
 
 
