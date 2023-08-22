@@ -41,3 +41,16 @@ def query_publisher(query, repo=repository.repo_instance):
 
     return result
 
+
+def query_genre(query, repo=repository.repo_instance):
+
+    sorted_game_object_list = query_all_games_by_name(repo)
+
+    result = []
+
+    for game in sorted_game_object_list:
+        for genre in game.genres:
+            if query.lower() in genre.genre_name.lower():
+                result.append(game)
+
+    return result
