@@ -1,0 +1,8 @@
+<table>
+    {% for game in all_games %}
+        <tr>
+            <td><a href="Probably need to do a GET method or something here"> {{ game.title }} </a></td>
+            <td><img src="{{ game.image_url }}" alt="game image"></td>
+        </tr>
+    {% endfor %}
+</table>
