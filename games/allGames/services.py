@@ -50,7 +50,7 @@ def query_genre(query, repo=repository.repo_instance):
 
     for game in sorted_game_object_list:
         for genre in game.genres:
-            if query.lower() in genre.genre_name.lower():
+            if query.lower() in genre.genre_name.lower() and game not in result:
                 result.append(game)
 
     return result
