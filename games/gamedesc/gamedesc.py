@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, redirect
 from games.domainmodel.model import Game
 from games.utilities import utilities
 
@@ -16,5 +16,8 @@ def get_game(game_id):
 @gamedesc_blueprint.route('/game/<int:game_id>')
 def desc(game_id):
     some_game = get_game(game_id)
-    # Use Jinja to customize a predefined html page rendering the layout for showing a single game.
-    return render_template('gameDescription.html', game=some_game, top_genres=utilities.get_top_genres())
+    if isinstance(some_game, Game):
+        # Use Jinja to customize a predefined html page rendering the layout for showing a single game.
+        return render_template('gameDescription.html', game=some_game, top_genres=utilities.get_top_genres())
+    else:
+        return redirect('404.html')
