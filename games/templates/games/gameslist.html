@@ -1,8 +1,26 @@
 <table>
     {% for game in all_games %}
         <tr>
-            <td><a href="Probably need to do a GET method or something here"> {{ game.title }} </a></td>
             <td><img src="{{ game.image_url }}" alt="game image"></td>
+            <td>
+                <div>
+                    <table>
+                        <tr>
+                            <td><a href="{{ url_for('game_bp.desc',game_id=game.game_id) }}"><h2>{{ game.title }}</h2></a></td>
+                        </tr>
+                        <tr>
+                            <td>{% for genre in game.genres %}<div class="w3-tag w3-round w3-blue">{{ genre.genre_name }}</div> {% endfor %}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ game.publisher.publisher_name }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+            <td>
+                ${{ game.price }}
+            </td>
+
         </tr>
     {% endfor %}
 </table>
