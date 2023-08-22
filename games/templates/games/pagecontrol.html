@@ -1,19 +1,38 @@
 <body>
     <div class="pagination">
-        {% if page != 1 %}
-            <a href="?page={{ 1 }}">First</a>
-        {% endif %}
+        {% if search_query != None %}
+            {% if page != 1 %}
+                <a href="?page={{ 1 }}&query={{ search_query }}&type={{ search_query_type }}">First</a>
+            {% endif %}
 
-        {% if page > 1 %}
-            <a href="?page={{ page - 1 }}">Previous</a>
-        {% endif %}
+            {% if page > 1 %}
+                <a href="?page={{ page - 1 }}&query={{ search_query }}&type={{ search_query_type }}">Previous</a>
+            {% endif %}
 
-        {% if all_games|length == 20 %}
-            <a href="?page={{ page + 1 }}">Next</a>
-        {% endif %}
+            {% if all_games|length == 20 %}
+                <a href="?page={{ page + 1 }}&query={{ search_query }}&type={{ search_query_type }}">Next</a>
+            {% endif %}
 
-        {% if all_games|length == 20 %}
-            <a href="?page={{ total_game_pages }}">Last</a>
+            {% if all_games|length == 20 %}
+                <a href="?page={{ total_game_pages }}&q={{ search_query }}&type={{ search_query_type }}">Last</a>
+            {% endif %}
+        {% else %}
+            {% if page != 1 %}
+                <a href="?page={{ 1 }}">First</a>
+            {% endif %}
+
+            {% if page > 1 %}
+                <a href="?page={{ page - 1 }}">Previous</a>
+            {% endif %}
+
+            {% if all_games|length == 20 %}
+                <a href="?page={{ page + 1 }}">Next</a>
+            {% endif %}
+
+            {% if all_games|length == 20 %}
+                <a href="?page={{ total_game_pages }}">Last</a>
+            {% endif %}
         {% endif %}
     </div>
 </body>
+
