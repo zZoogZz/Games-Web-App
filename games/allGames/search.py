@@ -21,6 +21,9 @@ def search_games():
     elif query_type == "publisher":
         # Publisher Query
         games = services.query_publisher(query)
+    elif query_type == "genre":
+        # Genre Query
+        games = services.query_genre(query)
     else:
         # If a type is defined but none are applicable, nothing is returned.
         games = []
