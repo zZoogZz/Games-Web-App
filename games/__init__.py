@@ -32,6 +32,9 @@ def create_app():
 
         from .allGames import search
         app.register_blueprint(search.games_search_blueprint)
+
+        from .errorHandlers import notFoundError
+        app.register_blueprint(notFoundError.not_found_blueprint)
     return app
 
 
