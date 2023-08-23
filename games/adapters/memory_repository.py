@@ -51,7 +51,7 @@ class MemoryRepository(AbstractRepository):  # implement games ordered by date. 
         return self.__games
 
     def get_game_ids(self):
-        return self.__games.keys()
+        return list(self.__games.keys())
 
     def add_game_id_to_genre(self, game_id: int, genre: Genre):
         if genre not in self.__games_by_genre.keys():
