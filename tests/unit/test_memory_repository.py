@@ -7,11 +7,6 @@ from games.adapters.datareader.csvdatareader import GameFileCSVReader
 
 
 # Functions to facilitate tests:
-def initialise_repo():
-    repo = MemoryRepository()
-    populate(repo)
-    return repo
-
 
 def create_csv_reader():
     dir_name = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -20,8 +15,10 @@ def create_csv_reader():
     reader.read_csv_file()
     return reader
 
+# Actual tests:
 
-def test_add_and_get_games():
+
+def test_memory_repository():
     repo = MemoryRepository()
     reader = create_csv_reader()
     game = next(iter(reader.dataset_of_games))
