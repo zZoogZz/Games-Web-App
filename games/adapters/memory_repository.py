@@ -25,7 +25,8 @@ class MemoryRepository(AbstractRepository):  # implement games ordered by date. 
         self.__reviews = list()
 
     def add_user(self, user: User):
-        self.__users.append(user) # check
+        if isinstance(user, User):
+            self.__users.append(user) # check
 
     def get_user(self, username: str) -> User:
         try:
@@ -48,7 +49,8 @@ class MemoryRepository(AbstractRepository):  # implement games ordered by date. 
         try:
             game = self.__games[game_id]
         except KeyError:
-            raise KeyError("Invalid game_id")
+            # No game fore this id
+            return None
         return game
 
     def get_games(self):
@@ -59,6 +61,8 @@ class MemoryRepository(AbstractRepository):  # implement games ordered by date. 
         return list(self.__games.keys())
 
     def add_game_id_to_genre(self, game_id: int, genre: Genre):
+        if not isinstance(game_id, int) and not isinstance(genre, Genre):
+            return
         if genre not in self.__games_by_genre.keys():
             self.__games_by_genre[genre] = [game_id]
         else:
@@ -79,7 +83,7 @@ class MemoryRepository(AbstractRepository):  # implement games ordered by date. 
     def get_game_ids_on_date(self, release_date: str) -> List[int]:
         try:
             return self.__games_by_release_date[release_date]
-        except ValueError:
+        except KeyError:
             # No games for specified date. Simply return an empty list.
             pass
         return []
@@ -133,15 +137,15 @@ class MemoryRepository(AbstractRepository):  # implement games ordered by date. 
             # Check if the release_date string is in the correct date format (e.g., "Oct 21, 2008")
             release_date = datetime.strptime(release_date, "%b %d, %Y")
         except ValueError:
-            raise ValueError("Release date must be in 'Oct 21, 2008' format!")
+            raise ValueError("Release date must be in 'Oct 21, 2008' format.")
+        except TypeError:
+            raise TypeError("Release date must be a string in 'Oct 21, 2008' format.")
         date_sequence = self.get_sorted_release_dates()
         if release_date in date_sequence:
-            try:
-                index = date_sequence.index(release_date) - 1
-                return date_sequence[index].strftime("%b %d, %Y")
-            except ValueError:
-                # No earlier release dates, so return None.
-                pass
+            index = date_sequence.index(release_date) - 1
+            if index not in range(len(date_sequence)):
+                return None
+            return date_sequence[index].strftime("%b %d, %Y")
         return None
 
     def get_next_release_date(self, release_date: str):
@@ -149,22 +153,22 @@ class MemoryRepository(AbstractRepository):  # implement games ordered by date. 
             # Check if the release_date string is in the correct date format (e.g., "Oct 21, 2008")
             release_date = datetime.strptime(release_date, "%b %d, %Y")
         except ValueError:
-            raise ValueError("Release date must be in 'Oct 21, 2008' format!")
+            raise ValueError("Release date must be in 'Oct 21, 2008' format.")
+        except TypeError:
+            raise TypeError("Release date must be a string in 'Oct 21, 2008' format.")
         date_sequence = self.get_sorted_release_dates()
         if release_date in date_sequence:
-            try:
-                index = date_sequence.index(release_date) + 1
-                return date_sequence[index].strftime("%b %d, %Y")
-            except ValueError:
-                # No later release dates, so return None.
-                pass
+            index = date_sequence.index(release_date) + 1
+            if index not in range(len(date_sequence)):
+                return None
+            return date_sequence[index].strftime("%b %d, %Y")
         return None
 
     def get_game_ids_by_publisher(self, publisher: Publisher) -> List[int]:
         try:
             return self.__games_by_publisher[publisher]
-        except ValueError:
-            # No games for specified publisher. Simply return an empty list.
+        except KeyError:
+            # No games for specified publisher or publisher invalid. Return an empty list.
             pass
         return []
 
