@@ -18,6 +18,15 @@ def create_csv_reader():
 # Actual tests:
 
 
+def test_empty_repo():
+    repo = MemoryRepository()
+    assert repo.get_number_of_games() == 0
+    assert repo.get_game(7940) is None
+    assert repo.get_game_ids == []
+    assert repo.get_genres == []
+    assert repo.get_game_ids_by_genre(Genre("Indie")) is None
+
+
 def test_memory_repository():
     repo = MemoryRepository()
     reader = create_csv_reader()
@@ -51,10 +60,18 @@ def test_memory_repository():
 
     assert repo.get_game_ids_by_genre(Genre("Indie"))[:3] == [299380, 448500, 1297010]
     assert repo.get_game_ids_on_date("Apr 24, 2021") == [1576880, 1580990]
+    assert repo.get_next_release_date("Apr 24, 2021") == ("Apr 26, 2021")
+    assert repo.get_next_release_date("Apr 26, 1723") is None
+    assert repo.get_next_release_date(repo.get_sorted_release_dates()[-1]) is None
+    assert repo.get_next_release_date("An invalid string") is None
+
+    assert repo.get_previous_release_date("Apr 26, 2021") == ("Apr 24, 2021")
+    assert repo.get_previous_release_date("Apr 26, 1723") is None
+    assert repo.get_previous_release_date(repo.get_sorted_release_dates()[0]) is None
+    assert repo.get_previous_release_date("An invalid string") is None
     assert repo.get_game_ids_sorted_by_title()[:3] == [435790, 1684530, 796580]
     assert repo.get_games_by_ids([1588070, 1939600]) == [Game(game_id=1588070, game_title="DuckMan"),
                                                          Game(game_id=1939600, game_title="Sillage")]
-
     assert repo.get_game_ids_by_publisher(Publisher("Arcen Games, LLC")) == [471770, 40420]
 
     # Test repository search games by title or publisher etc
