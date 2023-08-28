@@ -10,7 +10,8 @@
                             <td><a href="{{ url_for('game_bp.desc',game_id=game.game_id) }}"><h2>{{ game.title }}</h2></a></td>
                         </tr>
                         <tr>
-                            <td>{% for genre in game.genres %}<div class="w3-tag w3-round w3-blue">{{ genre.genre_name }}</div> {% endfor %}</td>
+                            <td>{% for genre in game.genres %}<div class="w3-tag w3-round w3-blue">
+                                <a href="{{ url_for('search_bp.search_games', query=genre.genre_name, query_type='genre') }}"> {{ genre.genre_name }} </a></div> {% endfor %}</td>
                         </tr>
                         <tr>
                             <td>{{ game.publisher.publisher_name }}</td>
