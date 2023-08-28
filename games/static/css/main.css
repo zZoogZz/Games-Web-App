@@ -18,10 +18,10 @@
   }
 
   body {
-    background-image: url("photo-1692891259833-9832c3ca751e.avif");
+    /*background-image: url("photo-1692891259833-9832c3ca751e.avif");*/
     background-position: center;
     background-size: auto 100%;
-    background-color: #cccccc;
+    background-color: #EEE;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -30,7 +30,7 @@
     .main {
         margin-top: 15px;
         padding: 5px 10px;
-        background-color: #FFF3;
+        background-color: #FFFA;
     }
   
   .header {
@@ -44,13 +44,14 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0px;
     /*background-color: #135;*/
   }
 
   .navbar ul {
     list-style-type: none;
-    margin: 0;
-    padding: 0;
+    margin: 0px;
+    padding: 0px;
     text-align: center;
     align-items: center;
   }
@@ -87,7 +88,7 @@
   }
 
   .navbar-right .search-btn:hover {
-    background-color: #0077aa;
+    background-color: #0002;
   }
 
   .pagination {
