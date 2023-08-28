@@ -1,11 +1,23 @@
 
 
-<div class="w3-row w3-centre">
-    <nav id="navigation" class="w3-black">
+<div class="navbar">
+    <div class="navbar-left">
+        <ul>
+            <li><a href="{{ url_for('home_bp.home') }}" class="w3-button">Home</a></li>
+            <li><a href="{{ url_for('all_games_bp.all_games') }}" class="w3-button">All Games</a></li>
+        </ul>
+    </div>
 
-        <a href="{{ url_for('home_bp.home') }}" class="w3-button">Home</a>
-        <a href="{{ url_for('all_games_bp.all_games') }}" class="w3-button">All Games</a>
-
-    </nav>
+    <form method="GET" action="{{ url_for('search_bp.search_games') }}">
+        <div class="navbar-right">
+            <input name ="query" type="text" placeholder="I'm looking for....">
+            <select name="query_type">
+              <option value="title">Title</option>
+              <option value="publisher">Publisher</option>
+              <option value="genre">Genre</option>
+            </select>
+            <input type="submit" class="search-btn" value="Search">
+        </div>
+    </form>
 </div>
 

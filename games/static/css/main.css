@@ -1,39 +1,183 @@
-/*this is a temporary chatgpt css file*/
-/* Reset some default margin and padding values */
-body, h1, h2, h3, p {
-  margin: 0;
-  padding: 0;
-}
+* {
+    box-sizing: border-box;
+  }
+  
+  .row::after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+  
+  [class*="col-"] {
+    float: left;
+    padding: 15px;
+  }
+  
+  html {
+    font-family: "Lucida Sans", sans-serif;
+  }
 
-/* Set the height of the header */
-header {
-  height: 100px;
-  background-color: black; /* Change to your desired header color */
-  color: white;
-  text-align: center;
-}
+  body {
+    background-image: url("photo-1692891259833-9832c3ca751e.avif");
+    background-position: center;
+    background-size: auto 100%;
+    background-color: #EEE;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    }
 
-#nav-game-count {
-  text-align: center;
-  font-size: 12px;
-  color: #555;
-  padding: 0px;
-}
+    .main {
+        margin-top: 15px;
+        padding: 5px 10px;
+        background-color: #FFFA;
+    }
+  
+  .header {
+    background-color: black;
+    color: #ffffff;
+    padding: 15px;
+    text-align: center;
+  }
 
-/* Style the main content area */
-#container {
-  margin-left: 220px; /* Space for the 200px wide navbar and 20px margin */
-  margin-top: 120px; /* Space for the 100px high header and 20px margin */
-  padding: 0px;
-  color: darkblue;
-}
+  .w3-tag a {
+    text-decoration: none;
+  }
 
-/* Style the footer */
-footer {
-  background-color: #555; /* Change to your desired footer color */
-  color: white;
-  text-align: center;
-  clear: both; /* Clear the float */
-  margin-top: 20px;
-  bottom: 0;
-}
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px;
+    /*background-color: #135;*/
+  }
+
+  .navbar ul {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+    text-align: center;
+    align-items: center;
+  }
+
+  .navbar li a{
+    display: block;
+    /*padding: 8px 16px;*/
+    text-decoration: none;
+  }
+
+  .navbar-left li{
+    display: inline-block;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .navbar-right {
+    margin: 5px;
+    display: inline-flex;
+    gap: 0px;
+    padding: 0px 0px;
+    align-items: center;
+  }
+
+  .navbar-right .search-btn {
+    padding: 0px 20px;
+    text-decoration: none;
+    background-color: #0000;
+    border: none;
+    font-size: 16px;
+    font-family: "Lucida Sans", sans-serif;
+    font-weight: 1200;
+  }
+
+  .navbar-right .search-btn:hover {
+    background-color: #0002;
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .pagination li {
+    list-style-type: none;
+    padding: 5px 10px;
+    color: #0006;
+  }
+
+  .pagination a{
+    padding: 5px 10px;
+    text-decoration: none;
+  }
+
+  .pagination a:hover{
+    background-color: #0002;
+  }
+
+  .menu ul {
+    list-style-type: none;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    height: 100%;
+  }
+
+  .menu li a{
+    display: block;
+    padding: 8px 16px;
+    text-decoration: none;
+    margin-bottom: 0px;
+    color: #ffffff;
+    background-color: #33b5e5;
+    /*border: 1px solid white;*/
+  }
+  
+  .menu li a:hover {
+    background-color: #0077aa;
+  }
+ 
+  .footer {
+    background-color: #0099cc;
+    color: #ffffff;
+    text-align: center;
+    font-size: 12px;
+    padding: 15px;
+    margin-top: auto;
+  }
+  
+  /* For mobile phones: */
+  [class*="col-"] {
+    width: 100%;
+  }
+  
+  @media only screen and (min-width: 600px) {
+    /* For tablets: */
+    .col-s-1 {width: 8.33%;}
+    .col-s-2 {width: 16.66%;}
+    .col-s-3 {width: 25%;}
+    .col-s-4 {width: 33.33%;}
+    .col-s-5 {width: 41.66%;}
+    .col-s-6 {width: 50%;}
+    .col-s-7 {width: 58.33%;}
+    .col-s-8 {width: 66.66%;}
+    .col-s-9 {width: 75%;}
+    .col-s-10 {width: 83.33%;}
+    .col-s-11 {width: 91.66%;}
+    .col-s-12 {width: 100%;}
+  }
+  @media only screen and (min-width: 768px) {
+    /* For desktop: */
+    .col-1 {width: 8.33%;}
+    .col-2 {width: 16.66%;}
+    .col-3 {width: 25%;}
+    .col-4 {width: 33.33%;}
+    .col-5 {width: 41.66%;}
+    .col-6 {width: 50%;}
+    .col-7 {width: 58.33%;}
+    .col-8 {width: 66.66%;}
+    .col-9 {width: 75%;}
+    .col-10 {width: 83.33%;}
+    .col-11 {width: 91.66%;}
+    .col-12 {width: 100%;}
+  }
