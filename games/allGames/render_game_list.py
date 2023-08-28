@@ -11,7 +11,7 @@ def render_game_list(game_list):
     page = request.args.get('page', 1, type=int)
     games_per_page = 20
     search_query = request.args.get('query')
-    search_query_type = request.args.get('type')
+    search_query_type = request.args.get('query_type')
     start_index = (page - 1) * games_per_page
     end_index = start_index + games_per_page
     paginated_games = game_list[start_index:end_index]

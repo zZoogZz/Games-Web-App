@@ -8,7 +8,7 @@
         </ul>
     </div>
 
-    <form method="GET">
+    <form method="GET" action="{{ url_for('search_bp.search_games') }}">
         <div class="navbar-right">
             <input name ="query" type="text" placeholder="I'm looking for....">
             <select name="query_type">

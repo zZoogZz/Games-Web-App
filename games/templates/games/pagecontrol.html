@@ -2,35 +2,51 @@
     <div class="pagination">
         {% if search_query != None %}
             {% if page != 1 %}
-                <a href="?page={{ 1 }}&query={{ search_query }}&type={{ search_query_type }}">First</a>
+                <a href="?page={{ 1 }}&query={{ search_query }}&query_type={{ search_query_type }}">First</a>
+            {% else %}
+                <li>First</li>
             {% endif %}
 
             {% if page > 1 %}
-                <a href="?page={{ page - 1 }}&query={{ search_query }}&type={{ search_query_type }}">Previous</a>
+                <a href="?page={{ page - 1 }}&query={{ search_query }}&query_type={{ search_query_type }}">Previous</a>
+            {% else %}
+                <li>Previous</li>
             {% endif %}
 
             {% if all_games|length == 20 %}
-                <a href="?page={{ page + 1 }}&query={{ search_query }}&type={{ search_query_type }}">Next</a>
+                <a href="?page={{ page + 1 }}&query={{ search_query }}&query_type={{ search_query_type }}">Next</a>
+            {% else %}
+                <li>Next</li>
             {% endif %}
 
             {% if all_games|length == 20 %}
-                <a href="?page={{ total_game_pages }}&query={{ search_query }}&type={{ search_query_type }}">Last</a>
+                <a href="?page={{ total_game_pages }}&query={{ search_query }}&query_type={{ search_query_type }}">Last</a>
+            {% else %}
+                    <li>Last</li>
             {% endif %}
         {% else %}
             {% if page != 1 %}
                 <a href="?page={{ 1 }}">First</a>
+            {% else %}
+                    <li>First</li>
             {% endif %}
 
             {% if page > 1 %}
                 <a href="?page={{ page - 1 }}">Previous</a>
+            {% else %}
+                    <li>Previous</li>
             {% endif %}
 
             {% if all_games|length == 20 %}
                 <a href="?page={{ page + 1 }}">Next</a>
+            {% else %}
+                <li>Next</li>
             {% endif %}
 
             {% if all_games|length == 20 %}
                 <a href="?page={{ total_game_pages }}">Last</a>
+            {% else %}
+                <li>Last</li>
             {% endif %}
         {% endif %}
     </div>

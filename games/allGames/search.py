@@ -11,7 +11,7 @@ games_search_blueprint = Blueprint(
 def search_games():
     args = request.args
     query = args.get("query", default="", type=str)
-    query_type = args.get("type", default="title", type=str)
+    query_type = args.get("query_type", default="title", type=str)
 
     print(query_type)
     # Check the type of query that has been defined, and route accordingly.
@@ -27,7 +27,6 @@ def search_games():
     else:
         # If a type is defined but none are applicable, nothing is returned.
         games = []
-
     return render_game_list(games)
 
 

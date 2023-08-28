@@ -1,19 +1,15 @@
 {% extends 'layout.html' %} {% block content %}
 
-<body>
-            <div id="container">
-              <main id="main">
-                <div class="description">
-                  <br>
-                    <h2>{{ game.title }} (Game ID: {{ game.game_id }})</h2>
-                    <p><i>Release Date:</i> {{ game.release_date }} </p>
-                    <p><i>Price:</i> {{ game.price }}</p>
-                    <p><i>About:</i> {{ game.description }} </p>
-                    <p><i>Image: </i><img src="{{ game.image_url }}" alt="game image"> </p>
-                    <p><i>Website: </i><a href="{{ game.website_url }}">{{ game.website_url }}</a></p>
-                </div>
-              </main>
-            </div>
+<div class="col-9 col-s-9 main">
+    <h2>{{ game.title }}</h2>
+    <p><i>Release Date:</i> {{ game.release_date }} </p>
+    <p><i>Price:</i> {{ game.price }}</p>
+    <p><i>About:</i> {{ game.description }} </p>
+    <p><i>Image: </i><img src="{{ game.image_url }}" alt="game image"> </p>
+    <p><i>Website: </i><a href="{{ game.website_url }}">{{ game.website_url }}</a></p>
+    <p>Game ID: {{ game.game_id }}</p>
+    <br>
+</div>
 
-</body>
+
 {% endblock %}
