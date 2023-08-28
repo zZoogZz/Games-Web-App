@@ -77,22 +77,6 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_first_game(self) -> Game:
-        """ Returns the first Game, ordered by date, from the repository.
-
-        Returns None if the repository is empty.
-        """
-        raise NotImplementedError
-
-    @abc.abstractmethod
-    def get_last_game(self) -> Game:
-        """ Returns the last Game, ordered by date, from the repository.
-
-        Returns None if the repository is empty.
-        """
-        raise NotImplementedError
-
-    @abc.abstractmethod
     def get_games_by_ids(self, id_list):
         """ Returns a list of Games, whose ids match those in id_list, from the repository.
 
@@ -122,20 +106,18 @@ class AbstractRepository(abc.ABC):
         """
 
     @abc.abstractmethod
-    def get_date_of_previous_game(self, game: Game):
-        """ Returns the date of a Game that immediately precedes game.
-
-        If game is the first Game in the repository, this method returns None because there are no Games
-        on a previous date.
+    def get_previous_release_date(self, game: Game):
+        """ Returns the previous release date in the repository
+        Returns None if an invalid release date (not formatted or not in the repository) is passed
+        Returns None if no earlier release dates in repository.
         """
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_date_of_next_game(self, game: Game):
-        """ Returns the date of an Game that immediately follows game.
-
-        If game is the last Game in the repository, this method returns None because there are no Games
-        on a later date.
+    def get_next_release_date(self, release_date:str):
+        """ Returns the next release date in the repository
+        Returns None if an invalid release date (not formatted or not in the repository) is passed
+        Returns None if no later release dates in repository.
         """
         raise NotImplementedError
 

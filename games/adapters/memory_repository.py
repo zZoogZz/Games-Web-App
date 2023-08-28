@@ -25,10 +25,15 @@ class MemoryRepository(AbstractRepository):  # implement games ordered by date. 
         self.__reviews = list()
 
     def add_user(self, user: User):
-        self.__users.append(user) # check
+        if isinstance(user, User):
+            self.__users.append(user) # check
 
-    def get_user(self, username) -> User:
-        return next((user for user in self.__users if user.username == username), None)  # check
+    def get_user(self, username: str) -> User:
+        try:
+            user = next((user for user in self.__users if user.username == username), None)  # check
+            return user
+        except ValueError:
+            raise ValueError("username invalid or not found")
 
     def add_game(self, game: Game):
         if isinstance(game, Game) and game.game_id not in self.__games.keys():
@@ -44,16 +49,20 @@ class MemoryRepository(AbstractRepository):  # implement games ordered by date. 
         try:
             game = self.__games[game_id]
         except KeyError:
-            pass  # Ignore exception and return None.
+            # No game fore this id
+            return None
         return game
 
     def get_games(self):
         return self.__games
 
     def get_game_ids(self):
-        return self.__games.keys()
+        print(self.__games.keys())
+        return list(self.__games.keys())
 
     def add_game_id_to_genre(self, game_id: int, genre: Genre):
+        if not isinstance(game_id, int) and not isinstance(genre, Genre):
+            return
         if genre not in self.__games_by_genre.keys():
             self.__games_by_genre[genre] = [game_id]
         else:
@@ -74,7 +83,7 @@ class MemoryRepository(AbstractRepository):  # implement games ordered by date. 
     def get_game_ids_on_date(self, release_date: str) -> List[int]:
         try:
             return self.__games_by_release_date[release_date]
-        except ValueError:
+        except KeyError:
             # No games for specified date. Simply return an empty list.
             pass
         return []
@@ -82,19 +91,13 @@ class MemoryRepository(AbstractRepository):  # implement games ordered by date. 
     def get_number_of_games(self):
         return len(self.__games)
 
-    def get_first_game(self):
-        if self.get_number_of_games() > 0:
-            #not implemented yet
-            game = self.__games[0]
-        return None
-
-    def get_last_game(self):
-        if self.get_number_of_games() > 0:
-            #not implemented yet
-            game = self.__games[0]
-        return None
-
-    def get_games_by_ids(self, game_id_list):
+    def get_games_by_ids(self, game_id_list: List[int]) -> List[Game]:
+        if not isinstance(game_id_list, List):
+            return []
+        else:
+            for item in game_id_list:
+                if not isinstance(item, int):
+                    return []
         # Strip out any ids in id_list that don't represent game ids in the repository.
         game_ids = [game_id for game_id in game_id_list if game_id in self.__games.keys()]
         # Fetch the games.
@@ -102,6 +105,8 @@ class MemoryRepository(AbstractRepository):  # implement games ordered by date. 
         return games
 
     def get_game_ids_by_genre(self, genre: Genre):
+        if not isinstance(genre, Genre):
+            return []
         try:
             return self.__games_by_genre[genre]
         except ValueError:
@@ -127,37 +132,49 @@ class MemoryRepository(AbstractRepository):  # implement games ordered by date. 
         return sorted(date_list)
 
     # Not sure if get date of game required for us
-    def get_date_of_previous_game(self, game: Game):
+    def get_previous_release_date(self, release_date: str):
+        try:
+            # Check if the release_date string is in the correct date format (e.g., "Oct 21, 2008")
+            release_date = datetime.strptime(release_date, "%b %d, %Y")
+        except ValueError:
+            raise ValueError("Release date must be in 'Oct 21, 2008' format.")
+        except TypeError:
+            raise TypeError("Release date must be a string in 'Oct 21, 2008' format.")
         date_sequence = self.get_sorted_release_dates()
-        if game.release_date in date_sequence:
-            try:
-                index = date_sequence.index(game.release_date) - 1
-                return date_sequence[index].strftime("%b %d, %Y")
-            except ValueError:
-                # No earlier games, so return None.
-                pass
+        if release_date in date_sequence:
+            index = date_sequence.index(release_date) - 1
+            if index not in range(len(date_sequence)):
+                return None
+            return date_sequence[index].strftime("%b %d, %Y")
         return None
 
-    def get_date_of_next_game(self, game: Game):
+    def get_next_release_date(self, release_date: str):
+        try:
+            # Check if the release_date string is in the correct date format (e.g., "Oct 21, 2008")
+            release_date = datetime.strptime(release_date, "%b %d, %Y")
+        except ValueError:
+            raise ValueError("Release date must be in 'Oct 21, 2008' format.")
+        except TypeError:
+            raise TypeError("Release date must be a string in 'Oct 21, 2008' format.")
         date_sequence = self.get_sorted_release_dates()
-        if game.release_date in date_sequence:
-            try:
-                index = date_sequence.index(game.release_date) + 1
-                return date_sequence[index].strftime("%b %d, %Y")
-            except ValueError:
-                # No earlier games, so return None.
-                pass
+        if release_date in date_sequence:
+            index = date_sequence.index(release_date) + 1
+            if index not in range(len(date_sequence)):
+                return None
+            return date_sequence[index].strftime("%b %d, %Y")
         return None
 
     def get_game_ids_by_publisher(self, publisher: Publisher) -> List[int]:
         try:
             return self.__games_by_publisher[publisher]
-        except ValueError:
-            # No games for specified publisher. Simply return an empty list.
+        except KeyError:
+            # No games for specified publisher or publisher invalid. Return an empty list.
             pass
         return []
 
     def add_genre(self, genre: Genre):
+        if not isinstance(genre, Genre):
+            return
         if genre not in self.__genres:
             self.__genres.append(genre)
 
