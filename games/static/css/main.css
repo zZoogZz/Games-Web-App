@@ -34,7 +34,7 @@
     }
   
   .header {
-
+    background-color: black;
     color: #ffffff;
     padding: 15px;
     text-align: center;
@@ -59,11 +59,6 @@
     display: block;
     /*padding: 8px 16px;*/
     text-decoration: none;
-    color: #ffffff;
-  }
-
-  .navbar li a:hover{
-    background-color: #000;
   }
 
   .navbar-left li{
@@ -73,6 +68,7 @@
   }
 
   .navbar-right {
+    margin: 5px;
     display: inline-flex;
     gap: 0px;
     padding: 0px 0px;
@@ -80,10 +76,10 @@
   }
 
   .navbar-right .search-btn {
+
     padding: 0px 20px;
     text-decoration: none;
-    color: #ffffff;
-    background-color: #44F0;
+    background-color: #0000;
     border: none;
     font-size: 16px;
     font-family: "Lucida Sans", sans-serif;
@@ -110,11 +106,12 @@
     text-decoration: none;
   }
 
-    .pagination a:hover{
+  .pagination a:hover{
     background-color: #FFF8;
   }
 
   .menu ul {
+    list-style-type: none;
     list-style-type: none;
     margin: 0;
     padding: 0;
