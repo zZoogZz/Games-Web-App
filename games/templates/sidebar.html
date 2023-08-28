@@ -1,6 +1,9 @@
-<div class="w3-gray">
-    <h4 class="w3-center h4">Top Genre's</h4>
-    {% for genre in top_genres %}
-        <li><a href="{{ url_for('search_bp.search_games', query=genre[0].genre_name, type='genre') }}"> {{ genre[0].genre_name }} </a></li>  <div id="nav-game-count"> ({{ genre[1] }}) </div>
-    {% endfor %}
+
+<div class="col-3 col-s-3 menu">
+    <h2>Top Genre's</h4>
+    <ul>
+        {% for genre in top_genres %}
+            <li><a href="{{ url_for('search_bp.search_games', query=genre[0].genre_name, type='genre') }}"> {{ genre[0].genre_name }} </a></li>
+        {% endfor %}
+    </ul>
 </div>
