@@ -1,7 +1,11 @@
 from games.adapters.repository import AbstractRepository
 from operator import itemgetter
+from typing import List
 
-def get_top_genres(repo: AbstractRepository, number_to_get):
+
+def get_top_genres(repo: AbstractRepository, number_to_get) -> List[tuple]:
+    if not isinstance(repo, AbstractRepository) or not isinstance(number_to_get, int):
+        return []
     games = repo.get_games()
     genre_count = dict()
     for game in games.values():
