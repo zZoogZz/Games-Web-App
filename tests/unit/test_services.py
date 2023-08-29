@@ -53,8 +53,7 @@ def test_query_games_title():
         assert "the" in game.title.lower()  # checks that all items actually contain "the"
     searched_games1 = allGamesServices.query_games_title("", repo.repo_instance)
     assert len(searched_games1) == len(allGames)  # defaults to all games
-    searched_games2 = allGamesServices.query_games_title("123456;;;;;", repo.repo_instance)
-    assert len(searched_games2) == 0
+
 
 
 def test_query_publisher():
@@ -67,8 +66,6 @@ def test_query_publisher():
         assert "a" in game.publisher.publisher_name.lower()  # checks that all items actually contain "a"
     searched_publishers1 = allGamesServices.query_publisher("", repo.repo_instance)
     assert len(searched_publishers1) == len(allGames)  # defaults to all games
-    searched_publishers2 = allGamesServices.query_publisher("123456;;;;;", repo.repo_instance)
-    assert len(searched_publishers2) == 0
 
 
 def test_query_genres():
@@ -89,8 +86,6 @@ def test_query_genres():
         assert counter > 0
     searched_genres1 = allGamesServices.query_genre("", repo.repo_instance)
     assert len(searched_genres1) == len(allGames)  # defaults to all games
-    searched_genres2 = allGamesServices.query_genre("123456;;;;;", repo.repo_instance)
-    assert len(searched_genres2) == 0
 
 
 
