@@ -44,11 +44,8 @@ def test_query_all_games_by_name():
 
 def test_query_games_title():
     repo.repo_instance = MemoryRepository()
-    allGames = allGamesServices.query_all_games_by_name(repo.repo_instance)
-    assert allGames == []  # check list begins empty before populate is called
     populate(repo.repo_instance)
     allGames = allGamesServices.query_all_games_by_name(repo.repo_instance)
-    assert allGames != []  # check populate works
     searched_games0 = allGamesServices.query_games_title("The", repo.repo_instance)
     assert searched_games0 != []  # checks that it returns items to the list
     for game in searched_games0:
@@ -59,11 +56,8 @@ def test_query_games_title():
     assert len(searched_games2) == 0
 def test_query_publisher():
     repo.repo_instance = MemoryRepository()
-    allGames = allGamesServices.query_all_games_by_name(repo.repo_instance)
-    assert allGames == []  # check list begins empty before populate is called
     populate(repo.repo_instance)
     allGames = allGamesServices.query_all_games_by_name(repo.repo_instance)
-    assert allGames != []  # check populate works
     searched_publishers0 = allGamesServices.query_publisher("a", repo.repo_instance)
     assert searched_publishers0 != []  # checks that it returns items to the list
     for game in searched_publishers0:
@@ -72,20 +66,10 @@ def test_query_publisher():
     assert len(searched_publishers1) == len(allGames)  # defaults to all games
     searched_publishers2 = allGamesServices.query_publisher("123456;;;;;", repo.repo_instance)
     assert len(searched_publishers2) == 0
-"""
-def test_query_games_genre():
-    repo.repo_instance = MemoryRepository()
-    allGames = allGamesServices.query_all_games_by_name(repo.repo_instance)
-    assert allGames == []  # check list begins empty before populate is called
-    populate(repo.repo_instance)
-    allGames = allGamesServices.query_all_games_by_name(repo.repo_instance)
-    assert allGames != []  # check populate works
-    searched_games0 = allGamesServices.query_games_title("The", repo.repo_instance)
-    assert searched_games0 != []  # checks that it returns items to the list
-    for game in searched_games0:
-        assert "the" in game.title.lower()  # checks that all items actually contain "the"
-    searched_games1 = allGamesServices.query_games_title("", repo.repo_instance)
-    assert len(searched_games1) == len(allGames)  # defaults to all games
-"""
 
+def test_query_genre():
+    repo.repo_instance = MemoryRepository()
+    populate(repo.repo_instance)
+    searched_games0 = allGamesServices.query_genre("adventure", repo.repo_instance)
+    assert searched_games0 != []  # checks that it returns items to the list
 

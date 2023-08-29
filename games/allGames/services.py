@@ -7,6 +7,7 @@ def query_all_games_by_name(repo=repository.repo_instance):
     sorted_game_object_list = repo.get_games_by_ids(game_ids_sorted)
     return sorted_game_object_list
 
+
 def query_games_title(query, repo=repository.repo_instance):
     """
     Takes a query string, compares with game title, and returns values where there is a substring.
