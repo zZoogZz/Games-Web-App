@@ -31,6 +31,7 @@ def test_get_top_genres():
     assert len(genres0) == 24
 
 # allGames tests:
+
 def test_query_all_games_by_name():
     repo.repo_instance = MemoryRepository()
     allGames0 = allGamesServices.query_all_games_by_name(repo.repo_instance)
@@ -54,6 +55,8 @@ def test_query_games_title():
     assert len(searched_games1) == len(allGames)  # defaults to all games
     searched_games2 = allGamesServices.query_games_title("123456;;;;;", repo.repo_instance)
     assert len(searched_games2) == 0
+
+
 def test_query_publisher():
     repo.repo_instance = MemoryRepository()
     populate(repo.repo_instance)
@@ -67,9 +70,28 @@ def test_query_publisher():
     searched_publishers2 = allGamesServices.query_publisher("123456;;;;;", repo.repo_instance)
     assert len(searched_publishers2) == 0
 
-def test_query_genre():
+
+def test_query_genres():
     repo.repo_instance = MemoryRepository()
     populate(repo.repo_instance)
-    searched_games0 = allGamesServices.query_genre("adventure", repo.repo_instance)
-    assert searched_games0 != []  # checks that it returns items to the list
+    search_term = "Adventure"
+    allGames = allGamesServices.query_all_games_by_name(repo.repo_instance)
+    searched_genres0 = allGamesServices.query_genre(search_term, repo.repo_instance)
+    assert searched_genres0 != []  # checks that it returns items to the list
+    for game in searched_genres0:
+        genre_list = []
+        counter = 0
+        for genre in game.genres:
+            genre_list.append(genre.genre_name.lower())
+        for genre in genre_list:
+            if search_term.lower() in genre:
+                counter += 1
+        assert counter > 0
+
+
+
+
+
+
+
 
