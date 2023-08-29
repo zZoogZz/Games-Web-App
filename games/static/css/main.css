@@ -72,6 +72,14 @@
     align-items: center;
   }
 
+  .navbar-left a {
+    padding: 5px 10px;
+    text-decoration: none;
+    background-color: #33b5e5;
+    color: #ffffff;
+    border-radius: 12px;
+  }
+
   .navbar-right {
     margin: 5px;
     display: inline-flex;
@@ -83,7 +91,9 @@
   .navbar-right .search-btn {
     padding: 0px 20px;
     text-decoration: none;
-    background-color: #0000;
+    border-radius: 12px;
+    background-color: grey;
+    color: white;
     border: none;
     font-size: 16px;
     font-family: "Lucida Sans", sans-serif;
@@ -108,10 +118,14 @@
   .pagination a{
     padding: 5px 10px;
     text-decoration: none;
+    background-color: #33b5e5;
+    color: #ffffff;
+    border-radius: 12px;
   }
 
   .pagination a:hover{
     background-color: #0002;
+    border-radius: 12px;
   }
 
   .menu ul {
