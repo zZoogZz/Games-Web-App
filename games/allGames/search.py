@@ -13,8 +13,6 @@ def search_games():
     args = request.args
     query = args.get("query", default="", type=str)
     query_type = args.get("query_type", default="title", type=str)
-
-    print(query_type)
     # Check the type of query that has been defined, and route accordingly.
     try:
         if query_type == "title":
