@@ -22,7 +22,7 @@ def query_games_title(query, repo=repository.repo_instance):
         if query.lower() in game.title.lower():
             result.append(game)
     if result == []:
-        raise NoResultsFoundException(f"No games found for {query} in titles.")
+        raise NoResultsFoundException(f"No games found for '{query}' in titles.")
     return result
 
 
@@ -40,7 +40,7 @@ def query_publisher(query, repo=repository.repo_instance):
         if query.lower() in game.publisher.publisher_name.lower():
             result.append(game)
     if result == []:
-        raise NoResultsFoundException(f"No games found for {query} in publishers.")
+        raise NoResultsFoundException(f"No games found for '{query}' in publishers.")
     return result
 
 
@@ -55,5 +55,5 @@ def query_genre(query, repo=repository.repo_instance):
             if query.lower() in genre.genre_name.lower() and game not in result:
                 result.append(game)
     if result == []:
-        raise NoResultsFoundException(f"No games found for {query} in genres.")
+        raise NoResultsFoundException(f"No games found for '{query}' in genres.")
     return result
