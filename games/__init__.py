@@ -14,6 +14,8 @@ def create_app():
     # Create the Flask app object.
     app = Flask(__name__)
 
+    app.config.from_object('config.Config')
+
     # Create the MemoryRepository implementation for a memory-based repository.
     repo.repo_instance = MemoryRepository()
     # fill repository with the content from the provided csv files

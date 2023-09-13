@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<div class="col-9 col-s-9 main">
+    <h2>{{ game.title }}</h2>
+    <p>{% for genre in game.genres %}<div class="w3-tag w3-round w3-blue">{{ genre.genre_name }}</div> {% endfor %}</p>
+    <p><i>Image: </i><img src="{{ game.image_url }}" alt="game image"> </p>
+    <p><i>Website: </i><a href="{{ game.website_url }}">{{ game.website_url }}</a></p>
+    <br>
+    <div class="form-wrapper">
+        <form action="{{handler_url}}" method="post">
+            {{form.article_id}} <!-- Need to include this hidden field as it tracks the article being commented. -->
+            {{form.csrf_token}} <!-- Need to include this token - Flask WTForms requires it. -->
+            <br>
+            <div class ="form-field">{{form.review.label}} </br>{{form.review(size = 100, placeholder="type your review", class="textarea", cols="50", rows="6", wrap="hard")}}
+                {% if form.review.errors %}
+                    <ul class="errors">
+                    {% for error in form.review.errors %}
+                        <li>{{error}}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            {{ form.submit }}
+        </form>
+    </div>
+</div>
+
+{% endblock %}

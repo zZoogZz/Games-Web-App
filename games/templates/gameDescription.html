@@ -9,6 +9,7 @@
     <p><i>Image: </i><img src="{{ game.image_url }}" alt="game image"> </p>
     <p><i>Website: </i><a href="{{ game.website_url }}">{{ game.website_url }}</a></p>
     <p>Game ID: {{ game.game_id }}</p>
+    <a class="link-button" href="{{ url_for('game_bp.review_game', game=game.game_id) }}">Comment</a>
     <br>
 </div>
 
