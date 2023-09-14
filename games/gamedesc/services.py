@@ -18,7 +18,7 @@ def get_game(game_id: int, repo: AbstractRepository):
 	return game
 
 
-def add_review(game_id: int, review_text: str, user_name:str, repo: AbstractRepository):
+def add_review(user_name: str, game_id: int, rating: int, review_text: str, repo: AbstractRepository):
 	game = repo.get_game(game_id)
 	if game is None:
 		raise NonExistentGameException
@@ -27,7 +27,7 @@ def add_review(game_id: int, review_text: str, user_name:str, repo: AbstractRepo
 	if user is None:
 		raise UnknownUserException
 
-	review = make_review(review_text, user, game)
+	review = make_review(user, game, rating, review_text)
 
 	repo.add_review(review)
 

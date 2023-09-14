@@ -397,8 +397,8 @@ class Wishlist:
             self.__current += 1
             return self.__list_of_games[self.__current - 1]
 
-def make_review(review_text: str, user: User, game: Game, timestamp: datetime = datetime.today()):
-    review = Review(user, game, review_text, timestamp)
+def make_review(user: User,  game: Game, rating: int, review_text: str):
+    review = Review(user, game, rating, review_text)
     user.add_review(review)
     game.add_review(review)
     return review

@@ -2,14 +2,24 @@
 
 <div class="col-9 col-s-9 main">
     <h2>{{ game.title }}</h2>
+    <a href="{{ game.website_url }}"><img src="{{ game.image_url }}" alt="game image"></a>
     <p>{% for genre in game.genres %}<div class="w3-tag w3-round w3-blue">{{ genre.genre_name }}</div> {% endfor %}</p>
     <p><i>Release Date:</i> {{ game.release_date }} </p>
     <p><i>Price:</i> {{ game.price }}</p>
     <p><i>About:</i> {{ game.description }} </p>
-    <p><i>Image: </i><img src="{{ game.image_url }}" alt="game image"> </p>
-    <p><i>Website: </i><a href="{{ game.website_url }}">{{ game.website_url }}</a></p>
     <p>Game ID: {{ game.game_id }}</p>
+    {% if not game.reviews %}
+    <p><em>No reviews for this game.</em></p>
+    {% endif %}
     <a class="link-button" href="{{ url_for('game_bp.review_game', game=game.game_id) }}">Review Game</a>
+    {% if game.reviews %}
+    <h4>Reviews:</h4>
+    <div style="clear:both">
+        {% for review in game.reviews %}
+            <p>User: {{review.user.username}}, Rating: {{review.rating}}, Review: "{{review.comment}}"</p>
+        {% endfor %}
+    </div>
+    {% endif %}
     <br>
 </div>
 

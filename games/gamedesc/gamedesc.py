@@ -1,11 +1,11 @@
-from games.domainmodel.model import Game
+from games.domainmodel.model import Game, User, Review
 from games.utilities import utilities
 
 from flask import session
 from flask import Blueprint, render_template, abort, url_for, request, redirect
 
 from flask_wtf import FlaskForm
-from wtforms import TextAreaField, HiddenField, SubmitField
+from wtforms import TextAreaField, HiddenField, SubmitField, SelectField
 from wtforms.validators import DataRequired, Length, ValidationError
 
 import games.adapters.repository as repo
@@ -36,43 +36,44 @@ def review_game():
         'user_name': 'a_user',
         'password': 'a_password'
     }
+    repo.repo_instance.add_user(User(user['user_name'], user['password']))
 
     session.clear()
     session['user_name'] = user['user_name']
     user_name = session['user_name']
 
-
     form = ReviewForm()
 
-
-
+    print(form.validate_on_submit())
+    print(form.errors)
+    print(repo.repo_instance.get_user(user))
     if form.validate_on_submit():
 
+        print(f"rating: {form.rating.data}")
         game_id = int(form.game_id.data)
+        services.add_review(user_name, game_id, int(form.rating.data), form.review.data, repo.repo_instance)
 
-        services.add_review(game_id, form.review.data, user_name, repo.repo_instance)
+        game = services.get_game(game_id, repo.repo_instance)
 
-        article = services.get_game(game_id, repo.repo_instance)
-
-        return redirect(url_for('gamedesc_bp.games_by_date', date=article['date'], view_reviews_for=game_id))
+        return redirect(url_for('game_bp.desc', game_id=game_id))
 
 
     if request.method == 'GET':
         game_id = int(request.args.get('game'))
 
-        form.game_id = game_id
+        form.game_id.data = game_id
     else:
         game_id = int(form.game_id.data)
 
     game = services.get_game(game_id, repo.repo_instance)
+    print('not validated?')
 
     return render_template(
         'games/review_game.html',
         game=game,
         form=form,
-        handler_url=url_for('game_bp.review_game'),
+        handler_url=url_for('game_bp.review_game', game=game_id),
         top_genres=utilities.get_top_genres()
-        # top_genres?
         # selected_articles=utilities.get_selected_games(),
         # tag_urls=utilities.get_tags_and_urls()
     )
@@ -81,7 +82,10 @@ def review_game():
 class ReviewForm(FlaskForm):
     review = TextAreaField('Review', [
         DataRequired(),
-        Length(min=15, message='Your review is too short')])
+        Length(min=4, message='Your review is too short')])
     game_id = HiddenField("Game ID")
+    rating = SelectField('Rating', choices=[0, 1, 2, 3, 4, 5])
     submit = SubmitField('Submit')
+
+
 
