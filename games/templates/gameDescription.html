@@ -11,12 +11,12 @@
     {% if not game.reviews %}
     <p><em>No reviews for this game.</em></p>
     {% endif %}
-    <a class="link-button" href="{{ url_for('game_bp.review_game', game=game.game_id) }}">Review Game</a>
+    <a class="link-button" href="{{ url_for('game_bp.review_game', game=game.game_id, sort_by='rating') }}">Review Game</a>
     {% if game.reviews %}
     <h4>Reviews:</h4>
     <div style="clear:both">
-        {% for review in game.reviews %}
-            <p>User: {{review.user.username}}, Rating: {{review.rating}}, Review: "{{review.comment}}"</p>
+        {% for review in game.reviews | sort(attribute='rating', reverse=True) %}
+            <p class="white-box">User: {{review.user.username}}, Rating: {{review.rating}}/5<br>{{review.comment}}</p>
         {% endfor %}
     </div>
     {% endif %}

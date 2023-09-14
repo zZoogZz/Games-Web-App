@@ -167,7 +167,13 @@
   .menu li a:hover {
     background-color: #0077aa;
   }
- 
+
+  .white-box {
+    margin-top: 5px;
+    padding: 5px 10px;
+    background-color: #FFFA;
+  }
+
   .footer {
     background-color: #0099cc;
     color: #ffffff;

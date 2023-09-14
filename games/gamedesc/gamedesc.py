@@ -44,16 +44,12 @@ def review_game():
 
     form = ReviewForm()
 
-    print(form.validate_on_submit())
-    print(form.errors)
-    print(repo.repo_instance.get_user(user))
     if form.validate_on_submit():
 
-        print(f"rating: {form.rating.data}")
         game_id = int(form.game_id.data)
         services.add_review(user_name, game_id, int(form.rating.data), form.review.data, repo.repo_instance)
 
-        game = services.get_game(game_id, repo.repo_instance)
+        # game = services.get_game(game_id, repo.repo_instance)
 
         return redirect(url_for('game_bp.desc', game_id=game_id))
 
@@ -66,14 +62,16 @@ def review_game():
         game_id = int(form.game_id.data)
 
     game = services.get_game(game_id, repo.repo_instance)
-    print('not validated?')
+
 
     return render_template(
         'games/review_game.html',
         game=game,
         form=form,
         handler_url=url_for('game_bp.review_game', game=game_id),
-        top_genres=utilities.get_top_genres()
+        top_genres=utilities.get_top_genres(),
+        # sort_by='rating',
+        # sort_reverse=True
         # selected_articles=utilities.get_selected_games(),
         # tag_urls=utilities.get_tags_and_urls()
     )
