@@ -1,0 +1,40 @@
+{% extends 'layout.html' %} {% block content %}
+
+<div class="col-9 col-s-9 main">
+    <div>
+        <div class="w3-row">
+            <div style="float:left";>
+                <h2>{{ game.title }}</h2>
+            </div>
+            <div style="float:right";>
+
+                <button class="w3-button">
+                    <i class="fa fa-solid fa-list fa-2x"></i> Wishlist
+                </button>
+
+
+                <button class="w3-button">
+                    <i class="fa fa-regular fa-star fa-2x"></i> Favourite
+                </button>
+
+            </div>
+        </div>
+        <div>
+            <p>{% for genre in game.genres %}<div class="w3-tag w3-round w3-blue">{{ genre.genre_name }}</div> {% endfor %}</p>
+        </div>
+    </div>
+    <div>
+        <img style="width:80%"; src="{{ game.image_url }}" alt="game image">
+    </div>
+
+    <p><i>Release Date:</i> {{ game.release_date }} </p>
+    <p><i>Price:</i> {{ game.price }}</p>
+    <p><i>About:</i> {{ game.description }} </p>
+    <p><i>Website: </i><a href="{{ game.website_url }}">{{ game.website_url }}</a></p>
+    <p>Game ID: {{ game.game_id }}</p>
+
+    <br>
+</div>
+
+
+{% endblock %}
