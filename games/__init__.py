@@ -6,6 +6,7 @@ from flask import Flask, render_template
 import games.adapters.repository as repo
 from games.adapters.memory_repository import MemoryRepository, populate
 
+
 def create_app():
     """Construct the core application."""
 
