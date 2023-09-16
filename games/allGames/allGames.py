@@ -11,4 +11,4 @@ def all_games():
 
     games = services.query_all_games_by_name()
 
-    return render_game_list(games)
+    return render_game_list(games, "All Games")

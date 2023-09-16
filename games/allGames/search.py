@@ -27,8 +27,10 @@ def search_games():
         else:
             # If a type is defined but none are applicable, nothing is returned.
             games = []
-        return render_game_list(games)
+        heading = "Showing results for {} search of \"{}\"....".format(query_type, query)
+        return render_game_list(games, heading=heading)
     except NoResultsFoundException as message:
+        # TODO: Move no results error to render_game_list to render for all lists.
         return render_template('errors/no_results.html', message=message,
                                top_genres=utilities.get_top_genres())
 
