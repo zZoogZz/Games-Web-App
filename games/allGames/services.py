@@ -57,3 +57,15 @@ def query_genre(query, repo=repository.repo_instance):
     if result == []:
         raise NoResultsFoundException(f"No games found for '{query}' in genres.")
     return result
+
+def query_favourite_games(repo=repository.repo_instance):
+    """
+    Retrieves all favourite games for the authorized user.
+
+    Returns a list of game objects.
+    """
+    game_ids_sorted = repo.get_game_ids_sorted_by_title()
+    sorted_game_object_list = repo.get_games_by_ids(game_ids_sorted)
+    return sorted_game_object_list
+
+    return result
