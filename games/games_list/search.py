@@ -1,14 +1,14 @@
 from flask import Blueprint, request, render_template
 from games.errorHandlers.custom_exceptions import NoResultsFoundException
-from games.allGames.render_game_list import render_game_list
-import games.allGames.services as services
+from games.games_list._render_game_list import render_game_list
+import games.games_list._services as services
 from games.utilities import utilities
 
-games_search_blueprint = Blueprint(
+search_blueprint = Blueprint(
     'search_bp', __name__)
 
 
-@games_search_blueprint.route('/games/search', methods=['GET'])
+@search_blueprint.route('/games/search', methods=['GET'])
 def search_games():
     args = request.args
     query = args.get("query", default="", type=str)

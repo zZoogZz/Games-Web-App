@@ -1,6 +1,6 @@
 from games.utilities import utilities
 from flask import render_template, request, redirect, url_for, abort
-import games.allGames.services as services
+import games.games_list._services as services
 
 GAMES_PER_PAGE = 20
 

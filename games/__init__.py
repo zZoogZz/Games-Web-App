@@ -27,14 +27,11 @@ def create_app():
         from .gamedesc import gamedesc
         app.register_blueprint(gamedesc.gamedesc_blueprint)
 
-        from .allGames import allGames
-        app.register_blueprint(allGames.all_games_blueprint)
-
-        from .allGames import search
-        app.register_blueprint(search.games_search_blueprint)
-
-        from .allGames import list_games
-        app.register_blueprint(list_games.list_games_blueprint)
+        from .games_list import all, search, favourites, wishlist
+        app.register_blueprint(all.all_blueprint)
+        app.register_blueprint(search.search_blueprint)
+        app.register_blueprint(favourites.favourites_blueprint)
+        app.register_blueprint(wishlist.wishlist_blueprint)
 
         from .errorHandlers import notFoundError
         app.register_blueprint(notFoundError.not_found_blueprint)
