@@ -35,6 +35,9 @@ def create_app():
 
         from .errorHandlers import notFoundError
         app.register_blueprint(notFoundError.not_found_blueprint)
+
+        from .authentication import authentication
+        app.register_blueprint(authentication.authentication_blueprint)
     return app
 
 
