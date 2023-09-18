@@ -7,10 +7,10 @@ from flask import Blueprint, render_template, abort, url_for, request, redirect
 from flask_wtf import FlaskForm
 from wtforms import TextAreaField, HiddenField, SubmitField, SelectField
 from wtforms.validators import DataRequired, Length, ValidationError
+from games.authentication.authentication import login_required
 
 import games.adapters.repository as repo
 import games.gamedesc.services as services
-import random
 
 gamedesc_blueprint = Blueprint(
     'game_bp', __name__)
@@ -53,15 +53,17 @@ def desc(game_id):
                            )
 
 @gamedesc_blueprint.route('/review', methods=['GET', 'POST'])
-# @login_required
+@login_required
 def review_game():
     # start authentication fudge:
-    user = {'user_name': 'a_user' + str(random.randint(0,5)), 'password': 'a_password'}
-    repo.repo_instance.add_user(User(user['user_name'], user['password']))
-    session.clear()
-    session['user_name'] = user['user_name']
-    user_name = session['user_name']
+    # user = {'user_name': 'a_user' + str(random.randint(0,5)), 'password': 'a_password'}
+    # repo.repo_instance.add_user(User(user['user_name'], user['password']))
+    # session.clear()
+    # session['user_name'] = user['user_name']
+    # user_name = session['user_name']
     # end authentication fudge
+
+    user_name = session['user_name']
 
     form = ReviewForm()
 
