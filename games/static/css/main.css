@@ -218,3 +218,56 @@
     .col-11 {width: 91.66%;}
     .col-12 {width: 100%;}
   }
+
+/*######################  Authentication CSS stuff  ######################*/
+
+/* Form container */
+.form-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Form fields */
+.form-field {
+  margin-bottom: 15px;
+}
+
+/* Label styles */
+.form-field label {
+  display: block;
+  font-weight: bold;
+}
+
+/* Input styles */
+.form-field input[type="text"],
+.form-field input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+/* Button styles */
+.form-field .btn {
+  background-color: #007BFF;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.form-field .btn:hover {
+  background-color: #0056b3;
+}
+
+/* Error message styles */
+.error-message {
+  color: #FF0000;
+  margin-top: 5px;
+}
