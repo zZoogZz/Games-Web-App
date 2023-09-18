@@ -5,6 +5,7 @@ from wtforms.validators import DataRequired, Length, ValidationError
 from password_validator import PasswordValidator
 from functools import wraps
 
+import games.utilities.utilities as utilities
 import games.authentication.services as services
 import games.adapters.repository as repo
 
@@ -17,6 +18,7 @@ authentication_blueprint = Blueprint(
 def register():
     form = RegistrationForm()
     user_name_not_unique = None
+    password_error = None  #Fix for bullet point under Register form
 
     if form.validate_on_submit():
         # Successful POST, i.e. the username and password have passed validation checking.
@@ -29,8 +31,8 @@ def register():
             user_name_not_unique = 'Your user name is already taken - please supply another'
 
     # For a GET or a failed POST request, return the Registration Web page.
-    return render_template('authentication/credentials.html', title='Register', form=form,
-                           user_name_error_message=user_name_not_unique, handler_url=url_for('authentication_bp.register'))
+    return render_template('authentication/credentials.html', title='Register', form=form, top_genres=utilities.get_top_genres(),
+                           user_name_error_message=user_name_not_unique, password_error_message=password_error, handler_url=url_for('authentication_bp.register'))
 
 
 @authentication_blueprint.route('/authentication/login', methods=['GET', 'POST'])
@@ -62,7 +64,7 @@ def login():
             password_does_not_match_user_name = 'Password does not match supplied user name - please check and try again'
     # For a GET or a failed POST, return the Login Web page.
     return render_template('authentication/credentials.html', title='Login', user_name_error_message=user_name_not_recognised,
-                           password_error_message=password_does_not_match_user_name, form=form)
+                           password_error_message=password_does_not_match_user_name, form=form,  top_genres=utilities.get_top_genres())
 
 
 @authentication_blueprint.route('/authentication/logout')
