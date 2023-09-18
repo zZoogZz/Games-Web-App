@@ -24,8 +24,8 @@ def add_review(user_name: str, game_id: int, rating: int, review_text: str, repo
 		raise NonExistentGameException
 
 	user = repo.get_user(user_name)
-	if user is None:
-		raise UnknownUserException
+	# if user is None:
+	# 	raise UnknownUserException
 
 	review = make_review(user, game, rating, review_text)
 
