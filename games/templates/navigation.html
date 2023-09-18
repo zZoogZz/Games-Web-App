@@ -5,9 +5,14 @@
         <ul>
             <li><a href="{{ url_for('home_bp.home') }}">Home</a></li>
             <li><a href="{{ url_for('all_games_bp.all_games') }}">All Games</a></li>
+            {% if 'user_name' not in session %}
             <li><a href="{{ url_for('authentication_bp.login') }}">Login</a></li>
             <li><a href="{{ url_for('authentication_bp.register') }}">Register</a></li>
-            {% if 'user_name' in session %}<li><a href="{{ url_for('authentication_bp.logout') }}">Logout</a></li>{% endif %}
+            {% endif %}
+            {% if 'user_name' in session %}
+            <li><p>You are logged in as {{ session['user_name'] }}</p></li>
+            <li><a href="{{ url_for('authentication_bp.logout') }}">Logout</a></li>
+            {% endif %}
         </ul>
     </div>
 
