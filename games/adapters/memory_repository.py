@@ -28,6 +28,13 @@ class MemoryRepository(AbstractRepository):  # implement games ordered by date. 
         if isinstance(user, User):
             self.__users.append(user) # check
 
+    def check_username_unique(self, username: str):
+        for user in self.__users:
+            if username.lower() == user.username.lower():
+                return False
+        return True
+
+
     def get_user(self, username: str) -> User:
         try:
             user = next((user for user in self.__users if user.username == username), None)  # check

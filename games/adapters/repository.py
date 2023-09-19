@@ -21,6 +21,10 @@ class AbstractRepository(abc.ABC):
         """" Adds a User to the repository. """
         raise NotImplementedError
 
+    def check_username_unique(self, username: str):
+        """" Checks if username is unique, regardless of case. """
+        raise NotImplementedError
+
     @abc.abstractmethod
     def get_user(self, user_name) -> User:
         """ Returns the User named user_name from the repository.
