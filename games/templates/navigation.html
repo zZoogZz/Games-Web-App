@@ -12,7 +12,9 @@
             {% if 'user_name' in session %}
             <li><p>You are logged in as {{ session['user_name'] }}</p></li>
             <li><a href="{{ url_for('authentication_bp.logout') }}">Logout</a></li>
+            <li><a href="{{ url_for('user_profile_bp.user_profile') }}">Profile</a></li>
             {% endif %}
+
         </ul>
     </div>
 
