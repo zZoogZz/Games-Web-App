@@ -14,6 +14,7 @@ user_profile_blueprint = Blueprint(
 def user_profile():
     user_name = session['user_name']
     user = services.get_user(user_name)
+    # wishlists = servieces.get_wishlists(user)
     if isinstance(user, User):
         # Use Jinja to customize a predefined html page rendering the layout for showing a single game.
         return render_template('user_profile/user_profile.html', user=user, top_genres=utilities.get_top_genres())
