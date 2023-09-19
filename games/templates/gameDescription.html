@@ -21,7 +21,12 @@
     </div>
     <div style="clear:both">
         {% for review in sorted_reviews %}
-            <p class="white-box">User: {{review.user.username}}, Rating: {{review.rating}}/5<br>{{review.comment}}</p>
+            <p class="white-box">User: {{review.user.username}},
+                Rating:
+                {% for i in range(review.rating) %}<img src="{{ url_for('static', filename='gold_star.png') }}" width="15" height="15">{% endfor %}{% for i in range(5 - review.rating) %}<img src="{{ url_for('static', filename='grey_star.png') }}" width="15" height="15">{% endfor %}
+                <br>
+                {{review.comment}}
+            </p>
         {% endfor %}
     </div>
     {% endif %}
