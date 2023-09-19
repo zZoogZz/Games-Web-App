@@ -1,0 +1,17 @@
+{% extends 'layout.html' %} {% block content %}
+
+
+
+
+<div class="col-9 col-s-9 main">
+    <h2>{{ user.username }}'s Profile</h2>
+    <div class="white-box"><h3>Favourites:</h3>
+        {% for favourite in user.favourites %}<div class="white-box">{{ favourite.title }}</div> {% endfor %}
+    </div>
+    <div class="white-box"><h3>Reviews</h3>
+        {% for review in user.reviews %}<div class="white-box">{{ review.comment }}</div> {% endfor %}
+    </div>
+</div>
+
+
+{% endblock %}
