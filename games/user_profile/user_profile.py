@@ -14,6 +14,18 @@ user_profile_blueprint = Blueprint(
 def user_profile():
     user_name = session['user_name']
     user = services.get_user(user_name)
+    print(user)
+
+    # dummy favourites:
+    # import games.adapters.repository as repo
+    # user.add_favourite_game(repo.repo_instance.get_game(410320))
+    # user.add_favourite_game(repo.repo_instance.get_game(730310))
+    # user.add_favourite_game(repo.repo_instance.get_game(1271620))
+    # user.add_favourite_game(repo.repo_instance.get_game(1022480))
+    # user.add_favourite_game(repo.repo_instance.get_game(299380))
+    # user.add_favourite_game(repo.repo_instance.get_game(441670))
+    # end dummy favourites
+
     # wishlists = servieces.get_wishlists(user)
     if isinstance(user, User):
         # Use Jinja to customize a predefined html page rendering the layout for showing a single game.

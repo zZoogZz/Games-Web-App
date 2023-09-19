@@ -7,8 +7,8 @@
     <div class="white-box"><h3>Favourites:</h3>
         {% if user.favourite_games|length > 0 %}
             {% for game in user.favourite_games %}
-            <div class="white-box">Game: {{ game.title }}
-            <a href="{{ game.website_url }}"><img src="{{ game.image_url }}" alt="game image" height="100"></a></div>
+            <div class="favourites-list"><a href="{{ url_for('game_bp.desc', game_id=game.game_id, sort_by='rating', reverse_sort='True') }}">
+                <img src="{{ game.image_url }}" alt="{{ game.title }}" height="120"></a></div>
             {% endfor %}
         {% else %}
             You have not added any favourites.
@@ -28,7 +28,7 @@
     <div class="white-box"><h3>Reviews:</h3>
         {% if user.reviews|length > 0 %}
             {% for review in user.reviews %}
-            <div class="white-box">Game: {{review.game.title}} <br>
+            <div class="white-box">Game: <a href="{{ url_for('game_bp.desc', game_id=review.game.game_id, sort_by='rating', reverse_sort='True') }}">{{review.game.title}}</a><br>
                 Rating:
                 {% for i in range(review.rating) %}<img src="{{ url_for('static', filename='gold_star.png') }}" width="15" height="15">{% endfor %}{% for i in range(5 - review.rating) %}<img src="{{ url_for('static', filename='grey_star.png') }}" width="15" height="15">{% endfor %}
                 <br>Comment: {{review.comment}}</div>
