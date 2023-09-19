@@ -6,7 +6,6 @@ from flask import Flask, render_template
 import games.adapters.repository as repo
 from games.adapters.memory_repository import MemoryRepository, populate
 
-
 def create_app(test_config=None):
     """Construct the core application."""
 
@@ -17,12 +16,12 @@ def create_app(test_config=None):
 
     # Configure the app from configuration-file settings.
     app.config.from_object('config.Config')
-    data_path = Path('games') / 'adapters' / 'data'
+    # data_path = Path('games') / 'adapters' / 'data'
 
     if test_config is not None:
         # Load test configuration, and override any configuration settings.
         app.config.from_mapping(test_config)
-        data_path = app.config['TEST_DATA_PATH']
+        # data_path = app.config['TEST_DATA_PATH']
     # Create the MemoryRepository implementation for a memory-based repository.
     repo.repo_instance = MemoryRepository()
     # fill repository with the content from the provided csv files
