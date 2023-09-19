@@ -18,8 +18,7 @@
         {% for review in user.reviews %}
         <div class="white-box">Game: {{review.game.title}} <br>
             Rating:
-            {% for i in range(review.rating) %}<img src="{{ url_for('static', filename='gold_star.png') }}" width="15" height="15">{% endfor %}
-            {% for i in range(5 - review.rating) %}<img src="{{ url_for('static', filename='grey_star.png') }}" width="15" height="15">{% endfor %}
+            {% for i in range(review.rating) %}<img src="{{ url_for('static', filename='gold_star.png') }}" width="15" height="15">{% endfor %}{% for i in range(5 - review.rating) %}<img src="{{ url_for('static', filename='grey_star.png') }}" width="15" height="15">{% endfor %}
             <br>Comment: {{review.comment}}</div> {% endfor %}
     </div>
 </div>
