@@ -11,7 +11,9 @@
     {% if not game.reviews %}
     <p><em>No reviews for this game.</em></p>
     {% endif %}
-    <a class="link-button" href="{{ url_for('game_bp.review_game', game=game.game_id, sort_by='rating', reverse_sort='True') }}">Review Game</a>
+
+    <a class="link-button" href="{{ url_for('game_bp.review_game', game=game.game_id, sort_by='rating', reverse_sort='True') }}">
+        {% if not already_reviewed %}Review Game{% else %}Edit Review{% endif %}</a>
     {% if game.reviews %}
     <h4>Reviews:</h4>
     <div class="form-wrapper">

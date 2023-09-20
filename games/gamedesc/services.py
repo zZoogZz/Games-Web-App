@@ -1,5 +1,7 @@
+from flask import session
 from games.adapters.repository import AbstractRepository
-from games.domainmodel.model import Game, Review, make_review
+from games.domainmodel.model import Game, Review, make_review, remove_review
+import games.adapters.repository as repo
 
 
 class NonExistentGameException(Exception):
@@ -24,10 +26,29 @@ def add_review(user_name: str, game_id: int, rating: int, review_text: str, repo
 		raise NonExistentGameException
 
 	user = repo.get_user(user_name)
-	# if user is None:
-	# 	raise UnknownUserException
+	if user is None:
+		raise UnknownUserException
+
+	existing_review = get_existing_review(game)
+
+	if existing_review is not None:
+		remove_review(user, game, existing_review)
+		repo.remove_review(existing_review)
 
 	review = make_review(user, game, rating, review_text)
 
 	repo.add_review(review)
+
+
+def get_existing_review(game: Game):
+	if 'user_name' in session:
+		user_name = session['user_name']
+		if user_name is not None:
+			user = repo.repo_instance.get_user(user_name)
+			for review in user.reviews:
+				if review.game == game:
+					return review
+	return None
+
+
 
