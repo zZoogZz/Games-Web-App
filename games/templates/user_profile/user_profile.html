@@ -27,7 +27,12 @@
     </div>
     <div class="white-box"><h3>Reviews:</h3>
         {% if user.reviews|length > 0 %}
-            {% for review in user.reviews %}
+            <div class="form-wrapper">
+                <form method="GET">
+                    {{sorting.sort_choice.label}} {{ sorting.sort_choice }} {{ sorting.submit(class="link-button") }}
+                </form>
+            </div>
+            {% for review in sorted_reviews %}
             <div class="white-box">Game: <a href="{{ url_for('game_bp.desc', game_id=review.game.game_id, sort_by='rating', reverse_sort='True') }}">{{review.game.title}}</a><br>
                 Rating:
                 {% for i in range(review.rating) %}<img src="{{ url_for('static', filename='gold_star.png') }}" width="15" height="15">{% endfor %}{% for i in range(5 - review.rating) %}<img src="{{ url_for('static', filename='grey_star.png') }}" width="15" height="15">{% endfor %}
