@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="col-9 col-s-9 main">
-    <a href="{{ url_for('game_bp.desc',game_id=game.game_id) }}"><h2>{{ game.title }}</h2></a>
+    <a href="{{ url_for('game_bp.desc', game_id=game.game_id, sort_choice=sort_choice) }}"><h2>{{ game.title }}</h2></a>
     <a href="{{ game.website_url }}"><img src="{{ game.image_url }}" alt="game image"></a>
     <p>{% for genre in game.genres %}
     <div class="w3-tag w3-round w3-blue">

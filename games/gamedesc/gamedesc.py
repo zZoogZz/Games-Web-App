@@ -26,17 +26,15 @@ def desc(game_id):
     if not isinstance(some_game, Game):
         return abort(404)
 
-    sort_by = request.args.get('sort_by', default='rating')
-    reverse_sort = request.args.get('reverse_sort', default='True') == 'True'
+    # Get sorting choices:
+    sort_choice = request.args.get('sort_choice', default='Highest Rating')
 
-    sorting = Sorting()
+    sorting = Sorting(sort_choice=sort_choice)
 
     if sorting.validate_on_submit():
+        sort_choice = sorting.sort_choice.data
 
-        sort_by = sorting.sort_by.data
-        reverse_sort = sorting.reverse_sort
-
-    sorted_reviews = sorted(some_game.reviews, key=lambda review: getattr(review, sort_by), reverse=reverse_sort)
+    sorted_reviews = sort_reviews(some_game, sort_choice)
 
     already_reviewed = services.get_existing_review(some_game) is not None
 
@@ -46,8 +44,7 @@ def desc(game_id):
                            top_genres=utilities.get_top_genres(),
                            sorted_reviews=sorted_reviews,
                            sorting=sorting,
-                           sort_by=sort_by,
-                           reverse_sort=reverse_sort,
+                           sort_choice=sort_choice,
                            already_reviewed=already_reviewed
                            )
 
@@ -58,12 +55,11 @@ def review_game():
 
     form = ReviewForm()
 
-    sort_by = request.args.get('sort_by', default='rating')
-    reverse_sort = request.args.get('reverse_sort', default='True') == 'True'
+    # maintain sorting choices:
+    sort_choice = request.args.get('sort_choice', default='Highest Rating')
 
     game_id = int(request.args.get('game', default=form.game_id.data))
     form.game_id.data = game_id
-
     some_game = services.get_game(game_id, repo.repo_instance)
 
     existing_review = services.get_existing_review(some_game)
@@ -76,14 +72,15 @@ def review_game():
         # game_id = int(form.game_id.data)
         services.add_review(user_name, game_id, int(form.rating.data), form.review.data, repo.repo_instance)
 
-        return redirect(url_for('game_bp.desc', game_id=game_id, sort_by=sort_by, reverse_sort=reverse_sort))
+        return redirect(url_for('game_bp.desc', game_id=game_id, sort_choice=sort_choice))
 
     return render_template(
         'games/review_game.html',
         game=some_game,
         form=form,
-        handler_url=url_for('game_bp.review_game', game=game_id, sort_by=sort_by, reverse_sort=reverse_sort),
-        top_genres=utilities.get_top_genres()
+        handler_url=url_for('game_bp.review_game', game=game_id, sort_choice=sort_choice),
+        top_genres=utilities.get_top_genres(),
+        sort_choice=sort_choice
     )
 
 
@@ -97,8 +94,25 @@ class ReviewForm(FlaskForm):
 
 
 class Sorting(FlaskForm):
-    sort_by = SelectField('Sort By', choices=['rating', 'user', 'date'])
-    reverse_sort = SelectField('Order', choices=['True', 'False'])
+    sort_choice = SelectField('Sort By', choices=['Highest Rating', 'Lowest Rating', 'User A-Z', 'User Z-A'])
     submit = SubmitField('Sort')
 
 
+def sort_reviews(game, sort_choice):
+    if sort_choice == 'Highest Rating':
+        sort_by = 'rating'
+        reverse_sort = True
+    elif sort_choice == 'Lowest Rating':
+        sort_by = 'rating'
+        reverse_sort = False
+    elif sort_choice == 'User A-Z':
+        sort_by = 'user'
+        reverse_sort = False
+    else: # sort_choice == 'User Z-A':
+        sort_by = 'user'
+        reverse_sort = True
+
+    if sort_by == 'rating':
+        return sorted(game.reviews, key=lambda review: review.rating, reverse=reverse_sort)
+    else:
+        return sorted(game.reviews, key=lambda review: review.user.username.lower(), reverse=reverse_sort)
