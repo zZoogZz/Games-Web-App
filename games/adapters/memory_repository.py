@@ -186,6 +186,15 @@ class MemoryRepository(AbstractRepository):  # implement games ordered by date. 
         super().add_review(review)
         self.__reviews.append(review)
 
+    def remove_review(self, review: Review):
+
+        if review in self.__reviews:
+            # super().remove_review(review)
+            self.__reviews.remove(review)
+            print("remove attempted")
+        else:
+            print("failed to remove")
+
     def get_reviews(self):
         return self.__reviews
 
@@ -222,35 +231,3 @@ def populate(repo: MemoryRepository):
         repo.add_game(game)
 
 
-"""
-# Demo:
-
-repo = MemoryRepository()
-populate(repo)
-
-
-print(repo.get_genres())
-print(repo.get_games())
-
-
-print("Games ID's sorted by their title:", end=5*" ")
-for game_id in repo.get_game_ids_sorted_by_title():
-    print(f"{game_id} ({repo.get_game(game_id).title})", end=", ")
-print()
-
-print("Games with Genre \"Simulation\":", end=5*" ")
-for game_id in repo.get_game_ids_by_genre(Genre("Simulation")):
-    print(repo.get_game(game_id).title, end=", ")
-print()
-
-print("Games released on \"Sep 3, 2015\":", end=5*" ")
-for game_id in repo.get_game_ids_on_date("Sep 3, 2015"):
-    print(repo.get_game(game_id).title, end=", ")
-print()
-
-print("Games released by Publisher \"Aerosoft GmbH\":", end=5*" ")
-for game_id in repo.get_game_ids_by_publisher(Publisher("Aerosoft GmbH")):
-    print(repo.get_game(game_id).title, end=", ")
-print("\nEND - this test repeats twice because __init__.py loads this module on run I think\n")
-
-"""

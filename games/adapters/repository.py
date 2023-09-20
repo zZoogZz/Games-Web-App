@@ -144,6 +144,10 @@ class AbstractRepository(abc.ABC):
             raise RepositoryException('Review not correctly attached to an Game')
 
     @abc.abstractmethod
+    def remove_review(self, review: Review):
+        """ Removes a review from the repository, if present. """
+
+    @abc.abstractmethod
     def get_reviews(self):
         """ Returns the Reviews stored in the repository. """
         raise NotImplementedError

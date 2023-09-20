@@ -201,7 +201,7 @@ class Game:
         if not isinstance(review, Review):
             return
         try:
-            self.__review.remove(review)
+            self.__reviews.remove(review)
         except ValueError:
             print(f"Could not find {review} in list of reviews.")
             pass
@@ -402,3 +402,7 @@ def make_review(user: User,  game: Game, rating: int, review_text: str):
     user.add_review(review)
     game.add_review(review)
     return review
+
+def remove_review(user: User,  game: Game, review: Review):
+    user.remove_review(review)
+    game.remove_review(review)

@@ -30,17 +30,15 @@ def desc(game_id):
     reverse_sort = request.args.get('reverse_sort', default='True') == 'True'
 
     sorting = Sorting()
-    print('sorting made')
 
     if sorting.validate_on_submit():
 
         sort_by = sorting.sort_by.data
         reverse_sort = sorting.reverse_sort
-        print(f'sort by: {sort_by}, reverse_sort: {reverse_sort}')
-
-
 
     sorted_reviews = sorted(some_game.reviews, key=lambda review: getattr(review, sort_by), reverse=reverse_sort)
+
+    already_reviewed = services.get_existing_review(some_game) is not None
 
     # Use Jinja to customize a predefined html page rendering the layout for showing a single game.
     return render_template('gameDescription.html',
@@ -49,20 +47,13 @@ def desc(game_id):
                            sorted_reviews=sorted_reviews,
                            sorting=sorting,
                            sort_by=sort_by,
-                           reverse_sort=reverse_sort
+                           reverse_sort=reverse_sort,
+                           already_reviewed=already_reviewed
                            )
 
 @gamedesc_blueprint.route('/review', methods=['GET', 'POST'])
 @login_required
 def review_game():
-    # start authentication fudge:
-    # user = {'user_name': 'a_user' + str(random.randint(0,5)), 'password': 'a_password'}
-    # repo.repo_instance.add_user(User(user['user_name'], user['password']))
-    # session.clear()
-    # session['user_name'] = user['user_name']
-    # user_name = session['user_name']
-    # end authentication fudge
-
     user_name = session['user_name']
 
     form = ReviewForm()
@@ -70,23 +61,26 @@ def review_game():
     sort_by = request.args.get('sort_by', default='rating')
     reverse_sort = request.args.get('reverse_sort', default='True') == 'True'
 
-    if form.validate_on_submit():
-
-        game_id = int(form.game_id.data)
-        services.add_review(user_name, game_id, int(form.rating.data), form.review.data, repo.repo_instance)
-
-        # game = services.get_game(game_id, repo.repo_instance)
-
-        return redirect(url_for('game_bp.desc', game_id=game_id, sort_by=sort_by, reverse_sort=reverse_sort))
-
     game_id = int(request.args.get('game', default=form.game_id.data))
     form.game_id.data = game_id
 
-    game = services.get_game(game_id, repo.repo_instance)
+    some_game = services.get_game(game_id, repo.repo_instance)
+
+    existing_review = services.get_existing_review(some_game)
+    already_reviewed = existing_review is not None
+    if already_reviewed:
+        form = ReviewForm(review=existing_review.comment, rating=existing_review.rating)
+
+    if form.validate_on_submit():
+
+        # game_id = int(form.game_id.data)
+        services.add_review(user_name, game_id, int(form.rating.data), form.review.data, repo.repo_instance)
+
+        return redirect(url_for('game_bp.desc', game_id=game_id, sort_by=sort_by, reverse_sort=reverse_sort))
 
     return render_template(
         'games/review_game.html',
-        game=game,
+        game=some_game,
         form=form,
         handler_url=url_for('game_bp.review_game', game=game_id, sort_by=sort_by, reverse_sort=reverse_sort),
         top_genres=utilities.get_top_genres()
@@ -106,4 +100,5 @@ class Sorting(FlaskForm):
     sort_by = SelectField('Sort By', choices=['rating', 'user', 'date'])
     reverse_sort = SelectField('Order', choices=['True', 'False'])
     submit = SubmitField('Sort')
+
 
