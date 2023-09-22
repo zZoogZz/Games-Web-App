@@ -1,5 +1,6 @@
-from games.adapters.repository import AbstractRepository
+from flask import session
 import games.adapters.repository as repository
+from games.authentication.authentication import login_required
 from games.errorHandlers.custom_exceptions import NoResultsFoundException
 
 def query_all_games_by_name(repo=repository.repo_instance):
@@ -59,14 +60,22 @@ def query_genre(query, repo=repository.repo_instance):
     return result
 
 
+@login_required
 def query_favourite_games(repo=repository.repo_instance):
     """
     Retrieves all favourite games for the authorized user.
 
     Returns a list of game objects.
     """
-    # TODO: link to memory repo
-    result = []
+    user = repo.get_user(session['user_name'])
+
+    # TODO Remove Test Data
+    test_list = query_all_games_by_name()
+    user.add_favourite_game(test_list[0])
+    user.add_favourite_game(test_list[1])
+    user.add_favourite_game(test_list[3])
+
+    result = user.favourite_games
 
     return result
 
