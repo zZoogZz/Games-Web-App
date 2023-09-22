@@ -1,4 +1,4 @@
-from games.domainmodel.model import Game, User, Review
+from games.domainmodel.model import Game
 from games.utilities import utilities
 from games.games_list._public_services import get_favourites, toggle_favourite, toggle_wishlist
 from games.authentication.authentication import login_required
@@ -25,8 +25,7 @@ def desc(game_id):
 
     selected_game = repo.repo_instance.get_game(game_id)
 
-    if not isinstance(selected_game, Game):
-        return abort(404)
+    if not isinstance(selected_game, Game): return abort(404)
 
     if request.method == 'GET':
         """
@@ -47,7 +46,7 @@ def desc(game_id):
         already_reviewed = services.get_existing_review(selected_game) is not None
 
         # Use Jinja to customize a predefined html page rendering the layout for showing a single game.
-        return render_template('/game/gameDescription.html',
+        return render_template('game/gameDescription.html',
                                game=selected_game,
                                top_genres=utilities.get_top_genres(),
                                sorted_reviews=sorted_reviews,
@@ -80,8 +79,7 @@ def desc(game_id):
         elif request.form['submit_button'] == 'toggle_wishlist':
             # Toggle Wishlist Game
 
-            # TODO re-enable wishlist
-            # toggle_wishlist(selected_game)
+            toggle_wishlist(selected_game)
 
             return redirect(url_for('game_bp.desc', game_id=game_id, sort_by=sort_by, reverse_sort=reverse_sort))
 
