@@ -23,7 +23,7 @@ def get_game(game_id):
     game = repo.repo_instance.get_game(game_id)
     return game
 
-@gamedesc_blueprint.route('/game/<int:game_id>')
+@gamedesc_blueprint.route('/game/<int:game_id>', methods=['GET','POST'])
 def desc(game_id):
     if request.method == 'GET':
         some_game = get_game(game_id)
@@ -50,7 +50,6 @@ def desc(game_id):
                                top_genres=utilities.get_top_genres(),
                                sorted_reviews=sorted_reviews,
                                sorting=sorting,
-                               sort_by=sort_by,
                                sort_choice=sort_choice,
                                already_reviewed=already_reviewed,
                                favourites=favourite_games
@@ -79,16 +78,6 @@ def desc(game_id):
             return "Toggled WL"
         else:
             pass  # unknown
-
-    # Use Jinja to customize a predefined html page rendering the layout for showing a single game.
-    return render_template('gameDescription.html',
-                           game=some_game,
-                           top_genres=utilities.get_top_genres(),
-                           sorted_reviews=sorted_reviews,
-                           sorting=sorting,
-                           sort_choice=sort_choice,
-                           already_reviewed=already_reviewed
-                           )
 
 @gamedesc_blueprint.route('/review', methods=['GET', 'POST'])
 @login_required
