@@ -21,6 +21,10 @@ class AbstractRepository(abc.ABC):
         """" Adds a User to the repository. """
         raise NotImplementedError
 
+    def check_username_unique(self, username: str):
+        """" Checks if username is unique, regardless of case. """
+        raise NotImplementedError
+
     @abc.abstractmethod
     def get_user(self, user_name) -> User:
         """ Returns the User named user_name from the repository.
@@ -142,6 +146,10 @@ class AbstractRepository(abc.ABC):
             raise RepositoryException('Review not correctly attached to a User')
         if review.game is None or review not in review.game.reviews:
             raise RepositoryException('Review not correctly attached to an Game')
+
+    @abc.abstractmethod
+    def remove_review(self, review: Review):
+        """ Removes a review from the repository, if present. """
 
     @abc.abstractmethod
     def get_reviews(self):
