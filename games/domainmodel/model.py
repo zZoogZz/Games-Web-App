@@ -200,7 +200,7 @@ class Game:
         if not isinstance(review, Review):
             return
         try:
-            self.__review.remove(review)
+            self.__reviews.remove(review)
         except ValueError:
             print(f"Could not find {review} in list of reviews.")
             pass
@@ -226,7 +226,7 @@ class User:
         if not isinstance(username, str) or username.strip() == "":
             raise ValueError('Username cannot be empty or non-string!')
         else:
-            self.__username = username.lower().strip()
+            self.__username = username.strip()
 
         if isinstance(password, str) and len(password) >= 7:
             self.__password = password
@@ -400,3 +400,7 @@ def make_review(user: User,  game: Game, rating: int, review_text: str):
     user.add_review(review)
     game.add_review(review)
     return review
+
+def remove_review(user: User,  game: Game, review: Review):
+    user.remove_review(review)
+    game.remove_review(review)
