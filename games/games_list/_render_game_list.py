@@ -10,7 +10,7 @@ def render_game_list(game_list, heading="List name not found."):
     Takes a list of games and paginates then renders the output.
     """
 
-    if len(game_list) < 1: abort(404) # 404 Redirect if no game found.
+    if len(game_list) < 1: abort(404) # 404 Redirect if no game found. TODO: Put a message on the 404 page.
 
     page = request.args.get('page', 1, type=int) #Gets page number
     
