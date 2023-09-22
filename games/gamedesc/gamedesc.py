@@ -1,4 +1,3 @@
-from flask import Blueprint, render_template, abort
 from games.domainmodel.model import Game, User, Review
 from games.utilities import utilities
 
@@ -21,6 +20,7 @@ def get_game(game_id):
     game = repo.repo_instance.get_game(game_id)
     return game
 
+
 @gamedesc_blueprint.route('/game/<int:game_id>')
 def desc(game_id):
     some_game = get_game(game_id)
@@ -39,12 +39,10 @@ def desc(game_id):
         reverse_sort = sorting.reverse_sort
         print(f'sort by: {sort_by}, reverse_sort: {reverse_sort}')
 
-
-
     sorted_reviews = sorted(some_game.reviews, key=lambda review: getattr(review, sort_by), reverse=reverse_sort)
 
     # Use Jinja to customize a predefined html page rendering the layout for showing a single game.
-    return render_template('gameDescription.html',
+    return render_template('/game/gameDescription.html',
                            game=some_game,
                            top_genres=utilities.get_top_genres(),
                            sorted_reviews=sorted_reviews,
@@ -52,6 +50,7 @@ def desc(game_id):
                            sort_by=sort_by,
                            reverse_sort=reverse_sort
                            )
+
 
 @gamedesc_blueprint.route('/review', methods=['GET', 'POST'])
 @login_required
@@ -108,3 +107,10 @@ class Sorting(FlaskForm):
     reverse_sort = SelectField('Order', choices=['True', 'False'])
     submit = SubmitField('Sort')
 
+
+@gamedesc_blueprint.route('/', methods=['POST'])
+def home_search_post():
+    query = request.form['query']
+    query_type = request.form['type']
+
+    return redirect(url_for("search_bp.search_games", query=query, type=query_type))

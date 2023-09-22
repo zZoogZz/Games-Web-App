@@ -1,5 +1,6 @@
 pytest~=7.4.0
 Flask==2.3.2
+Flask-WTF~=1.1.1
 WTForms~=3.0.1
 werkzeug~=2.3.7
 python-dotenv~=1.0.0
