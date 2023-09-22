@@ -1,0 +1,32 @@
+{% extends 'layout.html' %} {% block content %}
+
+<div class="col-9 col-s-9 main">
+    <h2>{{ game.title }}</h2>
+    <a href="{{ game.website_url }}"><img src="{{ game.image_url }}" alt="game image"></a>
+    <p>{% for genre in game.genres %}<div class="w3-tag w3-round w3-blue">{{ genre.genre_name }}</div> {% endfor %}</p>
+    <p><i>Release Date:</i> {{ game.release_date }} </p>
+    <p><i>Price:</i> {{ game.price }}</p>
+    <p><i>About:</i> {{ game.description }} </p>
+    <p>Game ID: {{ game.game_id }}</p>
+    {% if not game.reviews %}
+    <p><em>No reviews for this game.</em></p>
+    {% endif %}
+    <a class="link-button" href="{{ url_for('game_bp.review_game', game=game.game_id, sort_by='rating', reverse_sort='True') }}">Review Game</a>
+    {% if game.reviews %}
+    <h4>Reviews:</h4>
+    <div class="form-wrapper">
+    <form method="GET">
+        {{sorting.sort_by.label}} {{ sorting.sort_by }} {{sorting.reverse_sort.label}} {{ sorting.reverse_sort }} {{ sorting.submit(class="link-button") }}
+    </form>
+    </div>
+    <div style="clear:both">
+        {% for review in sorted_reviews %}
+            <p class="white-box">User: {{review.user.username}}, Rating: {{review.rating}}/5<br>{{review.comment}}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <br>
+</div>
+
+
+{% endblock %}
