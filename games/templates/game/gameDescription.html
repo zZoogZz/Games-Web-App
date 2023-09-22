@@ -6,23 +6,29 @@
             <div style="float:left";>
                 <h2>{{ game.title }}</h2>
             </div>
-            <div style="float:right";>
-
-                <button class="w3-button">
-                    <i class="fa fa-solid fa-list fa-2x"></i> Wishlist
+            <div class="w3-right">
+                <div class="w3-container col-6">
                     <form method="POST">
-                    <input type="submit" name="submit_button" value="toggle_wishlist">
+                    <button type="submit" name="action" value="toggle_favourite" class="w3-button">
+                        {% if game %}
+                            <i class="fa fa fa-bookmark"></i> Unwatch
+                        {% else %}
+                            <i class="fa fa fa-bookmark-o"></i> Watch
+                        {% endif %}
+                    </button>
                     </form>
-                </button>
-
-
-                <button class="w3-button">
-                    <i class="fa fa-regular fa-star fa-2x"></i> Favourite {% if game in favourites %} True {% else %} False {% endif %}
+                </div>
+                <div class="w3-container col-6">
                     <form method="POST">
-                    <input type="submit" name="submit_button" value="toggle_favourite">
+                    <button type="submit" name="action" value="toggle_favourite" class="w3-button">
+                        {% if game in favourites %}
+                            <i class="fa fa-star"></i> Unfavourite
+                        {% else %}
+                            <i class="fa fa-star-o"></i> Favourite
+                        {% endif %}
+                    </button>
                     </form>
-                </button>
-
+                </div>
             </div>
         </div>
         <div>

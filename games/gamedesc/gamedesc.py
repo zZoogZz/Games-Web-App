@@ -70,7 +70,7 @@ def desc(game_id):
         sort_by = request.args.get('sort_by', default='rating')
         reverse_sort = request.args.get('reverse_sort', default='True') == 'True'
 
-        if request.form['submit_button'] == 'toggle_favourite':
+        if request.form.get('action') == 'toggle_favourite':
 
             toggle_favourite(game)
             return redirect(url_for('game_bp.desc', game_id=game_id, sort_by=sort_by, reverse_sort=reverse_sort))
