@@ -1,6 +1,5 @@
 from datetime import datetime
 
-
 class Publisher:
     def __init__(self, publisher_name: str):
         if publisher_name == "" or type(publisher_name) is not str:
@@ -221,7 +220,6 @@ class Game:
         if not isinstance(other, self.__class__):
             return False
         return self.__game_id < other.game_id
-
 
 class User:
     def __init__(self, username: str, password: str):

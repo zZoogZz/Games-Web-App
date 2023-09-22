@@ -2,6 +2,7 @@ from flask import session
 import games.adapters.repository as repository
 from games.authentication.authentication import login_required
 from games.errorHandlers.custom_exceptions import NoResultsFoundException
+from games.games_list._public_services import toggle_favourite
 
 def query_all_games_by_name(repo=repository.repo_instance):
     game_ids_sorted = repo.get_game_ids_sorted_by_title()
@@ -74,6 +75,7 @@ def query_favourite_games(repo=repository.repo_instance):
     user.add_favourite_game(test_list[0])
     user.add_favourite_game(test_list[1])
     user.add_favourite_game(test_list[3])
+    toggle_favourite(test_list[5])
 
     result = user.favourite_games
 

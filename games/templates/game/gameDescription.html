@@ -10,17 +10,25 @@
 
                 <button class="w3-button">
                     <i class="fa fa-solid fa-list fa-2x"></i> Wishlist
+                    <form method="POST">
+                    <input type="submit" name="submit_button" value="toggle_wishlist">
+                    </form>
                 </button>
 
 
                 <button class="w3-button">
-                    <i class="fa fa-regular fa-star fa-2x"></i> Favourite
+                    <i class="fa fa-regular fa-star fa-2x"></i> Favourite {% if game in favourites %} True {% else %} False {% endif %}
+                    <form method="POST">
+                    <input type="submit" name="submit_button" value="toggle_favourite">
+                    </form>
                 </button>
 
             </div>
         </div>
         <div>
-            <p>{% for genre in game.genres %}<div class="w3-tag w3-round w3-blue">{{ genre.genre_name }}</div> {% endfor %}</p>
+            <p>
+                {% for genre in game.genres %}<div class="w3-tag w3-round w3-blue">{{ genre.genre_name }}</div> {% endfor %}
+            </p>
         </div>
     </div>
     <div>

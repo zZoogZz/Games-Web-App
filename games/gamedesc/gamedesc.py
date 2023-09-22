@@ -1,5 +1,6 @@
 from games.domainmodel.model import Game, User, Review
 from games.utilities import utilities
+from games.games_list._public_services import is_favourite, get_favourites
 
 from flask import session
 from flask import Blueprint, render_template, abort, url_for, request, redirect
@@ -12,6 +13,8 @@ from games.authentication.authentication import login_required
 import games.adapters.repository as repo
 import games.gamedesc.services as services
 
+from games.games_list._public_services import toggle_favourite, toggle_wishlist
+
 gamedesc_blueprint = Blueprint(
     'game_bp', __name__)
 
@@ -21,35 +24,64 @@ def get_game(game_id):
     return game
 
 
-@gamedesc_blueprint.route('/game/<int:game_id>')
+@login_required
+@gamedesc_blueprint.route('/game/<int:game_id>',  methods=['GET', 'POST'])
 def desc(game_id):
-    some_game = get_game(game_id)
-    if not isinstance(some_game, Game):
-        return abort(404)
+    if request.method == 'GET':
+        some_game = get_game(game_id)
+        if not isinstance(some_game, Game):
+            return abort(404)
 
-    sort_by = request.args.get('sort_by', default='rating')
-    reverse_sort = request.args.get('reverse_sort', default='True') == 'True'
+        sort_by = request.args.get('sort_by', default='rating')
+        reverse_sort = request.args.get('reverse_sort', default='True') == 'True'
 
-    sorting = Sorting()
-    print('sorting made')
+        sorting = Sorting()
+        print('sorting made')
 
-    if sorting.validate_on_submit():
+        if sorting.validate_on_submit():
 
-        sort_by = sorting.sort_by.data
-        reverse_sort = sorting.reverse_sort
-        print(f'sort by: {sort_by}, reverse_sort: {reverse_sort}')
+            sort_by = sorting.sort_by.data
+            reverse_sort = sorting.reverse_sort
+            print(f'sort by: {sort_by}, reverse_sort: {reverse_sort}')
 
-    sorted_reviews = sorted(some_game.reviews, key=lambda review: getattr(review, sort_by), reverse=reverse_sort)
+        sorted_reviews = sorted(some_game.reviews, key=lambda review: getattr(review, sort_by), reverse=reverse_sort)
 
-    # Use Jinja to customize a predefined html page rendering the layout for showing a single game.
-    return render_template('/game/gameDescription.html',
-                           game=some_game,
-                           top_genres=utilities.get_top_genres(),
-                           sorted_reviews=sorted_reviews,
-                           sorting=sorting,
-                           sort_by=sort_by,
-                           reverse_sort=reverse_sort
-                           )
+        favourite_games = get_favourites()
+
+        # Use Jinja to customize a predefined html page rendering the layout for showing a single game.
+        return render_template('/game/gameDescription.html',
+                               game=some_game,
+                               top_genres=utilities.get_top_genres(),
+                               sorted_reviews=sorted_reviews,
+                               sorting=sorting,
+                               sort_by=sort_by,
+                               reverse_sort=reverse_sort,
+                               favourites=favourite_games
+                               )
+    elif request.method == 'POST':
+        """
+        When a post request is placed, this function triggers the associated toggle button function
+        toggle_favourite
+        toggle_wishlist
+        """
+
+        game = get_game(game_id)
+
+        sort_by = request.args.get('sort_by', default='rating')
+        reverse_sort = request.args.get('reverse_sort', default='True') == 'True'
+
+        if request.form['submit_button'] == 'toggle_favourite':
+
+            toggle_favourite(game)
+            return redirect(url_for('game_bp.desc', game_id=game_id, sort_by=sort_by, reverse_sort=reverse_sort))
+        elif request.form['submit_button'] == 'toggle_wishlist':
+            # toggle_wishlist(game)
+            # TODO re-enable wishlist
+            print("toggling wishlist")
+            pass
+            return "Toggled WL"
+        else:
+            pass  # unknown
 
 
 @gamedesc_blueprint.route('/review', methods=['GET', 'POST'])
