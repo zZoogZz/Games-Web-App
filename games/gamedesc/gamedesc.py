@@ -1,59 +1,62 @@
 from games.domainmodel.model import Game, User, Review
 from games.utilities import utilities
-from games.games_list._public_services import is_favourite, get_favourites
+from games.games_list._public_services import get_favourites, toggle_favourite, toggle_wishlist
+from games.authentication.authentication import login_required
 
-from flask import session
-from flask import Blueprint, render_template, abort, url_for, request, redirect
-
+from flask import Blueprint, render_template, abort, url_for, request, redirect, session
 from flask_wtf import FlaskForm
 from wtforms import TextAreaField, HiddenField, SubmitField, SelectField
-from wtforms.validators import DataRequired, Length, ValidationError
-from games.authentication.authentication import login_required
+from wtforms.validators import DataRequired, Length
 
 import games.adapters.repository as repo
 import games.gamedesc.services as services
-
-from games.games_list._public_services import toggle_favourite, toggle_wishlist
 
 gamedesc_blueprint = Blueprint(
     'game_bp', __name__)
 
 
-def get_game(game_id):
-    game = repo.repo_instance.get_game(game_id)
-    return game
-
-@gamedesc_blueprint.route('/game/<int:game_id>', methods=['GET','POST'])
+@gamedesc_blueprint.route('/game/<int:game_id>', methods=['GET', 'POST'])
 def desc(game_id):
-    if request.method == 'GET':
-        some_game = get_game(game_id)
-        if not isinstance(some_game, Game):
-            return abort(404)
+    """
+    The game description accepts two types of methods, GET and POST.
+    Game description handles individual games and their associated functions.
+    """
+    # Initialization - Fetch the game object for the requested game.
 
-        # Get sorting choices:
+    selected_game = repo.repo_instance.get_game(game_id)
+
+    if not isinstance(selected_game, Game):
+        return abort(404)
+
+    if request.method == 'GET':
+        """
+        When a GET method is placed, this function displays the game's associated details.
+        The function also performs a number of review sorting functions. 
+        """
+        # Initialization - Retrieve information from url args.
         sort_choice = request.args.get('sort_choice', default='Highest Rating')
 
+        # Get sorting choices:
         sorting = Sorting(sort_choice=sort_choice)
 
         if sorting.validate_on_submit():
             sort_choice = sorting.sort_choice.data
 
-        sorted_reviews = sort_reviews(some_game, sort_choice)
+        sorted_reviews = sort_reviews(selected_game, sort_choice)
 
-        already_reviewed = services.get_existing_review(some_game) is not None
-
-        favourite_games = get_favourites()
+        already_reviewed = services.get_existing_review(selected_game) is not None
 
         # Use Jinja to customize a predefined html page rendering the layout for showing a single game.
         return render_template('/game/gameDescription.html',
-                               game=some_game,
+                               game=selected_game,
                                top_genres=utilities.get_top_genres(),
                                sorted_reviews=sorted_reviews,
                                sorting=sorting,
                                sort_choice=sort_choice,
                                already_reviewed=already_reviewed,
-                               favourites=favourite_games
+                               favourites=get_favourites()
                                )
+
     elif request.method == 'POST':
         """
         When a post request is placed, this function triggers the associated toggle button function
@@ -61,23 +64,32 @@ def desc(game_id):
         toggle_wishlist
         """
 
-        game = get_game(game_id)
+        # Initialization
 
         sort_by = request.args.get('sort_by', default='rating')
         reverse_sort = request.args.get('reverse_sort', default='True') == 'True'
 
+        # Test for different button presses.
         if request.form.get('action') == 'toggle_favourite':
+            # Toggle Favourite Game
 
-            toggle_favourite(game)
+            toggle_favourite(selected_game)
+
             return redirect(url_for('game_bp.desc', game_id=game_id, sort_by=sort_by, reverse_sort=reverse_sort))
+
         elif request.form['submit_button'] == 'toggle_wishlist':
-            # toggle_wishlist(game)
+            # Toggle Wishlist Game
+
             # TODO re-enable wishlist
-            print("toggling wishlist")
-            pass
-            return "Toggled WL"
+            # toggle_wishlist(selected_game)
+
+            return redirect(url_for('game_bp.desc', game_id=game_id, sort_by=sort_by, reverse_sort=reverse_sort))
+
         else:
-            pass  # unknown
+            # No acceptable post request placed - bad request.
+
+            return abort(400)
+
 
 @gamedesc_blueprint.route('/review', methods=['GET', 'POST'])
 @login_required
@@ -99,7 +111,6 @@ def review_game():
         form = ReviewForm(review=existing_review.comment, rating=existing_review.rating)
 
     if form.validate_on_submit():
-
         # game_id = int(form.game_id.data)
         services.add_review(user_name, game_id, int(form.rating.data), form.review.data, repo.repo_instance)
 
@@ -139,7 +150,7 @@ def sort_reviews(game, sort_choice):
     elif sort_choice == 'User A-Z':
         sort_by = 'user'
         reverse_sort = False
-    else: # sort_choice == 'User Z-A':
+    else:  # sort_choice == 'User Z-A':
         sort_by = 'user'
         reverse_sort = True
 
@@ -148,8 +159,10 @@ def sort_reviews(game, sort_choice):
     else:
         return sorted(game.reviews, key=lambda review: review.user.username.lower(), reverse=reverse_sort)
 
+
 @gamedesc_blueprint.route('/', methods=['POST'])
 def home_search_post():
+    # TODO: potentially remove this function.
     query = request.form['query']
     query_type = request.form['type']
 
