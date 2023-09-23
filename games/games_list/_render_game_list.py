@@ -1,3 +1,4 @@
+from games.games_list._no_content_found import no_content_found
 from games.utilities import utilities
 from flask import render_template, request, redirect, url_for, abort
 import games.games_list._services as services
@@ -5,14 +6,17 @@ import games.games_list._services as services
 GAMES_PER_PAGE = 20
 
 
-def render_game_list(game_list, heading="List name not found."):
+def render_game_list(game_list, heading="List name not found.", ):
     """
     Takes a list of games and paginates then renders the output.
     """
 
-    if len(game_list) < 1: abort(404) # 404 Redirect if no game found. TODO: Put a message on the 404 page.
+    if len(game_list) < 1: return no_content_found(header=heading,
+                                            description="Hmmm..... We couldn't find anything.....")
 
-    page = request.args.get('page', 1, type=int) #Gets page number
+
+
+    page = request.args.get('page', 1, type=int) # Gets page number
     
     # search_query = request.args.get('query')
     # search_query_type = request.args.get('query_type')

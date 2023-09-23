@@ -41,8 +41,8 @@ def create_app(test_config=None):
         app.register_blueprint(favourites.favourites_blueprint)
         app.register_blueprint(wishlist.wishlist_blueprint)
 
-        from .errorHandlers import notFoundError
-        app.register_blueprint(notFoundError.not_found_blueprint)
+        from .errorHandlers import error_handler
+        app.register_blueprint(error_handler.error_handler_blueprint)
 
         from .authentication import authentication
         app.register_blueprint(authentication.authentication_blueprint)

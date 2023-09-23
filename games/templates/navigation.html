@@ -5,13 +5,14 @@
         <ul>
             <li><a href="{{ url_for('home_bp.home') }}" class="w3-button">Home</a></li>
             <li><a href="{{ url_for('all_games_bp.all_games') }}" class="w3-button">All Games</a></li>
-            <li><a href="{{ url_for('favourites_bp.favourite_games') }}" class="w3-button">Favourites</a></li>
-            <li><a href="{{ url_for('wishlist_bp.wishlist_list') }}" class="w3-button">Wishlist</a></li>
+
             {% if 'user_name' not in session %}
             <li><a href="{{ url_for('authentication_bp.login') }}">Login</a></li>
             <li><a href="{{ url_for('authentication_bp.register') }}">Register</a></li>
             {% endif %}
             {% if 'user_name' in session %}
+            <li><a href="{{ url_for('favourites_bp.favourite_games') }}" class="w3-button">Favourites</a></li>
+            <!--<li><a href="{{ url_for('wishlist_bp.wishlist_list') }}" class="w3-button">Wishlist</a></li> -->
             <li><p>You are logged in as {{ session['user_name'] }}</p></li>
             <li><a href="{{ url_for('authentication_bp.logout') }}">Logout</a></li>
             <li><a href="{{ url_for('user_profile_bp.user_profile') }}">Profile</a></li>
