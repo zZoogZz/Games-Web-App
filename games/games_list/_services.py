@@ -70,13 +70,6 @@ def query_favourite_games(repo=repository.repo_instance):
     """
     user = repo.get_user(session['user_name'])
 
-    # TODO Remove Test Data
-    test_list = query_all_games_by_name()
-    user.add_favourite_game(test_list[0])
-    user.add_favourite_game(test_list[1])
-    user.add_favourite_game(test_list[3])
-    toggle_favourite(test_list[5])
-
     result = user.favourite_games
 
     return result
