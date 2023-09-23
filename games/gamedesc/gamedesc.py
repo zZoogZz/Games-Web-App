@@ -156,12 +156,3 @@ def sort_reviews(game, sort_choice):
         return sorted(game.reviews, key=lambda review: review.rating, reverse=reverse_sort)
     else:
         return sorted(game.reviews, key=lambda review: review.user.username.lower(), reverse=reverse_sort)
-
-
-@gamedesc_blueprint.route('/', methods=['POST'])
-def home_search_post():
-    # TODO: potentially remove this function.
-    query = request.form['query']
-    query_type = request.form['type']
-
-    return redirect(url_for("search_bp.search_games", query=query, type=query_type))
