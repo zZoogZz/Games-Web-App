@@ -1,7 +1,7 @@
 from flask import session
 import games.adapters.repository as repository
 from games.authentication.authentication import login_required
-from games.games_list._public_services import toggle_favourite
+from games.games_list._public_services import toggle_favourite, get_favourites
 
 
 def query_all_games_by_name(repo=repository.repo_instance) -> list:
@@ -79,9 +79,7 @@ def query_favourite_games(repo=repository.repo_instance) -> list:
 
     Returns a list of game objects.
     """
-    user = repo.get_user(session['user_name'])
-
-    result = user.favourite_games
+    result = get_favourites()
 
     return result
 

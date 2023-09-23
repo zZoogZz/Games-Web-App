@@ -34,7 +34,11 @@ def is_favourite(game, repo=repository.repo_instance):
 
 
 def get_favourites(repo=repository.repo_instance):
+    if 'user_name' not in session:
+        return []
+
     user = repo.get_user(session['user_name'])
+
     if user is None:
         return []
 
