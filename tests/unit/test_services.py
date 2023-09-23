@@ -5,7 +5,7 @@ from games.adapters.memory_repository import MemoryRepository, populate
 import games.adapters.repository as repo
 import games.utilities.services as services
 import games.utilities.utilities as utilities
-import games.allGames.services as allGamesServices
+import games.games_list._services as allGamesServices
 
 
 # Utilities tests:
@@ -30,7 +30,7 @@ def test_get_top_genres():
     genres0 = services.get_top_genres(repo.repo_instance, 1000)
     assert len(genres0) == 24
 
-# allGames tests:
+# games_list tests:
 
 def test_query_all_games_by_name():
     repo.repo_instance = MemoryRepository()

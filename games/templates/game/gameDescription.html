@@ -1,0 +1,80 @@
+{% extends 'layout.html' %} {% block content %}
+
+<div class="col-9 col-s-9 main">
+    <div>
+        <div class="w3-row">
+            <div style="float:left";>
+                <h2>{{ game.title }}</h2>
+            </div>
+            <div class="w3-right">
+                <!--
+                <div class="w3-container col-6">
+
+                    <form method="POST">
+                    <button type="submit" name="action" value="toggle_favourite" class="w3-button">
+                        {% if game %}
+                            <i class="fa fa fa-bookmark"></i> Unwatch
+                        {% else %}
+                            <i class="fa fa fa-bookmark-o"></i> Watch
+                        {% endif %}
+                    </button>
+                    </form>
+                </div>
+                -->
+                <div class="w3-container col-6">
+                    <form method="POST">
+                    <button type="submit" name="action" value="toggle_favourite" class="w3-button">
+                        {% if game in favourites %}
+                            <i class="fa fa-star"></i> Unfavourite
+                        {% else %}
+                            <i class="fa fa-star-o"></i> Favourite
+                        {% endif %}
+                    </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div>
+            <p>
+                {% for genre in game.genres %}<div class="w3-tag w3-round w3-blue">{{ genre.genre_name }}</div> {% endfor %}
+            </p>
+        </div>
+    </div>
+    <div>
+        <img style="width:80%"; src="{{ game.image_url }}" alt="game image">
+    </div>
+
+    <p><i>Release Date:</i> {{ game.release_date }} </p>
+    <p><i>Price:</i> {{ game.price }}</p>
+    <p><i>About:</i> {{ game.description }} </p>
+    <p><i>Website: </i><a href="{{ game.website_url }}">{{ game.website_url }}</a></p>
+    <p>Game ID: {{ game.game_id }}</p>
+    {% if not game.reviews %}
+    <p><em>No reviews for this game.</em></p>
+    {% endif %}
+
+    <a class="link-button" href="{{ url_for('game_bp.review_game', game=game.game_id, sort_choice=sort_choice) }}">
+        {% if not already_reviewed %}Review Game{% else %}Edit Review{% endif %}</a>
+    {% if game.reviews %}
+    <h4>Reviews:</h4>
+    <div class="form-wrapper">
+    <form method="GET">
+        {{sorting.sort_choice.label}} {{ sorting.sort_choice }} {{ sorting.submit(class="link-button") }}
+    </form>
+    </div>
+    <div style="clear:both">
+        {% for review in sorted_reviews %}
+            <p class="white-box">User: {{review.user.username}},
+                Rating:
+                {% for i in range(review.rating) %}<img src="{{ url_for('static', filename='gold_star.png') }}" width="15" height="15">{% endfor %}{% for i in range(5 - review.rating) %}<img src="{{ url_for('static', filename='grey_star.png') }}" width="15" height="15">{% endfor %}
+                <br>
+                {{review.comment}}
+            </p>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <br>
+</div>
+
+
+{% endblock %}
