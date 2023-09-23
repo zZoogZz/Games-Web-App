@@ -3,6 +3,7 @@ import games.adapters.repository as repository
 from games.authentication.authentication import login_required
 
 
+@login_required
 def toggle_favourite(game, repo=repository.repo_instance):
     """
     Toggles the games status as a favourite.

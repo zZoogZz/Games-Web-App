@@ -15,10 +15,10 @@ gamedesc_blueprint = Blueprint(
     'game_bp', __name__)
 
 
-@gamedesc_blueprint.route('/game/<int:game_id>', methods=['GET', 'POST'])
+@gamedesc_blueprint.route('/game/<int:game_id>', methods=['GET'])
 def desc(game_id):
     """
-    The game description accepts two types of methods, GET and POST.
+    This part of game description accepts GET requests.
     Game description handles individual games and their associated functions.
     """
     # Initialization - Fetch the game object for the requested game.
@@ -56,7 +56,21 @@ def desc(game_id):
                                favourites=get_favourites()
                                )
 
-    elif request.method == 'POST':
+
+@gamedesc_blueprint.route('/game/<int:game_id>', methods=['POST'])
+@login_required
+def desc_options(game_id):
+    """
+    This part of game description accepts POST requests.
+    Game description handles individual games and their associated functions.
+    """
+    # Initialization - Fetch the game object for the requested game.
+
+    selected_game = repo.repo_instance.get_game(game_id)
+
+    if not isinstance(selected_game, Game): return abort(404)
+
+    if request.method == 'POST':
         """
         When a post request is placed, this function triggers the associated toggle button function
         toggle_favourite
@@ -72,7 +86,7 @@ def desc(game_id):
         if request.form.get('action') == 'toggle_favourite':
             # Toggle Favourite Game
 
-            toggle_favourite(selected_game)
+            toggle_favourite(game=selected_game)
 
             return redirect(url_for('game_bp.desc', game_id=game_id, sort_by=sort_by, reverse_sort=reverse_sort))
 
