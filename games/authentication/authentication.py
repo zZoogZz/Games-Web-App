@@ -45,7 +45,7 @@ def login():
         # Successful POST, i.e. the username and password have passed validation checking.
         # Use the service layer to look up the user.
         try:
-            user = services.get_user(form.user_name.data, repo.repo_instance)
+            user = services.get_user(form.user_name.data.lower(), repo.repo_instance)
 
             # Authenticate user.
             services.authenticate_user(user['user_name'], form.password.data, repo.repo_instance)
