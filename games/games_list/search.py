@@ -38,7 +38,7 @@ def search_games():
 
     print(type(games))
 
-    heading = "Showing results for {} search of \"{}\"....".format(query_type, query)
+    heading = query
 
     return render_game_list(games, heading=heading)
 

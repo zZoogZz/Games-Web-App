@@ -53,7 +53,7 @@ def test_memory_repository():
     assert repo.get_game("Not a game") ==None
     assert repo.get_game(7940) == Game(game_id=7940, game_title="Call of Duty® 4: Modern Warfare®")
 
-    populate(repo)
+    populate(repo, "./games/adapters/data/")
 
     # Test repository retrieves correct number of game objects:
     assert repo.get_number_of_games() == 877

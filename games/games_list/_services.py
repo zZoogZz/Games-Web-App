@@ -4,18 +4,18 @@ from games.authentication.authentication import login_required
 from games.games_list._public_services import toggle_favourite, get_favourites
 
 
-def query_all_games_by_name(repo=repository.repo_instance) -> list:
+def query_all_games_by_name(repo=repository) -> list:
     """
     Fetches all games, and returns them as a list.
     """
 
-    game_ids_sorted = repo.get_game_ids_sorted_by_title()
-    sorted_game_object_list = repo.get_games_by_ids(game_ids_sorted)
+    game_ids_sorted = repo.repo_instance.get_game_ids_sorted_by_title()
+    sorted_game_object_list = repo.repo_instance.get_games_by_ids(game_ids_sorted)
 
     return sorted_game_object_list
 
 
-def query_games_title(query, repo=repository.repo_instance) -> list:
+def query_games_title(query, repo=repository) -> list:
     """
     Takes a query string, compares with game title, and returns values where there is a substring.
 
@@ -35,7 +35,7 @@ def query_games_title(query, repo=repository.repo_instance) -> list:
     return result
 
 
-def query_publisher(query, repo=repository.repo_instance) -> list:
+def query_publisher(query, repo=repository) -> list:
     """
     Takes a query string, compares with game title, and returns values where there is a substring.
 
@@ -55,7 +55,7 @@ def query_publisher(query, repo=repository.repo_instance) -> list:
     return result
 
 
-def query_genre(query, repo=repository.repo_instance) -> list:
+def query_genre(query, repo=repository) -> list:
 
     sorted_game_object_list = query_all_games_by_name(repo)
 
@@ -73,7 +73,7 @@ def query_genre(query, repo=repository.repo_instance) -> list:
 
 
 @login_required
-def query_favourite_games(repo=repository.repo_instance) -> list:
+def query_favourite_games(repo=repository) -> list:
     """
     Retrieves all favourite games for the authorized user.
 
@@ -84,7 +84,7 @@ def query_favourite_games(repo=repository.repo_instance) -> list:
     return result
 
 
-def query_wishlist_games(wishlist_id,repo=repository.repo_instance) -> list:
+def query_wishlist_games(wishlist_id,repo=repository) -> list:
     """
     Retrieves all wishlist games from a specified wishlist for the authorized user.
 
