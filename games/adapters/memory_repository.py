@@ -230,7 +230,7 @@ def read_csv_file(filename: str):
 def populate(repo: MemoryRepository, data_path):
     # Per lecture 12:
     dir_name = os.path.dirname(os.path.abspath(__file__))
-    games_file_name = os.path.join(data_path, "data/games.csv")
+    games_file_name = os.path.join(data_path, "games.csv")
     reader = GameFileCSVReader(games_file_name)
     reader.read_csv_file()
     games = reader.dataset_of_games

@@ -9,7 +9,7 @@ TEST_DATA_PATH = get_project_root() / "tests" / "data"
 def in_memory_repo():
 	repo = memory_repository.MemoryRepository()
 	database_mode = False
-	repository_populate.populate(TEST_DATA_PATH, repo, database_mode)
+	memory_repository.populate(repo, TEST_DATA_PATH)
 	return repo
 
 
