@@ -43,7 +43,10 @@ def desc(game_id):
 
         sorted_reviews = sort_reviews(selected_game, sort_choice)
 
-        already_reviewed = services.get_existing_review(selected_game) is not None
+        if 'user_name' in session:
+            already_reviewed = services.get_existing_review(selected_game, session['user_name']) is not None
+        else:
+            already_reviewed = False
 
         # Use Jinja to customize a predefined html page rendering the layout for showing a single game.
         return render_template('game/gameDescription.html',
@@ -117,7 +120,7 @@ def review_game():
     form.game_id.data = game_id
     some_game = services.get_game(game_id, repo.repo_instance)
 
-    existing_review = services.get_existing_review(some_game)
+    existing_review = services.get_existing_review(some_game, user_name)
     already_reviewed = existing_review is not None
     if already_reviewed:
         form = ReviewForm(review=existing_review.comment, rating=existing_review.rating)

@@ -4,8 +4,10 @@ from games.domainmodel.model import Publisher, Genre, Game, Review, User, Wishli
 from games.adapters.memory_repository import MemoryRepository, populate
 import games.adapters.repository as repo
 import games.utilities.services as services
-import games.utilities.utilities as utilities
 import games.games_list._services as allGamesServices
+import games.user_profile.services as user_profile_services
+import games.gamedesc.services as gamedesc_services
+from games.gamedesc.services import NonExistentGameException, UnknownUserException
 
 
 # Utilities tests:
@@ -87,6 +89,54 @@ def test_query_genres():
     searched_genres1 = allGamesServices.query_genre("", repo.repo_instance)
     assert len(searched_genres1) == len(allGames)  # defaults to all games
 
+
+# gamedesc Review tests:
+
+def test_get_game():
+    repo.repo_instance = MemoryRepository()
+    populate(repo.repo_instance)
+    game = gamedesc_services.get_game(7940, repo.repo_instance)
+    assert "Call of Duty" in game.title
+
+    with pytest.raises(NonExistentGameException):
+        gamedesc_services.get_game(123454321, repo.repo_instance)
+
+def test_add_review():
+    repo.repo_instance = MemoryRepository()
+    populate(repo.repo_instance)
+    test_user = User('james', 'Password123')
+    repo.repo_instance.add_user(test_user)
+    test_game = repo.repo_instance.get_game(7940)
+
+    with pytest.raises(NonExistentGameException):
+        gamedesc_services.add_review('james', 123454321, 3, 'Good game', repo.repo_instance)
+
+    with pytest.raises(UnknownUserException):
+        gamedesc_services.add_review('lames', 7940, 3, 'Good game', repo.repo_instance)
+
+    gamedesc_services.add_review('james', 7940, 3, 'Good game', repo.repo_instance)
+    test_review1 = Review(test_user, test_game, 3, 'Good game')
+    test_reviews = repo.repo_instance.get_reviews()
+
+    assert test_review1 in test_reviews
+    assert len(test_reviews) == 1
+
+    gamedesc_services.add_review('james', 7940, 1, 'Bad game', repo.repo_instance)
+    test_review2 = Review(test_user, test_game, 1, 'Bad game')
+    test_reviews = repo.repo_instance.get_reviews()
+
+    assert test_review1 not in test_reviews
+    assert test_review2 in test_reviews
+    assert len(test_reviews) == 1
+
+
+def test_get_existing_review():
+    pass
+
+
+# user_profiile tests:
+def test_profile_get_user():
+    pass
 
 
 
