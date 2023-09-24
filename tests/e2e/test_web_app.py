@@ -139,4 +139,11 @@ class TestPagesAuthenticated:
             assert third_response.status_code == 200
             assert "Unfavourite" in third_response.data.decode('utf-8')
 
+    def test_profile_page(self, client, login):
+        with client:
+            response = client.get('/user_profile/')
+            assert response.status_code == 200
+            assert session['user_name'] == TESTUSERNAME
+            assert "{}'s Profile".format(TESTUSERNAME) in response.data.decode('utf-8')
+
 
