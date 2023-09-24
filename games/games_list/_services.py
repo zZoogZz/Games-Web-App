@@ -4,13 +4,13 @@ from games.authentication.authentication import login_required
 from games.games_list._public_services import toggle_favourite, get_favourites
 
 
-def query_all_games_by_name(repo=repository.repo_instance) -> list:
+def query_all_games_by_name(repo=repository) -> list:
     """
     Fetches all games, and returns them as a list.
     """
 
-    game_ids_sorted = repo.get_game_ids_sorted_by_title()
-    sorted_game_object_list = repo.get_games_by_ids(game_ids_sorted)
+    game_ids_sorted = repo.repo_instance.get_game_ids_sorted_by_title()
+    sorted_game_object_list = repo.repo_instance.get_games_by_ids(game_ids_sorted)
 
     return sorted_game_object_list
 
