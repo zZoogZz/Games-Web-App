@@ -35,10 +35,10 @@ def search_games():
         games = []
 
     # Render
-
-    print(type(games))
-
-    heading = "Showing results for {} search of \"{}\"....".format(query_type, query)
+    if query_type == "genre":
+        heading = query
+    else:
+        heading = "Showing results for {} search of \"{}\"....".format(query_type, query)
 
     return render_game_list(games, heading=heading)
 
