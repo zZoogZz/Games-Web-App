@@ -15,6 +15,7 @@
             <!--<li><a href="{{ url_for('wishlist_bp.wishlist_list') }}">Wishlist</a></li> -->
             <li><p>You are logged in as {{ session['user_name'] }}</p></li>
             <li><a href="{{ url_for('authentication_bp.logout') }}">Logout</a></li>
+            {{ url_for('user_profile_bp.user_profile') }}
             <li><a href="{{ url_for('user_profile_bp.user_profile') }}">Profile</a></li>
             {% endif %}
 

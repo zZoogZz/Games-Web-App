@@ -1,28 +1,14 @@
 {% extends 'layout.html' %} {% block content %}
-
-
-
 <div class="col-9 col-s-9 main">
     <h2>{{ user.username }}'s Profile</h2>
     <div class="white-box"><h3>Favourites:</h3>
         {% if user.favourite_games|length > 0 %}
             {% for game in user.favourite_games %}
-            <div class="favourites-list"><a href="{{ url_for('game_bp.desc', game_id=game.game_id, sort_by='rating', reverse_sort='True') }}">
+            <div class="favourites-list"><a href="{{ url_for('game_bp.desc', game_id=game.game_id) }}">
                 <img src="{{ game.image_url }}" alt="{{ game.title }}" height="120"></a></div>
             {% endfor %}
         {% else %}
             You have not added any favourites.
-        {% endif %}
-    </div>
-    <div class="white-box"><h3>Wishlists:</h3>
-        {% if wishlists|length > 0 %}
-            {% for wishlist in wishlists %}
-            <div class="white-box"><h4>{{ wishlist.name }} </h4>
-                {% for game in wishlist %}<div class="white-box">{{ item.title }}</div> {% endfor %}
-            </div>
-            {% endfor %}
-        {% else %}
-            You have not added any wishlists.
         {% endif %}
     </div>
     <div class="white-box"><h3>Reviews:</h3>
@@ -43,6 +29,4 @@
         {% endif %}
     </div>
 </div>
-
-
 {% endblock %}
