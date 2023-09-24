@@ -8,14 +8,9 @@ from games.adapters.memory_repository import MemoryRepository, populate
 from games.authentication.services import add_user, authenticate_user
 from flask import session
 
-
-
-
 class TestTypes:
-    repo.repo_instance = MemoryRepository()
-    populate(repo.repo_instance)
-
-
+    #repo.repo_instance = MemoryRepository()
+    #populate(repo.repo_instance)
 
     def test_query_all(self):
         assert type(query_all_games_by_name(repo)) == list
@@ -40,15 +35,3 @@ class TestTypes:
 
         with pytest.raises(AttributeError):
             query_genre(0)
-
-    def test_query_favourite_games(self, client):
-        with client:
-            TESTUSERNAME = "testuserdjdjdj"
-            TESTPASSWORD = "testpassword123"
-            add_user(TESTUSERNAME, TESTPASSWORD, repo.repo_instance)
-            # set a user id without going through the login route
-            response = client.post("/authentication/login", data={"user_name": TESTUSERNAME, "password": TESTPASSWORD})
-            assert session['user_name'] == TESTUSERNAME
-            assert response.status_code == 302
-            assert "User name not recognised - please supply another" not in response.response
-

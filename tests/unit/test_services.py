@@ -16,10 +16,11 @@ def test_get_top_genres():
     genres0 = services.get_top_genres(repo.repo_instance, 10)
     assert genres0 == []
 
-    populate(repo.repo_instance)
+    populate(repo.repo_instance, "./games/adapters/data/")
     genres0 = services.get_top_genres(repo.repo_instance, 0)
     assert genres0 == []
     genres0 = services.get_top_genres(repo.repo_instance, 1)
+    assert genres0 == [(Genre("Indie"), 649)]
     assert genres0 == [(Genre("Indie"), 649)]
     genres0 = services.get_top_genres(repo.repo_instance, 10)
     assert genres0[-2:] == [(Genre("Free to Play"), 65),(Genre("Sports"), 41)]
@@ -36,7 +37,7 @@ def test_query_all_games_by_name():
     repo.repo_instance = MemoryRepository()
     allGames0 = allGamesServices.query_all_games_by_name(repo)
     assert allGames0 == []  # check list begins empty before populate is called
-    populate(repo.repo_instance)
+    populate(repo.repo_instance, "./games/adapters/data/")
     allGames1 = allGamesServices.query_all_games_by_name(repo)
     assert allGames1 != []  # check populate works
     for i in range(len(allGames1) - 1):
@@ -45,7 +46,7 @@ def test_query_all_games_by_name():
 
 def test_query_games_title():
     repo.repo_instance = MemoryRepository()
-    populate(repo.repo_instance)
+    populate(repo.repo_instance, "./games/adapters/data/")
     allGames = allGamesServices.query_all_games_by_name(repo)
     searched_games0 = allGamesServices.query_games_title("The", repo)
     assert searched_games0 != []  # checks that it returns items to the list
@@ -58,7 +59,7 @@ def test_query_games_title():
 
 def test_query_publisher():
     repo.repo_instance = MemoryRepository()
-    populate(repo.repo_instance)
+    populate(repo.repo_instance, "./games/adapters/data/")
     allGames = allGamesServices.query_all_games_by_name(repo)
     searched_publishers0 = allGamesServices.query_publisher("a", repo)
     assert searched_publishers0 != []  # checks that it returns items to the list
@@ -70,7 +71,7 @@ def test_query_publisher():
 
 def test_query_genres():
     repo.repo_instance = MemoryRepository()
-    populate(repo.repo_instance)
+    populate(repo.repo_instance, "./games/adapters/data/")
     search_term = "Adventure"
     allGames = allGamesServices.query_all_games_by_name(repo)
     searched_genres0 = allGamesServices.query_genre(search_term, repo)

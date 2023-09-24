@@ -88,9 +88,9 @@ class TestPagesUnauthenticated:
     def test_game_desc_page(self, client):
         # TODO Manually control this test data.
         with client:
-            response = client.get('/game/435790')
+            response = client.get('/game/7940')
             assert response.status_code == 200
-            assert "10 Second Ninja X" in response.data.decode('utf-8')
+            assert "Call of Duty" in response.data.decode('utf-8')
 
     def test_review(self, client):
         # TODO Manually control this test data.
@@ -127,17 +127,17 @@ def login(client):
 class TestPagesAuthenticated:
     def test_favourite_toggle(self, client, login):
         with client:
-            first_response = client.get('/game/435790')
+            first_response = client.get('/game/7940')
             assert session['user_name'] == TESTUSERNAME
 
             assert first_response.status_code == 200
             assert "Favourite" in first_response.data.decode('utf-8')
 
-            second_response = client.post('/game/435790', data={'action': 'toggle_favourite'})
+            second_response = client.post('/game/7940', data={'action': 'toggle_favourite'})
             assert second_response.status_code == 302
-            assert is_favourite(Game(435790, "Test"), repo)
+            assert is_favourite(Game(7940, "Test"), repo)
 
-            third_response = client.get('/game/435790')
+            third_response = client.get('/game/7940')
             assert third_response.status_code == 200
             assert "Unfavourite" in third_response.data.decode('utf-8')
 
