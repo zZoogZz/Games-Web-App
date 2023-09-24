@@ -6,8 +6,14 @@ import games.utilities.services as services
 from games.adapters import memory_repository
 from games.adapters.memory_repository import MemoryRepository, populate
 from games.authentication.services import add_user, authenticate_user, get_user, user_to_dict
-from games.domainmodel.model import Genre, User, Game
+from games.domainmodel.model import Genre, User, Game, Review
 from tests.conftest import in_memory_repo
+import games.gamedesc.services as gamedesc_services
+import games.user_profile.services as user_profile_services
+from games.authentication.services import UnknownUserException
+from games.gamedesc.services import NonExistentGameException
+
+
 
 # Utilities tests:
 def test_get_top_genres():
@@ -136,6 +142,75 @@ class TestAuth:
         user_dict = user_to_dict(test_user)
 
         assert test_user.username == user_dict['user_name']
+
+# gamedesc Review tests:
+
+def test_get_game():
+    repo.repo_instance = MemoryRepository()
+    populate(repo.repo_instance, "./games/adapters/data/")
+    game = gamedesc_services.get_game(7940, repo.repo_instance)
+    assert "Call of Duty" in game.title
+
+    with pytest.raises(NonExistentGameException):
+        gamedesc_services.get_game(123454321, repo.repo_instance)
+
+def test_add_review():
+    repo.repo_instance = MemoryRepository()
+    populate(repo.repo_instance, "./games/adapters/data/")
+    test_user = User('james', 'Password123')
+    repo.repo_instance.add_user(test_user)
+    test_game = repo.repo_instance.get_game(7940)
+
+    with pytest.raises(NonExistentGameException):
+        gamedesc_services.add_review('james', 123454321, 3, 'Good game', repo.repo_instance)
+
+    with pytest.raises(UnknownUserException):
+        gamedesc_services.add_review('lames', 7940, 3, 'Good game', repo.repo_instance)
+
+    gamedesc_services.add_review('james', 7940, 3, 'Good game', repo.repo_instance)
+    test_review1 = Review(test_user, test_game, 3, 'Good game')
+    test_reviews = repo.repo_instance.get_reviews()
+
+    assert test_review1 in test_reviews
+    assert len(test_reviews) == 1
+
+    gamedesc_services.add_review('james', 7940, 1, 'Bad game', repo.repo_instance)
+    test_review2 = Review(test_user, test_game, 1, 'Bad game')
+    test_reviews = repo.repo_instance.get_reviews()
+
+    assert test_review1 not in test_reviews
+    assert test_review2 in test_reviews
+    assert len(test_reviews) == 1
+
+
+def test_get_existing_review():
+    repo.repo_instance = MemoryRepository()
+    populate(repo.repo_instance, "./games/adapters/data/")
+    test_user = User('james', 'Password123')
+    repo.repo_instance.add_user(test_user)
+    test_game1 = repo.repo_instance.get_game(7940)
+    test_game2 = repo.repo_instance.get_game(1228870)
+
+    #assert gamedesc_services.get_existing_review(test_game1, 'mystery_person') is None
+    assert gamedesc_services.get_existing_review(test_game1, 'james') is None
+
+    gamedesc_services.add_review('james', 7940, 3, 'Good game', repo.repo_instance)
+    test_review1 = Review(test_user, test_game1, 3, 'Good game')
+
+    assert gamedesc_services.get_existing_review(test_game1, 'james') == test_review1
+    assert gamedesc_services.get_existing_review(test_game2, 'james') is None
+
+
+# user_profiile tests:
+def test_profile_get_user():
+    repo.repo_instance = MemoryRepository()
+    populate(repo.repo_instance, "./games/adapters/data/")
+    test_user = User('james', 'Password123')
+    repo.repo_instance.add_user(test_user)
+
+    #assert user_profile_services.get_user('mystery_person') is None
+    assert user_profile_services.get_user('james') == test_user
+
 
 
 class TestFavourite:
