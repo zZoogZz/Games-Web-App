@@ -14,7 +14,6 @@ class UnknownUserException(Exception):
 
 def get_game(game_id: int, repo: AbstractRepository):
 	game = repo.get_game(game_id)
-	print(game)
 	if game is None:
 		raise NonExistentGameException
 
@@ -30,7 +29,7 @@ def add_review(user_name: str, game_id: int, rating: int, review_text: str, repo
 	if user is None:
 		raise UnknownUserException
 
-	existing_review = get_existing_review(game, user)
+	existing_review = get_existing_review(game, user_name)
 
 	if existing_review is not None:
 		remove_review(user, game, existing_review)
@@ -42,16 +41,12 @@ def add_review(user_name: str, game_id: int, rating: int, review_text: str, repo
 
 
 def get_existing_review(game: Game, user_name: str):
-	try:
-		user = repo.repo_instance.get_user(user_name)
-	except ValueError:
-		raise UnknownUserException("username invalid or not found")
 
-	print(type(user))
-	print(user.reviews)
-	for review in user.reviews:
-		if review.game == game:
-			return review
+	user = repo.repo_instance.get_user(user_name)
+	if user is not None:
+		for review in user.reviews:
+			if review.game == game:
+				return review
 	return None
 
 

@@ -131,12 +131,33 @@ def test_add_review():
 
 
 def test_get_existing_review():
-    pass
+    repo.repo_instance = MemoryRepository()
+    populate(repo.repo_instance)
+    test_user = User('james', 'Password123')
+    repo.repo_instance.add_user(test_user)
+    test_game1 = repo.repo_instance.get_game(7940)
+    test_game2 = repo.repo_instance.get_game(1228870)
+
+    assert gamedesc_services.get_existing_review(test_game1, 'mystery_person') is None
+    assert gamedesc_services.get_existing_review(test_game1, 'james') is None
+
+    gamedesc_services.add_review('james', 7940, 3, 'Good game', repo.repo_instance)
+    test_review1 = Review(test_user, test_game1, 3, 'Good game')
+
+    assert gamedesc_services.get_existing_review(test_game1, 'james') == test_review1
+    assert gamedesc_services.get_existing_review(test_game2, 'james') is None
 
 
 # user_profiile tests:
 def test_profile_get_user():
-    pass
+    repo.repo_instance = MemoryRepository()
+    populate(repo.repo_instance)
+    test_user = User('james', 'Password123')
+    repo.repo_instance.add_user(test_user)
+
+    assert user_profile_services.get_user('mystery_person') is None
+    assert user_profile_services.get_user('james') == test_user
+
 
 
 

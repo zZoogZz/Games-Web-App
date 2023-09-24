@@ -26,18 +26,6 @@ def user_profile():
 
     sorted_reviews = sort_reviews(user, sort_choice)
 
-    # dummy favourites:
-    # import games.adapters.repository as repo
-    # user.add_favourite_game(repo.repo_instance.get_game(410320))
-    # user.add_favourite_game(repo.repo_instance.get_game(730310))
-    # user.add_favourite_game(repo.repo_instance.get_game(1271620))
-    # user.add_favourite_game(repo.repo_instance.get_game(1022480))
-    # user.add_favourite_game(repo.repo_instance.get_game(299380))
-    # user.add_favourite_game(repo.repo_instance.get_game(441670))
-    # end dummy favourites
-
-    # wishlists = services.get_wishlists(user)
-
     if isinstance(user, User):
         # Use Jinja to customize a predefined html page rendering the layout for showing a single game.
         return render_template('user_profile/user_profile.html',
