@@ -226,7 +226,7 @@ class User:
         if not isinstance(username, str) or username.strip() == "":
             raise ValueError('Username cannot be empty or non-string!')
         else:
-            self.__username = username.strip()
+            self.__username = username.strip().lower()
 
         if isinstance(password, str) and len(password) >= 7:
             self.__password = password

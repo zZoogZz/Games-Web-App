@@ -15,4 +15,4 @@ def wishlist_list():
 def wishlist(wishlist_id):
     games = services.query_wishlist_games(wishlist_id)
     heading = "Wishlist: {}".format(wishlist_id)
-    return render_game_list(games, heading)
+    return render_game_list(games, heading, errormessage="Look's like you don't have any favourites yet - add some!")
