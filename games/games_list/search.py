@@ -35,6 +35,7 @@ def search_games():
         games = []
 
     # Render
+
     if query_type == "genre":
         heading = query
     else:
