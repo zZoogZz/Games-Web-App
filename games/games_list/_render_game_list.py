@@ -16,8 +16,8 @@ def render_game_list(game_list, heading="List name not found.", errormessage="Hm
 
     page = request.args.get('page', 1, type=int)  # Gets page number
 
-    # search_query = request.args.get('query')
-    # search_query_type = request.args.get('query_type')
+    search_query = request.args.get('query')
+    search_query_type = request.args.get('query_type')
 
     start_index = (page - 1) * GAMES_PER_PAGE
     end_index = start_index + GAMES_PER_PAGE
@@ -26,4 +26,4 @@ def render_game_list(game_list, heading="List name not found.", errormessage="Hm
     total_game_pages = (total_games + GAMES_PER_PAGE - 1) // GAMES_PER_PAGE
 
     return render_template('games/games.html', all_games=paginated_games, top_genres=utilities.get_top_genres(),
-                           page=page, total_game_pages=total_game_pages, heading=heading)
+                           page=page, total_game_pages=total_game_pages, heading=heading, search_query=search_query, search_query_type=search_query_type)
