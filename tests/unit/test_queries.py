@@ -19,19 +19,19 @@ class TestTypes:
             query_all_games_by_name("TEST")
 
     def test_query_title(self):
-        assert type(query_games_title("TEST",repo)) == list
+        assert type(query_games_title("TEST", repo)) == list
 
         with pytest.raises(AttributeError):
             query_games_title(0)
 
     def test_query_publisher(self):
-        assert type(query_publisher("TEST",repo)) == list
+        assert type(query_publisher("TEST", repo)) == list
 
         with pytest.raises(AttributeError):
             query_publisher(0)
 
     def test_query_genre(self):
-        assert type(query_genre("TEST",repo)) == list
+        assert type(query_genre("TEST", repo)) == list
 
         with pytest.raises(AttributeError):
             query_genre(0)
