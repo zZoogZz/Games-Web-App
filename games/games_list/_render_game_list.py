@@ -6,13 +6,13 @@ import games.games_list._services as services
 GAMES_PER_PAGE = 20
 
 
-def render_game_list(game_list, heading="List name not found.", ):
+def render_game_list(game_list, heading="List name not found.", errormessage="Hmmm..... We couldn't find anything....."):
     """
     Takes a list of games and paginates then renders the output.
     """
 
     if len(game_list) < 1: return no_content_found(header=heading,
-                                            description="Hmmm..... We couldn't find anything.....")
+                                            description=errormessage)
 
 
 
