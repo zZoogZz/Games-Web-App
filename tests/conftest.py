@@ -29,11 +29,9 @@ class AuthenticationManager:
 		self.__client = client
 
 	def register(self, user_name='spork', password='Password123'):
-		print('******************************* register')
-		return self.__client.post('authentication/login', data={'user_name': user_name, 'password': password})
+		return self.__client.post('authentication/register', data={'user_name': user_name, 'password': password})
 
 	def login(self, user_name='spork', password='Password123'):
-		print('******************************* login')
 		return self.__client.post('authentication/login', data={'user_name': user_name, 'password': password})
 
 	def logout(self):
