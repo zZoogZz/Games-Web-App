@@ -15,4 +15,4 @@ favourites_blueprint = Blueprint(
 def favourite_games():
     games = services.query_favourite_games()
 
-    return render_game_list(games, "Favourites")
+    return render_game_list(games, "Favourites", errormessage="Look's like you don't have any favourites yet - add some!")

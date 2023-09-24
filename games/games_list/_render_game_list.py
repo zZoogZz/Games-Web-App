@@ -6,21 +6,19 @@ import games.games_list._services as services
 GAMES_PER_PAGE = 20
 
 
-def render_game_list(game_list, heading="List name not found.", ):
+def render_game_list(game_list, heading="List name not found.", errormessage="Hmmm..... We couldn't find anything....."):
     """
     Takes a list of games and paginates then renders the output.
     """
 
     if len(game_list) < 1: return no_content_found(header=heading,
-                                            description="Hmmm..... We couldn't find anything.....")
+                                                   description="Hmmm..... We couldn't find anything.....")
 
+    page = request.args.get('page', 1, type=int)  # Gets page number
 
-
-    page = request.args.get('page', 1, type=int) # Gets page number
-    
     # search_query = request.args.get('query')
     # search_query_type = request.args.get('query_type')
-    
+
     start_index = (page - 1) * GAMES_PER_PAGE
     end_index = start_index + GAMES_PER_PAGE
     paginated_games = game_list[start_index:end_index]
