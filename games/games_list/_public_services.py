@@ -10,10 +10,7 @@ def toggle_favourite(game, repo=repo):
     """
     user = repo.repo_instance.get_user(session['user_name'])
 
-    if game in user.favourite_games:
-        user.remove_favourite_game(game)
-    else:
-        user.add_favourite_game(game)
+    repo.repo_instance.toggle_favourite(game, user)
 
 
 def toggle_wishlist(game, repo):
@@ -27,11 +24,8 @@ def is_favourite(game, repo=repo):
     user = repo.repo_instance.get_user(session['user_name'])
     if user is None:
         return False
-
-    if game in user.favourite_games:
-        return True
     else:
-        return False
+        return repo.repo_instance.game_is_favourite(game, user)
 
 
 def get_favourites(repo=repo):
@@ -43,4 +37,4 @@ def get_favourites(repo=repo):
     if user is None:
         return []
 
-    return user.favourite_games
+    return repo.repo_instance.get_favourites(user)

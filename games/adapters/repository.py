@@ -156,8 +156,20 @@ class AbstractRepository(abc.ABC):
         """ Returns the Reviews stored in the repository. """
         raise NotImplementedError
 
+    @abc.abstractmethod
+    def game_is_favourite(self, game: Game, user: User):
+        """ Checks if the game is a favourite. """
+        raise NotImplementedError
 
+    @abc.abstractmethod
+    def get_favourites(self, user: User):
+        """ Returns the favourite games for a user that are stored in the repository. """
+        raise NotImplementedError
 
+    @abc.abstractmethod
+    def toggle_favourite(self, game: Game, user: User):
+        """ Toggles a game's favourite status. """
+        raise NotImplementedError
 
 
 

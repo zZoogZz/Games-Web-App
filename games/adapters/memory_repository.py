@@ -3,6 +3,7 @@ import os.path
 from pathlib import Path
 from datetime import date, datetime
 from typing import List
+from games.authentication.services import UnknownUserException
 
 # from bisect import bisect, bisect_left, insort_left # using dict so no sorting by id required
 
@@ -34,13 +35,24 @@ class MemoryRepository(AbstractRepository):  # implement games ordered by date. 
                 return False
         return True
 
-
     def get_user(self, username: str) -> User:
+        username = username.lower()
+        for user in self.__users:
+            if user.username == username:
+                return user
+
+        raise UnknownUserException
+
+        """
         try:
             user = next((user for user in self.__users if user.username == username), None)  # check
             return user
         except ValueError:
             raise ValueError("username invalid or not found")
+        """
+
+    def get_users(self):
+        return self.__users
 
     def add_game(self, game: Game):
         if isinstance(game, Game) and game.game_id not in self.__games.keys():
@@ -212,7 +224,20 @@ class MemoryRepository(AbstractRepository):  # implement games ordered by date. 
     #         return index
     #     raise ValueError
 
+    def game_is_favourite(self, game: Game, user: User):
+        if game in user.favourite_games:
+            return True
+        else:
+            return False
 
+    def get_favourites(self, user: User):
+        return user.favourite_games
+
+    def toggle_favourite(self, game: Game, user: User):
+        if self.game_is_favourite(game, user):
+            user.remove_favourite_game(game)
+        else:
+            user.add_favourite_game(game)
 def read_csv_file(filename: str):
     with open(filename, encoding='utf-8-sig') as infile:
         reader = csv.reader(infile)
