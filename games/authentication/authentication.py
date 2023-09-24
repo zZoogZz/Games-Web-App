@@ -53,8 +53,6 @@ def login():
             # Initialise session and redirect the user to the home page.
             session.clear()
             session['user_name'] = user['user_name']
-            print('*******************************************************')
-            print(url_for('home_bp.home'))
             return redirect(url_for('home_bp.home'))
 
         except services.UnknownUserException:
@@ -87,8 +85,7 @@ def login_required(view):
 class PasswordValid:
     def __init__(self, message=None):
         if not message:
-            message = u'Your password must be at least 8 characters, and contain an upper case letter,\
-            a lower case letter and a digit'
+            message = 'Your password must be at least 8 characters, and contain an upper case letter, a lower case letter and a digit'
         self.message = message
 
     def __call__(self, form, field):

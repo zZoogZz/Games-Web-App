@@ -4,7 +4,7 @@
     <div class="white-box"><h3>Favourites:</h3>
         {% if user.favourite_games|length > 0 %}
             {% for game in user.favourite_games %}
-            <div class="favourites-list"><a href="{{ url_for('game_bp.desc', game_id=game.game_id, sort_by='rating', reverse_sort='True') }}">
+            <div class="favourites-list"><a href="{{ url_for('game_bp.desc', game_id=game.game_id) }}">
                 <img src="{{ game.image_url }}" alt="{{ game.title }}" height="120"></a></div>
             {% endfor %}
         {% else %}
