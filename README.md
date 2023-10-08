@@ -54,6 +54,9 @@ The *project directory/.env* file contains variable settings. They are set with 
 * `SECRET_KEY`: Secret key used to encrypt session data.
 * `TESTING`: Set to False for running the application. Overridden and set to True automatically when testing the application.
 * `WTF_CSRF_SECRET_KEY`: Secret key used by the WTForm library.
+* `SQLALCHEMY_DATABASE_URI`: The Database URI for this environment.
+* `SQLALCHEMY_ECHO`: Choose whether to echo SQL statements when working with a database.
+* `REPOSITORY`: The Repository selection, either `Database` or `Memory`.
  
 ## Data sources
 
