@@ -34,8 +34,8 @@ def create_app(test_config=None):
         # Create the MemoryRepository implementation for a memory-based repository.
         repo.repo_instance = memory_repository.MemoryRepository()
         # Fill the content with the repository from the provided csv files (has to be done every time we start app!)
-        database_mode = False
-        memory_repository.populate(data_path, repo.repo_instance, database_mode)
+        # database_mode = False
+        memory_repository.populate(repo.repo_instance, data_path)
 
     elif app.config['REPOSITORY'] == 'database':
         # Configure database.
