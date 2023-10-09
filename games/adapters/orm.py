@@ -42,6 +42,28 @@ game_genre_table = Table(
     Column('genre', ForeignKey('genres.name'))
 )
 
+users_table = Table(
+    'users', metadata,
+    Column('username', Text, primary_key=True),
+    Column('password', Text, nullable=False)
+)
+
+users_favourite_games_table = Table(
+    'users_favourites', metadata,
+    Column('id', Integer, primary_key=True, autoincrement=True),
+    Column('username', ForeignKey('users.username')),
+    Column('favourite_game', ForeignKey('games.game_id'))
+)
+
+reviews_table = Table(
+    'reviews', metadata,
+    Column('id', Integer, primary_key=True, autoincrement=True),
+    Column('user', ForeignKey('users.username')),
+    Column('game', ForeignKey('games.game_id')),
+    Column('rating', Integer, nullable=False),
+    Column('comment', String(255), nullable=False)
+)
+
 def map_model_to_tables():
     mapper(Publisher, publishers_table, properties={
         '_Publisher__publisher_name': publishers_table.c.name,
@@ -56,11 +78,24 @@ def map_model_to_tables():
         '_Game__image_url': games_table.c.game_image_url,
         '_Game__website_url': games_table.c.game_website_url,
         '_Game__publisher': relationship(Publisher),
-        '_Game__genres': relationship(Genre, secondary=game_genre_table)
+        '_Game__genres': relationship(Genre, secondary=game_genre_table),
     })
 
     mapper(Genre, genres_table, properties={
         '_Genre__genre_name': genres_table.c.name,
+    })
+
+    mapper(User, users_table, properties={
+        '_User__username': users_table.c.username,
+        '_User__password': users_table.c.password,
+        '_User__favourite_games': relationship(Game, secondary=users_favourite_games_table)
+    })
+
+    mapper(Review, reviews_table, properties={
+        '_Review__game': relationship(Game),
+        '_Review__rating': reviews_table.c.rating,
+        '_Review__comment': reviews_table.c.comment,
+        '_Review__user': relationship(User)
     })
 
 
