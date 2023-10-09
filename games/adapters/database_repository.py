@@ -71,7 +71,6 @@ class SqlAlchemyRepository(AbstractRepository, ABC):
         Adds a game to the repository.
         """
         with self._session_cm as scm:
-            # TODO: This doesn't work..............
             self._session_cm.session.merge(game)
             self._session_cm.session.commit()
 
@@ -147,6 +146,13 @@ class SqlAlchemyRepository(AbstractRepository, ABC):
     def get_game_ids_sorted_by_title(self) -> list[int]:
         """ Returns a list of all game id's sorted according to game title.
         """
+
+        # TODO: This is a hack - it is shit. fix it.
+        games = self._session_cm.session.query(Game).order_by(Game._Game__game_title).all()
+        game_ids = []
+        for game in games:
+            game_ids.append(game.game_id)
+        return game_ids
 
     def get_sorted_release_dates(self):
         """ Returns a list of all dates (as strings) on which a game in the games dictionary has a release date,
