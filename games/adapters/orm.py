@@ -26,8 +26,7 @@ games_table = Table(
     Column('game_description', String(255), nullable=True),
     Column('game_image_url', String(255), nullable=True),
     Column('game_website_url', String(255), nullable=True),
-    Column('publisher_name', ForeignKey('publishers.name')),
-    Column('genre_name', ForeignKey('genres.name'))
+    Column('publisher_name', ForeignKey('publishers.name'))
 )
 
 genres_table = Table(
@@ -38,7 +37,6 @@ genres_table = Table(
 
 
 def map_model_to_tables():
-    # TODO: Create Model/Table mappings here
     mapper(Publisher, publishers_table, properties={
         '_Publisher__publisher_name': publishers_table.c.name,
     })
@@ -51,8 +49,7 @@ def map_model_to_tables():
         '_Game__description': games_table.c.game_description,
         '_Game__image_url': games_table.c.game_image_url,
         '_Game__website_url': games_table.c.game_website_url,
-        '_Game__publisher': relationship(Publisher),
-        '_Game__genres': relationship(Genre)
+        '_Game__publisher': relationship(Publisher)
     })
 
     mapper(Genre, genres_table, properties={

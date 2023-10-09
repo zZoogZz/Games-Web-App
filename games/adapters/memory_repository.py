@@ -63,6 +63,10 @@ class MemoryRepository(AbstractRepository):  # implement games ordered by date. 
                 self.add_genre(genre)
             self.add_game_id_to_publisher(game.game_id, game.publisher)
 
+    def add_publisher(self, publisher: Publisher):
+        """ Adds a Publisher to the repository. """
+        raise NotImplementedError
+
     def get_game(self, game_id: int) -> Game:
         game = None
         try:

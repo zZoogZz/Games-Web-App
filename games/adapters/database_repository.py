@@ -1,8 +1,7 @@
 from abc import ABC
 
 from sqlalchemy.orm import scoped_session
-from sqlalchemy import desc, asc
-from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
+from sqlalchemy.orm.exc import NoResultFound
 
 
 from games.adapters.repository import AbstractRepository
@@ -73,8 +72,8 @@ class SqlAlchemyRepository(AbstractRepository, ABC):
         """
         with self._session_cm as scm:
             # TODO: This doesn't work..............
-            scm.session.merge(game)
-            scm.commit()
+            self._session_cm.session.merge(game)
+            self._session_cm.session.commit()
 
     def get_game(self, game_id: int) -> Game:
         """
@@ -172,7 +171,15 @@ class SqlAlchemyRepository(AbstractRepository, ABC):
 
     def add_genre(self, genre: Genre):
         """ Adds a Genre to the repository. """
-        raise NotImplementedError
+        with self._session_cm as scm:
+            self._session_cm.session.merge(genre)
+            self._session_cm.session.commit()
+
+    def add_publisher(self, publisher: Publisher):
+        """ Adds a Publisher to the repository. """
+        with self._session_cm as scm:
+            self._session_cm.session.merge(publisher)
+            self._session_cm.session.commit()
 
     def get_genres(self) -> list[Genre]:
         """ Returns the Genres stored in the repository. """

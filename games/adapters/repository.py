@@ -39,6 +39,11 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
+    def add_publisher(self, publisher: Publisher):
+        """ Adds a Publisher to the repository. """
+        raise NotImplementedError
+
+    @abc.abstractmethod
     def get_game(self, game_id: int) -> Game:
         """ Returns Game with id from the repository.
 

@@ -1,22 +1,21 @@
 """Initialize Flask app."""
 
 from pathlib import Path
-from flask import Flask, render_template
+
+from flask import Flask
 
 # imports from SQLAlchemy
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, clear_mappers
 from sqlalchemy.pool import NullPool
 
-
 import games.adapters.repository as repo
-from games.adapters import database_repository, memory_repository, repository_populate
+from games.adapters import memory_repository, database_repository, repository_populate
 from games.adapters.orm import metadata, map_model_to_tables
+
 
 def create_app(test_config=None):
     """Construct the core application."""
-
-    data_path = Path('games') / 'adapters' / 'data'
 
     # Create the Flask app object.
     app = Flask(__name__)
@@ -30,10 +29,13 @@ def create_app(test_config=None):
         app.config.from_mapping(test_config)
         data_path = app.config['TEST_DATA_PATH']
 
+    # Here the "magic" of our repository pattern happens. We can easily switch between in memory data and
+    # persistent database data storage for our application.
+
     if app.config['REPOSITORY'] == 'memory':
         # Create the MemoryRepository implementation for a memory-based repository.
         repo.repo_instance = memory_repository.MemoryRepository()
-        # Fill the content with the repository from the provided csv files (has to be done every time we start app!)
+        # fill the content of the repository from the provided csv files (has to be done every time we start app!)
         repository_populate.populate(repo.repo_instance, data_path, 'memory')
 
     elif app.config['REPOSITORY'] == 'database':
@@ -72,8 +74,6 @@ def create_app(test_config=None):
             # Solely generate mappings that map domain model classes to the database tables.
             map_model_to_tables()
 
-
-
     with app.app_context():
         # Add blueprints here to register them.
         from .home import home
@@ -96,6 +96,19 @@ def create_app(test_config=None):
 
         from .user_profile import user_profile
         app.register_blueprint(user_profile.user_profile_blueprint)
+
+        # Register a callback the makes sure that database sessions are associated with http requests
+        # We reset the session inside the database repository before a new flask request is generated
+        @app.before_request
+        def before_flask_http_request_function():
+            if isinstance(repo.repo_instance, database_repository.SqlAlchemyRepository):
+                repo.repo_instance.reset_session()
+
+        # Register a tear-down method that will be called after each request has been processed.
+        @app.teardown_appcontext
+        def shutdown_session(exception=None):
+            if isinstance(repo.repo_instance, database_repository.SqlAlchemyRepository):
+                repo.repo_instance.close_session()
 
     return app
 
