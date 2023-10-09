@@ -35,6 +35,12 @@ genres_table = Table(
     Column('name', String(64), primary_key=True, nullable=False)
 )
 
+game_genre_table = Table(
+    'game_genre', metadata,
+    # Column('id', Integer, primary_key=True, autoincrement=True),
+    Column('game', ForeignKey('games.game_id')),
+    Column('genre', ForeignKey('genres.name'))
+)
 
 def map_model_to_tables():
     mapper(Publisher, publishers_table, properties={
@@ -49,7 +55,8 @@ def map_model_to_tables():
         '_Game__description': games_table.c.game_description,
         '_Game__image_url': games_table.c.game_image_url,
         '_Game__website_url': games_table.c.game_website_url,
-        '_Game__publisher': relationship(Publisher)
+        '_Game__publisher': relationship(Publisher),
+        '_Game__genres': relationship(Genre, secondary=game_genre_table)
     })
 
     mapper(Genre, genres_table, properties={
