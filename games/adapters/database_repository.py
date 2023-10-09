@@ -98,7 +98,6 @@ class SqlAlchemyRepository(AbstractRepository, ABC):
         """ Gets the game ids of all games in repo """
         return self.get_games().keys()
 
-
     def add_game_id_to_genre(self, game_id: int, genre: Genre):
         """ Adds adds game id against genre key in games by genre dictionary. """
         raise NotImplementedError
@@ -160,6 +159,7 @@ class SqlAlchemyRepository(AbstractRepository, ABC):
 
         If there are no matches, this method returns an empty list.
         """
+        raise NotImplementedError
 
     def get_previous_release_date(self, game: Game):
         """ Returns the previous release date in the repository
@@ -198,8 +198,10 @@ class SqlAlchemyRepository(AbstractRepository, ABC):
         RepositoryException and doesn't update the repository.
         """
         raise NotImplementedError
+
     def remove_review(self, review: Review):
         """ Removes a review from the repository, if present. """
+        raise NotImplementedError
 
     def get_reviews(self):
         """ Returns the Reviews stored in the repository. """
