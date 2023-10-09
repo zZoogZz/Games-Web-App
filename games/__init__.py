@@ -34,8 +34,7 @@ def create_app(test_config=None):
         # Create the MemoryRepository implementation for a memory-based repository.
         repo.repo_instance = memory_repository.MemoryRepository()
         # Fill the content with the repository from the provided csv files (has to be done every time we start app!)
-        # database_mode = False
-        memory_repository.populate(repo.repo_instance, data_path)
+        repository_populate.populate(repo.repo_instance, data_path, 'memory')
 
     elif app.config['REPOSITORY'] == 'database':
         # Configure database.
@@ -66,8 +65,7 @@ def create_app(test_config=None):
             # Generate mappings that map domain model classes to the database tables.
             map_model_to_tables()
 
-            database_mode = True
-            repository_populate.populate(data_path, repo.repo_instance, database_mode)
+            repository_populate.populate(repo.repo_instance, data_path, 'database')
             print("REPOPULATING DATABASE... FINISHED")
 
         else:
