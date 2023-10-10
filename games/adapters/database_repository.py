@@ -157,8 +157,6 @@ class SqlAlchemyRepository(AbstractRepository, ABC):
     def get_game_ids_sorted_by_title(self) -> list[int]:
         """ Returns a list of all game id's sorted according to game title.
         """
-
-        # TODO: This is a hack - it is shit. fix it.
         games = self._session_cm.session.query(Game).order_by(Game._Game__game_title).all()
         game_ids = []
         for game in games:
