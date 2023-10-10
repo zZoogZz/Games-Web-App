@@ -216,7 +216,11 @@ class SqlAlchemyRepository(AbstractRepository, ABC):
 
     def remove_review(self, review: Review):
         """ Removes a review from the repository, if present. """
-        raise NotImplementedError
+        super().remove_review(review)
+        with self._session_cm as scm:
+            scm.session.merge(review, load=False)
+            scm.session.delete(review)
+            scm.commit()
 
     def get_reviews(self):
         """ Returns the Reviews stored in the repository. """

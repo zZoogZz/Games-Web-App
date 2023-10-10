@@ -68,7 +68,7 @@ game_reviews_table = Table(
     'game_reviews', metadata,
     Column('game_review_id', Integer, primary_key=True, autoincrement=True),
     Column('game_id', ForeignKey('games.game_id')),
-    Column('user_id', ForeignKey('users.username'))
+    Column('review_id', ForeignKey('reviews.review_id'))
 )
 
 user_reviews_table = Table(
@@ -93,7 +93,7 @@ def map_model_to_tables():
         '_Game__website_url': games_table.c.game_website_url,
         '_Game__publisher': relationship(Publisher),
         '_Game__genres': relationship(Genre, secondary=game_genre_table),
-        '_Game__reviews': relationship(Review, back_populates='_Review__game')
+        '_Game__reviews': relationship(Review, secondary=game_reviews_table)
     })
 
     mapper(Genre, genres_table, properties={
@@ -108,10 +108,10 @@ def map_model_to_tables():
     })
 
     mapper(Review, reviews_table, properties={
-        '_Review__game': relationship(Game),
+        '_Review__game': relationship(Game, secondary=game_reviews_table, back_populates='_Game__reviews', uselist=False),
         '_Review__rating': reviews_table.c.rating,
         '_Review__comment': reviews_table.c.comment,
-        '_Review__user': relationship(User),
+        '_Review__user': relationship(User, secondary=user_reviews_table, back_populates='_User__reviews', uselist=False),
     })
 
 
