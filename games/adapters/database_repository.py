@@ -3,7 +3,6 @@ from abc import ABC
 from sqlalchemy.orm import scoped_session
 from sqlalchemy.orm.exc import NoResultFound
 
-
 from games.adapters.repository import AbstractRepository
 from games.domainmodel.model import Game, Publisher, Genre, User, Review
 
@@ -53,18 +52,31 @@ class SqlAlchemyRepository(AbstractRepository, ABC):
 
     def add_user(self, user: User):
         """ Adds a User to the repository. """
-        raise NotImplementedError
+        with self._session_cm as scm:
+            scm.session.add(user)
+            scm.commit()
 
     def check_username_unique(self, username: str):
         """ Checks if username is unique, regardless of case. """
-        raise NotImplementedError
+        user = self.get_user(username)
+        if user is None:
+            return True
+        else:
+            return False
 
     def get_user(self, user_name) -> User:
         """
         Returns the User named user_name from the repository.
         If there is no User with the given user_name, this method returns None.
         """
-        raise NotImplementedError
+        user = None
+        try:
+            user = self._session_cm.session.query(User).filter(User._User__username == user_name).one()
+        except NoResultFound:
+            # Ignore any exception and return None.
+            pass
+
+        return user
 
     def add_game(self, game: Game):
         """
@@ -168,7 +180,7 @@ class SqlAlchemyRepository(AbstractRepository, ABC):
         """
         raise NotImplementedError
 
-    def get_next_release_date(self, release_date:str):
+    def get_next_release_date(self, release_date: str):
         """ Returns the next release date in the repository
         Returns None if an invalid release date (not formatted or not in the repository) is passed
         Returns None if no later release dates in repository.
@@ -218,4 +230,3 @@ class SqlAlchemyRepository(AbstractRepository, ABC):
     def toggle_favourite(self, game: Game, user: User):
         """ Toggles a game's favourite status. """
         raise NotImplementedError
-

@@ -64,6 +64,7 @@ reviews_table = Table(
     Column('comment', String(255), nullable=False)
 )
 
+
 def map_model_to_tables():
     mapper(Publisher, publishers_table, properties={
         '_Publisher__publisher_name': publishers_table.c.name,
