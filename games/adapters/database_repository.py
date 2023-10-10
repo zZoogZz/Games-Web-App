@@ -220,7 +220,6 @@ class SqlAlchemyRepository(AbstractRepository, ABC):
 
     def get_reviews(self):
         """ Returns the Reviews stored in the repository. """
-
         reviews = self._session_cm.session.query(Review).all()
         return reviews
 
@@ -230,9 +229,9 @@ class SqlAlchemyRepository(AbstractRepository, ABC):
 
     def get_favourites(self, user: User):
         """ Returns the favourite games for a user that are stored in the repository. """
-        reviews = self._session_cm.session.query(Review).all()
-        return reviews
-        raise NotImplementedError
+        # favourites = self._session_cm.session.query(Game).filter_by()
+        favourites = user.favourite_games
+        return favourites
 
     def toggle_favourite(self, game: Game, user: User):
         """ Toggles a game's favourite status. """
