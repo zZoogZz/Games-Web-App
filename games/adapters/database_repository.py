@@ -209,15 +209,23 @@ class SqlAlchemyRepository(AbstractRepository, ABC):
         If the Review doesn't have bidirectional links with an Game and a User, this method raises a
         RepositoryException and doesn't update the repository.
         """
-        raise NotImplementedError
+        super().add_review(review)
+        with self._session_cm as scm:
+            scm.session.add(review)
+            scm.commit()
 
     def remove_review(self, review: Review):
         """ Removes a review from the repository, if present. """
-        raise NotImplementedError
+        super().remove_review(review)
+        with self._session_cm as scm:
+            scm.session.merge(review, load=False)
+            scm.session.delete(review)
+            scm.commit()
 
     def get_reviews(self):
         """ Returns the Reviews stored in the repository. """
-        raise NotImplementedError
+        reviews = self._session_cm.session.query(Review).all()
+        return reviews
 
     def game_is_favourite(self, game: Game, user: User):
         """ Checks if the game is a favourite. """
@@ -225,7 +233,9 @@ class SqlAlchemyRepository(AbstractRepository, ABC):
 
     def get_favourites(self, user: User):
         """ Returns the favourite games for a user that are stored in the repository. """
-        raise NotImplementedError
+        # favourites = self._session_cm.session.query(Game).filter_by()
+        favourites = user.favourite_games
+        return favourites
 
     def toggle_favourite(self, game: Game, user: User):
         """ Toggles a game's favourite status. """
