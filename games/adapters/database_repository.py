@@ -157,8 +157,6 @@ class SqlAlchemyRepository(AbstractRepository, ABC):
     def get_game_ids_sorted_by_title(self) -> list[int]:
         """ Returns a list of all game id's sorted according to game title.
         """
-
-        # TODO: This is a hack - it is shit. fix it.
         games = self._session_cm.session.query(Game).order_by(Game._Game__game_title).all()
         game_ids = []
         for game in games:
@@ -229,14 +227,22 @@ class SqlAlchemyRepository(AbstractRepository, ABC):
 
     def game_is_favourite(self, game: Game, user: User):
         """ Checks if the game is a favourite. """
-        raise NotImplementedError
+        return super().game_is_favourite(game, user)
 
     def get_favourites(self, user: User):
         """ Returns the favourite games for a user that are stored in the repository. """
         # favourites = self._session_cm.session.query(Game).filter_by()
-        favourites = user.favourite_games
-        return favourites
+        return super().get_favourites(user)
 
     def toggle_favourite(self, game: Game, user: User):
         """ Toggles a game's favourite status. """
-        raise NotImplementedError
+        print("T",self.game_is_favourite(game, user))
+
+        super().toggle_favourite(game, user)
+
+        with self._session_cm as scm:
+            self._session_cm.session.merge(user)
+            self._session_cm.session.commit()
+
+
+

@@ -50,7 +50,6 @@ users_table = Table(
 
 users_favourite_games_table = Table(
     'users_favourites', metadata,
-    Column('id', Integer, primary_key=True, autoincrement=True),
     Column('username', ForeignKey('users.username')),
     Column('favourite_game', ForeignKey('games.game_id'))
 )
