@@ -396,7 +396,7 @@ class Wishlist:
             return self.__list_of_games[self.__current - 1]
 
 def make_review(user: User,  game: Game, rating: int, review_text: str):
-    review = Review(user, game, rating, review_text)
+    review = Review(user=user, game=game, rating=rating, comment=review_text)
     user.add_review(review)
     game.add_review(review)
     return review

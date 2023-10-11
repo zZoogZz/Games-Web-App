@@ -229,19 +229,14 @@ class MemoryRepository(AbstractRepository):  # implement games ordered by date. 
     #     raise ValueError
 
     def game_is_favourite(self, game: Game, user: User):
-        if game in user.favourite_games:
-            return True
-        else:
-            return False
+        return super().game_is_favourite(game, user)
 
     def get_favourites(self, user: User):
-        return user.favourite_games
+        return super().get_favourites(user)
 
     def toggle_favourite(self, game: Game, user: User):
-        if self.game_is_favourite(game, user):
-            user.remove_favourite_game(game)
-        else:
-            user.add_favourite_game(game)
+        super().toggle_favourite(game, user)
+
 def read_csv_file(filename: str):
     with open(filename, encoding='utf-8-sig') as infile:
         reader = csv.reader(infile)

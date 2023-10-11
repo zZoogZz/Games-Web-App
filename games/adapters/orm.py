@@ -50,20 +50,32 @@ users_table = Table(
 
 users_favourite_games_table = Table(
     'users_favourites', metadata,
-    Column('id', Integer, primary_key=True, autoincrement=True),
     Column('username', ForeignKey('users.username')),
     Column('favourite_game', ForeignKey('games.game_id'))
 )
 
 reviews_table = Table(
     'reviews', metadata,
-    Column('id', Integer, primary_key=True, autoincrement=True),
+    Column('review_id', Integer, primary_key=True, autoincrement=True),
     Column('user', ForeignKey('users.username')),
     Column('game', ForeignKey('games.game_id')),
     Column('rating', Integer, nullable=False),
     Column('comment', String(255), nullable=False)
 )
 
+game_reviews_table = Table(
+    'game_reviews', metadata,
+    Column('game_review_id', Integer, primary_key=True, autoincrement=True),
+    Column('game_id', ForeignKey('games.game_id')),
+    Column('review_id', ForeignKey('reviews.review_id'))
+)
+
+user_reviews_table = Table(
+    'user_reviews', metadata,
+    Column('user_review_id', Integer, primary_key=True, autoincrement=True),
+    Column('username', ForeignKey('users.username')),
+    Column('review_id', ForeignKey('reviews.review_id'))
+)
 
 def map_model_to_tables():
     mapper(Publisher, publishers_table, properties={
@@ -80,6 +92,7 @@ def map_model_to_tables():
         '_Game__website_url': games_table.c.game_website_url,
         '_Game__publisher': relationship(Publisher),
         '_Game__genres': relationship(Genre, secondary=game_genre_table),
+        '_Game__reviews': relationship(Review, secondary=game_reviews_table)
     })
 
     mapper(Genre, genres_table, properties={
@@ -89,14 +102,15 @@ def map_model_to_tables():
     mapper(User, users_table, properties={
         '_User__username': users_table.c.username,
         '_User__password': users_table.c.password,
+        '_User__reviews': relationship(Review, secondary=user_reviews_table),
         '_User__favourite_games': relationship(Game, secondary=users_favourite_games_table)
     })
 
     mapper(Review, reviews_table, properties={
-        '_Review__game': relationship(Game),
+        '_Review__game': relationship(Game, secondary=game_reviews_table, back_populates='_Game__reviews', uselist=False),
         '_Review__rating': reviews_table.c.rating,
         '_Review__comment': reviews_table.c.comment,
-        '_Review__user': relationship(User)
+        '_Review__user': relationship(User, secondary=user_reviews_table, back_populates='_User__reviews', uselist=False),
     })
 
 

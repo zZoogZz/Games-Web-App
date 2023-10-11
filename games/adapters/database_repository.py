@@ -157,8 +157,6 @@ class SqlAlchemyRepository(AbstractRepository, ABC):
     def get_game_ids_sorted_by_title(self) -> list[int]:
         """ Returns a list of all game id's sorted according to game title.
         """
-
-        # TODO: This is a hack - it is shit. fix it.
         games = self._session_cm.session.query(Game).order_by(Game._Game__game_title).all()
         game_ids = []
         for game in games:
@@ -209,24 +207,42 @@ class SqlAlchemyRepository(AbstractRepository, ABC):
         If the Review doesn't have bidirectional links with an Game and a User, this method raises a
         RepositoryException and doesn't update the repository.
         """
-        raise NotImplementedError
+        super().add_review(review)
+        with self._session_cm as scm:
+            scm.session.add(review)
+            scm.commit()
 
     def remove_review(self, review: Review):
         """ Removes a review from the repository, if present. """
-        raise NotImplementedError
+        super().remove_review(review)
+        with self._session_cm as scm:
+            scm.session.merge(review, load=False)
+            scm.session.delete(review)
+            scm.commit()
 
     def get_reviews(self):
         """ Returns the Reviews stored in the repository. """
-        raise NotImplementedError
+        reviews = self._session_cm.session.query(Review).all()
+        return reviews
 
     def game_is_favourite(self, game: Game, user: User):
         """ Checks if the game is a favourite. """
-        raise NotImplementedError
+        return super().game_is_favourite(game, user)
 
     def get_favourites(self, user: User):
         """ Returns the favourite games for a user that are stored in the repository. """
-        raise NotImplementedError
+        # favourites = self._session_cm.session.query(Game).filter_by()
+        return super().get_favourites(user)
 
     def toggle_favourite(self, game: Game, user: User):
         """ Toggles a game's favourite status. """
-        raise NotImplementedError
+        print("T",self.game_is_favourite(game, user))
+
+        super().toggle_favourite(game, user)
+
+        with self._session_cm as scm:
+            self._session_cm.session.merge(user)
+            self._session_cm.session.commit()
+
+
+
