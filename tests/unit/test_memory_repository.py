@@ -2,11 +2,12 @@ import pytest
 import os
 from games.domainmodel.model import Publisher, Genre, Game, Review, User, Wishlist
 from games.adapters.datareader.csvdatareader import GameFileCSVReader
-from games.adapters.memory_repository import MemoryRepository, populate
+from games.adapters.memory_repository import MemoryRepository
+from games.adapters.repository_populate import populate
 from games.adapters.datareader.csvdatareader import GameFileCSVReader
 
-
 # Functions to facilitate tests:
+
 
 def create_csv_reader():
     dir_name = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -21,14 +22,14 @@ def create_csv_reader():
 def test_empty_repo():
     repo = MemoryRepository()
     assert repo.get_number_of_games() == 0
-    assert repo.get_game(7940) == None
+    assert repo.get_game(7940) is None
     assert repo.get_game_ids() == []
     assert repo.get_genres() == []
     with pytest.raises(KeyError):
         games_list0 = repo.get_game_ids_by_genre(Genre("Indie"))
 
 
-def test_memory_repository():
+def test_memory_repository(app):
     repo = MemoryRepository()
     reader = create_csv_reader()
     list_iterator = iter(reader.dataset_of_games)
@@ -53,7 +54,8 @@ def test_memory_repository():
     assert repo.get_game("Not a game") ==None
     assert repo.get_game(7940) == Game(game_id=7940, game_title="Call of Duty® 4: Modern Warfare®")
 
-    populate(repo, "./games/adapters/data/")
+    # populate(repo, "./games/adapters/data/")
+    populate(repo, app.config['TEST_DATA_PATH'], app.config['REPOSITORY'])
 
     # Test repository retrieves correct number of game objects:
     assert repo.get_number_of_games() == 877

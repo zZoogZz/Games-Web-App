@@ -4,26 +4,25 @@ import games.adapters.repository as repo
 import games.games_list._services as allGamesServices
 import games.utilities.services as services
 from games.adapters import memory_repository
-from games.adapters.memory_repository import MemoryRepository, populate
+from games.adapters.memory_repository import MemoryRepository
 from games.authentication.services import add_user, authenticate_user, get_user, user_to_dict
 from games.domainmodel.model import Genre, User, Game, Review
-from tests.conftest import in_memory_repo
+from games.adapters.repository_populate import populate
 import games.gamedesc.services as gamedesc_services
 import games.user_profile.services as user_profile_services
 from games.authentication.services import UnknownUserException
 from games.gamedesc.services import NonExistentGameException
 
 
-
 # Utilities tests:
-def test_get_top_genres():
+def test_get_top_genres(app):
 
     repo.repo_instance = MemoryRepository()
 
     genres0 = services.get_top_genres(repo.repo_instance, 10)
     assert genres0 == []
 
-    populate(repo.repo_instance, "./games/adapters/data/")
+    populate(repo.repo_instance, app.config['TEST_DATA_PATH'], app.config['REPOSITORY'])
     genres0 = services.get_top_genres(repo.repo_instance, 0)
     assert genres0 == []
     genres0 = services.get_top_genres(repo.repo_instance, 1)
@@ -40,12 +39,12 @@ def test_get_top_genres():
 
 # games_list tests:
 
-def test_query_all_games_by_name():
+def test_query_all_games_by_name(app):
     repo.repo_instance = MemoryRepository()
     allGames0 = allGamesServices.query_all_games_by_name(repo)
     assert allGames0 == []  # check list begins empty before populate is called
 
-    populate(repo.repo_instance, "./games/adapters/data/")
+    populate(repo.repo_instance, app.config['TEST_DATA_PATH'], app.config['REPOSITORY'])
 
     allGames1 = allGamesServices.query_all_games_by_name(repo)
     assert allGames1 != []  # check populate works
@@ -53,10 +52,10 @@ def test_query_all_games_by_name():
         assert allGames1[i].title < allGames1[i+1].title  # check all games are in order by title
 
 
-def test_query_games_title():
+def test_query_games_title(app):
     repo.repo_instance = MemoryRepository()
 
-    populate(repo.repo_instance, "./games/adapters/data/")
+    populate(repo.repo_instance, app.config['TEST_DATA_PATH'], app.config['REPOSITORY'])
 
     allGames = allGamesServices.query_all_games_by_name(repo)
     searched_games0 = allGamesServices.query_games_title("The", repo)
@@ -67,11 +66,10 @@ def test_query_games_title():
     assert len(searched_games1) == len(allGames)  # defaults to all games
 
 
-
-def test_query_publisher():
+def test_query_publisher(app):
     repo.repo_instance = MemoryRepository()
 
-    populate(repo.repo_instance, "./games/adapters/data/")
+    populate(repo.repo_instance, app.config['TEST_DATA_PATH'], app.config['REPOSITORY'])
 
     allGames = allGamesServices.query_all_games_by_name(repo)
     searched_publishers0 = allGamesServices.query_publisher("a", repo)
@@ -82,9 +80,9 @@ def test_query_publisher():
     assert len(searched_publishers1) == len(allGames)  # defaults to all games
 
 
-def test_query_genres():
+def test_query_genres(app):
     repo.repo_instance = MemoryRepository()
-    populate(repo.repo_instance, "./games/adapters/data/")
+    populate(repo.repo_instance, app.config['TEST_DATA_PATH'], app.config['REPOSITORY'])
     search_term = "Adventure"
     allGames = allGamesServices.query_all_games_by_name(repo)
     searched_genres0 = allGamesServices.query_genre(search_term, repo)
@@ -145,18 +143,18 @@ class TestAuth:
 
 # gamedesc Review tests:
 
-def test_get_game():
+def test_get_game(app):
     repo.repo_instance = MemoryRepository()
-    populate(repo.repo_instance, "./games/adapters/data/")
+    populate(repo.repo_instance, app.config['TEST_DATA_PATH'], app.config['REPOSITORY'])
     game = gamedesc_services.get_game(7940, repo.repo_instance)
     assert "Call of Duty" in game.title
 
     with pytest.raises(NonExistentGameException):
         gamedesc_services.get_game(123454321, repo.repo_instance)
 
-def test_add_review():
+def test_add_review(app):
     repo.repo_instance = MemoryRepository()
-    populate(repo.repo_instance, "./games/adapters/data/")
+    populate(repo.repo_instance, app.config['TEST_DATA_PATH'], app.config['REPOSITORY'])
     test_user = User('james', 'Password123')
     repo.repo_instance.add_user(test_user)
     test_game = repo.repo_instance.get_game(7940)
@@ -183,9 +181,9 @@ def test_add_review():
     assert len(test_reviews) == 1
 
 
-def test_get_existing_review():
+def test_get_existing_review(app):
     repo.repo_instance = MemoryRepository()
-    populate(repo.repo_instance, "./games/adapters/data/")
+    populate(repo.repo_instance, app.config['TEST_DATA_PATH'], app.config['REPOSITORY'])
     test_user = User('james', 'Password123')
     repo.repo_instance.add_user(test_user)
     test_game1 = repo.repo_instance.get_game(7940)
@@ -202,9 +200,9 @@ def test_get_existing_review():
 
 
 # user_profiile tests:
-def test_profile_get_user():
+def test_profile_get_user(app):
     repo.repo_instance = MemoryRepository()
-    populate(repo.repo_instance, "./games/adapters/data/")
+    populate(repo.repo_instance, app.config['TEST_DATA_PATH'], app.config['REPOSITORY'])
     test_user = User('james', 'Password123')
     repo.repo_instance.add_user(test_user)
 
