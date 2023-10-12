@@ -5,7 +5,6 @@ from flask import session
 from games.domainmodel.model import Game, Review
 from games.games_list._public_services import is_favourite, get_favourites
 from tests.conftest import client, app, runner
-from games.adapters.memory_repository import MemoryRepository, populate
 import games.adapters.repository as repo
 
 TESTUSERNAME = "testuserdjdjdj"

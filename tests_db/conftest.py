@@ -45,8 +45,9 @@ def session_factory():
     session_factory = sessionmaker(autocommit=False, autoflush=True, bind=engine)
     # Create the SQLAlchemy DatabaseRepository instance for an sqlite3-based repository.
     repo_instance = database_repository.SqlAlchemyRepository(session_factory)
-    database_mode = True
-    repository_populate.populate(TEST_DATA_PATH_DATABASE_FULL, repo_instance, database_mode)
+
+    repository_populate.populate(repo_instance, TEST_DATA_PATH_DATABASE_FULL, 'database')
+
     yield session_factory
     metadata.drop_all(engine)
 
