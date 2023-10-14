@@ -23,8 +23,7 @@ def insert_user(empty_session, values=None):
                           {'username': new_name, 'password': new_password})
     row = empty_session.execute('SELECT username from users where username = :username',
                                 {'username': new_name}).fetchone()
-    print("insert user returns:")
-    print(row[0])
+
     return row[0]
 
 def insert_users(empty_session, values):
@@ -44,8 +43,7 @@ def insert_game(empty_session):
         {'release_date': "Nov 12, 2007"}
     )
     row = empty_session.execute('SELECT game_id from games').fetchone()
-    print("insert game returns:")
-    print(row[0])
+
     return row[0]
 
 
@@ -185,15 +183,7 @@ def test_saving_of_review(empty_session):
     empty_session.add(review)
     empty_session.commit()
 
-    test_rows = empty_session.query(Review).all()
-    for review in test_rows:
-        print("review in test_rows: ", review)
-        print("review.user", review.user)
-        print("review.game", review.game)
-        print("review.comment", review.comment)
-
     rows = list(empty_session.execute('SELECT user, game, comment FROM reviews'))
-    print("test_saving_of_review rows:", rows)
 
     assert rows == [(user_key, game_key, review_text)]
 
@@ -268,7 +258,5 @@ def test_save_reviewed_game(empty_session):
     # Check that the reviews table has a new record that links to the games and users
     # tables.
     rows = list(empty_session.execute('SELECT user, game, comment FROM reviews'))
-
-    print(rows)
 
     assert rows == [(user_key, game_key, review_text)]

@@ -6,13 +6,15 @@ def test_database_populate_inspect_table_names(database_engine):
 
     # Get table information
     inspector = inspect(database_engine)
-    assert inspector.get_table_names() == ['game_genres', 'games', 'reviews', 'genres', 'users']
+    print("*" * 100, inspector.get_table_names())
+    assert inspector.get_table_names() == ['game_genre', 'games', 'genres', 'publishers', 'reviews',
+                                           'users', 'users_favourites']
 
 def test_database_populate_select_all_genres(database_engine):
 
     # Get table information
     inspector = inspect(database_engine)
-    name_of_genres_table = inspector.get_table_names()[3]
+    name_of_genres_table = inspector.get_table_names()[2]
 
     with database_engine.connect() as connection:
         # query for records in table genres
@@ -21,15 +23,15 @@ def test_database_populate_select_all_genres(database_engine):
 
         all_genre_names = []
         for row in result:
-            all_genre_names.append(row['genre_name'])
+            all_genre_names.append(row['name'])
 
-        assert all_genre_names == ['Action', 'Indie', 'a', 'b']
+        assert sorted(all_genre_names) == ['Action', 'Test-Genre']
 
 def test_database_populate_select_all_users(database_engine):
 
     # Get table information
     inspector = inspect(database_engine)
-    name_of_users_table = inspector.get_table_names()[4]
+    name_of_users_table = inspector.get_table_names()[5]
 
     with database_engine.connect() as connection:
         # query for records in table users
@@ -38,15 +40,15 @@ def test_database_populate_select_all_users(database_engine):
 
         all_users = []
         for row in result:
-            all_users.append(row['user_name'])
+            all_users.append(row['username'])
 
-        assert all_users == ['thorke', 'fmercury']
+        assert all_users == ['spork', 'jazzman']
 
 def test_database_populate_select_all_reviews(database_engine):
 
     # Get table information
     inspector = inspect(database_engine)
-    name_of_reviews_table = inspector.get_table_names()[2]
+    name_of_reviews_table = inspector.get_table_names()[4]
 
     with database_engine.connect() as connection:
         # query for records in table reviews
@@ -55,10 +57,10 @@ def test_database_populate_select_all_reviews(database_engine):
 
         all_reviews = []
         for row in result:
-            all_reviews.append((row['id'], row['user_id'], row['game_id'], row['review']))
+            all_reviews.append((row['review_id'], row['user'], row['game'], row['rating'], row['comment']))
 
-        assert all_reviews == [(1, 2, 1, 'Oh no, COVID-19 has hit New Zealand'),
-                                (2, 1, 1, 'Yeah Freddie, bad news')]
+        assert all_reviews == [(1, 'jazzman', 7940, 2, 'Wow, this is Call of Duty.'),
+                                (2, 'spork', 418650, 4, 'Pirates pirates pirates.')]
 
 def test_database_populate_select_all_games(database_engine):
 
@@ -73,9 +75,9 @@ def test_database_populate_select_all_games(database_engine):
 
         all_games = []
         for row in result:
-            all_games.append((row['id'], row['title']))
+            all_games.append((row['game_id'], row['game_title']))
 
         nr_games = len(all_games)
-        assert nr_games == 6
+        assert nr_games == 5
 
-        assert all_games[0] == (1, 'Coronavirus: First case of virus in New Zealand')
+        assert all_games[0] == (7940, 'Call of Duty® 4: Modern Warfare®')
