@@ -165,6 +165,7 @@ def test_saving_of_review(empty_session):
     game_key = insert_game(empty_session)
     user_key = insert_user(empty_session, ("andrew", "Abcde1234"))
 
+
     rows = empty_session.query(Game).all()
     game = rows[0]
     user = empty_session.query(User).filter(User._User__username == "andrew").one()
@@ -176,6 +177,11 @@ def test_saving_of_review(empty_session):
     # Note: if the bidirectional links between the new Review and the User and
     # Game objects hadn't been established in memory, they would exist following
     # committing the addition of the Review to the database.
+
+    empty_session.add(user)
+    empty_session.commit()
+    empty_session.add(game)
+    empty_session.commit()
     empty_session.add(review)
     empty_session.commit()
 
@@ -186,7 +192,7 @@ def test_saving_of_review(empty_session):
         print("review.game", review.game)
         print("review.comment", review.comment)
 
-    rows = list(empty_session.execute('SELECT * FROM reviews'))
+    rows = list(empty_session.execute('SELECT user, game, comment FROM reviews'))
     print("test_saving_of_review rows:", rows)
 
     assert rows == [(user_key, game_key, review_text)]
