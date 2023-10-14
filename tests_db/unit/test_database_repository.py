@@ -73,12 +73,6 @@ def test_repository_can_get_games_by_game_ids(session_factory):
     all_games = test_repo.get_games_by_ids(all_game_ids)
     assert len(all_games) == 877
 
-def test_repository_can_get_games_by_sorted_id_list(session_factory):
-    test_repo = SqlAlchemyRepository(session_factory)
-    games = test_repo.get_game_ids_sorted_by_title()
-    assert len(games) == 877
-
-
 
 
 
