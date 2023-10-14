@@ -64,7 +64,7 @@ class SqlAlchemyRepository(AbstractRepository, ABC):
         else:
             return False
 
-    def get_user(self, user_name) -> User:
+    def get_user(self, user_name: str) -> User:
         """
         Returns the User named user_name from the repository.
         If there is no User with the given user_name, this method returns None.

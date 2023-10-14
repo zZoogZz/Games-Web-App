@@ -57,7 +57,7 @@ def create_app(test_config=None):
         repo.repo_instance = database_repository.SqlAlchemyRepository(session_factory)
 
         if app.config['TESTING'] == 'True' or len(database_engine.table_names()) == 0:
-            print("REPOPULATING DATABASE...")
+            print("REPOPULATING TEST DATABASE...")
             # For testing, or first-time use of the web application, reinitialise the database.
             clear_mappers()
             metadata.create_all(database_engine)  # Conditionally create database tables.
@@ -68,7 +68,7 @@ def create_app(test_config=None):
             map_model_to_tables()
 
             repository_populate.populate(repo.repo_instance, data_path, 'database')
-            print("REPOPULATING DATABASE... FINISHED")
+            print("REPOPULATING TEST DATABASE... FINISHED")
 
         else:
             # Solely generate mappings that map domain model classes to the database tables.

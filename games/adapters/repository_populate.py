@@ -13,7 +13,6 @@ def populate(repo, data_path, repository_type):
     genres = reader.dataset_of_genres
     games = reader.dataset_of_games
 
-
     if repository_type == 'memory':
         print("Memory Type")
         for game in games:
