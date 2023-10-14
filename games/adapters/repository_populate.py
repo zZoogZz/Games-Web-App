@@ -30,9 +30,6 @@ def populate(repo, data_path, repository_type):
             repo.add_game(game)
 
 
-
-
-
     else:
         raise ValueError("Repository Type not specified correctly at population.")
 
