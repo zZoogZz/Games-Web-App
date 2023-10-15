@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker, clear_mappers
 
 from games.adapters import database_repository, repository_populate
 from games.adapters.orm import metadata, map_model_to_tables
-from games.adapters.csv_data_importer import load_reviews, load_users
+from games.adapters.csv_data_importer import load_reviews, load_users, load_favourites
 
 from utils import get_project_root
 
@@ -32,6 +32,7 @@ def database_engine():
     repository_populate.populate(repo_instance, TEST_DATA_PATH_DATABASE_LIMITED, 'database')
     users = load_users(TEST_DATA_PATH_DATABASE_LIMITED, repo_instance)
     load_reviews(TEST_DATA_PATH_DATABASE_LIMITED, repo_instance, users)
+    load_favourites(TEST_DATA_PATH_DATABASE_LIMITED, repo_instance, users)
     yield engine
     metadata.drop_all(engine)
 

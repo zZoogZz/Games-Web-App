@@ -45,3 +45,13 @@ def load_reviews(data_path: Path, repo: AbstractRepository, users):
             review_text=data_row[3]
         )
         repo.add_review(comment)
+
+def load_favourites(data_path: Path, repo: AbstractRepository, users):
+    user_favourites_filename = str(Path(data_path) / "users_favourites.csv")
+    print("******")
+    print(users)
+    for data_row in read_csv_file(user_favourites_filename):
+        print(data_row[0])
+        user = users[data_row[0]]
+        game = repo.get_game(int(data_row[1]))
+        repo.toggle_favourite(game, user)
