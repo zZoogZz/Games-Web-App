@@ -8,7 +8,6 @@ def test_database_populate_inspect_table_names(database_engine):
     """
     # Get table information
     inspector = inspect(database_engine)
-    print("*" * 100, inspector.get_table_names())
     assert inspector.get_table_names() == ['game_genre', 'games', 'genres', 'publishers', 'reviews',
                                            'users', 'users_favourites']
 
