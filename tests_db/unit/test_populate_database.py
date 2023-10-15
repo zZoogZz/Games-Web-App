@@ -81,3 +81,24 @@ def test_database_populate_select_all_games(database_engine):
         assert nr_games == 5
 
         assert all_games[0] == (7940, 'Call of Duty® 4: Modern Warfare®')
+
+def test_database_populate_select_favourites(database_engine):
+    """
+    Tests that favourites table is populated (using test favourites in user_favourites.csv).
+    """
+
+    # Get table information
+    inspector = inspect(database_engine)
+    name_of_favourites_table = inspector.get_table_names()[6]
+
+    with database_engine.connect() as connection:
+        # query for records in table reviews
+        select_statement = select([metadata.tables[name_of_favourites_table]])
+        result = connection.execute(select_statement)
+
+        all_favourites = []
+        for row in result:
+            all_favourites.append((row['username'], row['favourite_game']))
+
+        assert all_favourites == [('spork', 7940),
+                                ('spork', 418650)]

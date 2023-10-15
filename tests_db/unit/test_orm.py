@@ -8,7 +8,7 @@ from datetime import datetime
 
 from sqlalchemy.exc import IntegrityError
 
-from games.domainmodel.model import User, Game, Review, Genre, make_review, remove_review  # make_genre_association
+from games.domainmodel.model import User, Game, Review, Genre, Publisher, make_review, remove_review  # make_genre_association
 
 
 def insert_user(empty_session, values=None):
@@ -84,6 +84,7 @@ def make_game():
     game.description = "The new action-thriller..."
     game.image_url = "https://cdn.akamai.steamstatic.com/steam/apps/7940/header.jpg?t=1646762118"
     game.website_url = "http://www.charlieoscardelta.com/"
+    game.publisher = Publisher("Activision")
     return game
 
 
@@ -138,6 +139,9 @@ def test_loading_of_game(empty_session):
 
 
 def test_loading_of_genred_game(empty_session):
+    """
+    Tests game table's genres field contains all applied genres
+    """
     game_key = insert_game(empty_session)
     genre_keys = insert_genres(empty_session)
     insert_game_genre_associations(empty_session, game_key, genre_keys)
@@ -150,6 +154,9 @@ def test_loading_of_genred_game(empty_session):
 
 
 def test_loading_of_reviewed_game(empty_session):
+    """
+    Tests bidirectional link between game and review.
+    """
     insert_reviewed_game(empty_session)
 
     rows = empty_session.query(Game).all()
@@ -160,6 +167,9 @@ def test_loading_of_reviewed_game(empty_session):
 
 
 def test_saving_of_review(empty_session):
+    """
+    Tests all fields of reviews table are populated.
+    """
     game_key = insert_game(empty_session)
     user_key = insert_user(empty_session, ("andrew", "Abcde1234"))
 
@@ -189,26 +199,32 @@ def test_saving_of_review(empty_session):
 
 
 def test_saving_of_game(empty_session):
+    """
+    Tests all fields of a game are populated in games table.
+    """
     game = make_game()
     empty_session.add(game)
     empty_session.commit()
 
-    rows = list(empty_session.execute('SELECT game_id, game_title, game_price, release_date, game_description, game_image_url, game_website_url FROM games'))
+    rows = list(empty_session.execute('SELECT game_id, game_title, game_price, release_date, game_description, game_image_url, game_website_url, publisher_name FROM games'))
     release_date = "Nov 12, 2007"
     assert rows == [(7940, "Call of Duty® 4: Modern Warfare®", 9.99, release_date,
                      "The new action-thriller...",
                      "https://cdn.akamai.steamstatic.com/steam/apps/7940/header.jpg?t=1646762118",
-                     "http://www.charlieoscardelta.com/"
+                     "http://www.charlieoscardelta.com/",
+                     "Activision"
                      )]
 
 
 def test_saving_genred_game(empty_session):
+    """
+    Tests game and a genre added to that game are populated in the game_genre association table.
+    """
     game = make_game()
     genre = make_genre()
 
     # Establish the bidirectional relationship between the Game and the Genre.
     game.add_genre(genre)
-
 
     # Persist the Game (and Genre).
     # Note: it doesn't matter whether we add the Genre or the Game. They are connected
@@ -235,6 +251,9 @@ def test_saving_genred_game(empty_session):
 
 
 def test_save_reviewed_game(empty_session):
+    """
+    Tests game and user from a review are populated in reviews table.
+    """
     # Create Game User objects.
     game = make_game()
     user = make_user()
@@ -260,3 +279,24 @@ def test_save_reviewed_game(empty_session):
     rows = list(empty_session.execute('SELECT user, game, comment FROM reviews'))
 
     assert rows == [(user_key, game_key, review_text)]
+
+def test_users_favourites(empty_session):
+    """
+    Tests that a user with a favourite game creates an appropriate entry in users_favourites table.
+    """
+    # Create Game User objects.
+    game = make_game()
+    user = make_user()
+
+    # Make game a favourite for user
+    user.add_favourite_game(game)
+
+    # Add game and user with that game as favourite
+    empty_session.add(user)
+    empty_session.add(game)
+    empty_session.commit()
+
+    # Load the username and favourite game from users_favourites table to check present and matching game and user above
+    rows = list(empty_session.execute('SELECT username, favourite_game FROM users_favourites'))
+
+    assert rows == [('andrew', 7940)]

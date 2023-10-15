@@ -10,7 +10,7 @@ FULL_TEST_DATA_PATH = './games/adapters/data/'
 def in_memory_repo():
     repo = memory_repository.MemoryRepository()
     # database_mode = False
-    repository_populate.populate(repo, TEST_DATA_PATH, 'memory')
+    repository_populate.populate(repo, FULL_TEST_DATA_PATH, 'memory')
     return repo
 
 
