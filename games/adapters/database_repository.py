@@ -236,11 +236,9 @@ class SqlAlchemyRepository(AbstractRepository, ABC):
 
     def toggle_favourite(self, game: Game, user: User):
         """ Toggles a game's favourite status. """
-        print("T",self.game_is_favourite(game, user))
-
         super().toggle_favourite(game, user)
 
-        with self._session_cm as scm:
+        with self._session_cm:
             self._session_cm.session.merge(user)
             self._session_cm.session.commit()
 
