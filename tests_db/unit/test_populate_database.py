@@ -3,7 +3,9 @@ from sqlalchemy import select, inspect
 from games.adapters.orm import metadata
 
 def test_database_populate_inspect_table_names(database_engine):
-
+    """
+    Tests all expected tables exist with correct names in test databaes.
+    """
     # Get table information
     inspector = inspect(database_engine)
     print("*" * 100, inspector.get_table_names())
@@ -11,7 +13,9 @@ def test_database_populate_inspect_table_names(database_engine):
                                            'users', 'users_favourites']
 
 def test_database_populate_select_all_genres(database_engine):
-
+    """
+    Tests genres table populates and all genres from test games.csv can be retrieved.
+    """
     # Get table information
     inspector = inspect(database_engine)
     name_of_genres_table = inspector.get_table_names()[2]
@@ -28,7 +32,9 @@ def test_database_populate_select_all_genres(database_engine):
         assert sorted(all_genre_names) == ['Action', 'Test-Genre']
 
 def test_database_populate_select_all_users(database_engine):
-
+    """
+    Tests users table populates and all users from test users.csv can be retrieved.
+    """
     # Get table information
     inspector = inspect(database_engine)
     name_of_users_table = inspector.get_table_names()[5]
@@ -45,7 +51,9 @@ def test_database_populate_select_all_users(database_engine):
         assert all_users == ['spork', 'jazzman']
 
 def test_database_populate_select_all_reviews(database_engine):
-
+    """
+    Tests reviews table populated and all reviews can be retrieved.
+    """
     # Get table information
     inspector = inspect(database_engine)
     name_of_reviews_table = inspector.get_table_names()[4]
@@ -63,7 +71,9 @@ def test_database_populate_select_all_reviews(database_engine):
                                 (2, 'spork', 418650, 4, 'Pirates pirates pirates.')]
 
 def test_database_populate_select_all_games(database_engine):
-
+    """
+    Tests that games table is populated with all games in test games.csv
+    """
     # Get table information
     inspector = inspect(database_engine)
     name_of_games_table = inspector.get_table_names()[1]
