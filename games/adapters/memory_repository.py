@@ -80,7 +80,6 @@ class MemoryRepository(AbstractRepository):  # implement games ordered by date. 
         return self.__games
 
     def get_game_ids(self):
-        print(self.__games.keys())
         return list(self.__games.keys())
 
     def add_game_id_to_genre(self, game_id: int, genre: Genre):
@@ -214,7 +213,6 @@ class MemoryRepository(AbstractRepository):  # implement games ordered by date. 
         if review in self.__reviews:
             # super().remove_review(review)
             self.__reviews.remove(review)
-            print("remove attempted")
         else:
             print("failed to remove")
 
