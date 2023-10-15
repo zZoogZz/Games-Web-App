@@ -239,7 +239,7 @@ class SqlAlchemyRepository(AbstractRepository, ABC):
 
         super().toggle_favourite(game, user)
 
-        with self._session_cm as scm:
+        with self._session_cm:
             self._session_cm.session.merge(user)
             self._session_cm.session.commit()
 
