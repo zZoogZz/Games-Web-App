@@ -4,7 +4,7 @@ import pytest
 
 import games.adapters.repository as repo
 from games.adapters.database_repository import SqlAlchemyRepository
-from games.domainmodel.model import Publisher, Genre, Game, Review, User, Wishlist
+from games.domainmodel.model import Publisher, Genre, Game, Review, User
 from games.adapters.repository import RepositoryException
 
 
@@ -73,7 +73,19 @@ def test_repository_can_get_games_by_game_ids(session_factory):
     all_games = test_repo.get_games_by_ids(all_game_ids)
     assert len(all_games) == 877
 
-
+def test_repository_user_can_add_a_review(session_factory):
+    test_repo = SqlAlchemyRepository(session_factory)
+    user = User('User', 'Password!123')
+    test_repo.add_user(user)
+    game = Game(1, "Test Game")
+    game.price = 69
+    game.release_date = 'Oct 21, 2008'
+    test_repo.add_game(game)
+    retrieved_game = test_repo.get_game(1)
+    retrieved_user = test_repo.get_user('user')
+    review = Review(retrieved_user, retrieved_game, 5, "Great game!")
+    test_repo.add_review(review)
+    assert review in test_repo.get_reviews()
 
 
 
